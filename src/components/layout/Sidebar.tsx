@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Home, LayoutDashboard, LineChart, Plus, Settings, Menu, X, Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -13,30 +13,35 @@ export function Sidebar() {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(!isMobile);
 
+  useEffect(() => {
+    setIsOpen(!isMobile);
+  }, [isMobile]);
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
   return (
     <>
-      {isMobile && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="fixed top-4 left-4 z-50"
-          onClick={toggleSidebar}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </Button>
-      )}
+      {/* Botón de menú - ahora a la derecha */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="fixed top-4 right-4 z-50 md:hidden"
+        onClick={toggleSidebar}
+      >
+        <Menu size={24} />
+      </Button>
 
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col w-64 transition-transform duration-300 border-r bg-sidebar text-sidebar-foreground border-sidebar-border",
-          isMobile && !isOpen && "-translate-x-full"
+          "fixed inset-y-0 left-0 z-40 flex flex-col transition-all duration-300 border-r bg-sidebar text-sidebar-foreground border-sidebar-border",
+          "w-full md:w-64", // Ancho completo en móvil, 64 en desktop
+          !isOpen && "-translate-x-full",
+          "md:translate-x-0" // Siempre visible en desktop
         )}
       >
-        <div className="flex flex-col items-center px-4 py-6">
+        <div className="flex items-center justify-between px-4 py-6 md:justify-center">
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center">
               <img
@@ -47,6 +52,15 @@ export function Sidebar() {
             </div>
             <p className="text-xs text-sidebar-foreground/70">Regenerative Insights</p>
           </div>
+          {/* Botón de cierre - dentro del sidebar */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={toggleSidebar}
+          >
+            <X size={24} />
+          </Button>
         </div>
 
         <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
@@ -92,6 +106,14 @@ export function Sidebar() {
           </div>
         </div>
       </div>
+
+      {/* Overlay para cerrar el sidebar en móvil */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
     </>
   );
 }
