@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { LanguageSelector } from "./LanguageSelector";
+import RuutsLogo from "@/assets/ruuts-blanco.svg";
 
 export function Sidebar() {
   const { t } = useTranslation();
@@ -35,16 +36,16 @@ export function Sidebar() {
           isMobile && !isOpen && "-translate-x-full"
         )}
       >
-        <div className="flex items-center justify-between px-4 py-6">
-          <div className="flex flex-col">
-            <div className="flex items-center">
+        <div className="flex flex-col items-center px-4 py-6">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center">
               <img
-                src="/ruuts-blanco.svg"
+                src={RuutsLogo}
                 alt="Ruuts Logo"
                 className="w-32"
               />
             </div>
-            <p className="text-xs text-sidebar-foreground/70 ml-2">Regenerative Insights</p>
+            <p className="text-xs text-sidebar-foreground/70">Regenerative Insights</p>
           </div>
         </div>
 
