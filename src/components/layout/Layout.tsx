@@ -1,4 +1,3 @@
-
 import { Sidebar } from "./Sidebar";
 import { PageContainer } from "./PageContainer";
 import { Toaster } from "@/components/ui/toaster";
@@ -10,11 +9,9 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background overflow-x-hidden">
       <Sidebar />
-      <PageContainer>
-        {children}
-      </PageContainer>
+      <PageContainer>{children}</PageContainer>
       <Toaster />
       <Sonner />
     </div>
