@@ -1,0 +1,101 @@
+
+{
+  "app": {
+    "title": "GreenEarth Insights",
+    "subtitle": "Your platform for regenerative agriculture insights and farm management"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "farm": "Farm",
+    "farms": "Farms",
+    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "analytics": "Analytics",
+    "export": "Export Data",
+    "addFarm": "Add New Farm",
+    "viewDetails": "View Details",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "year": "Year",
+    "search": "Search",
+    "searchFarms": "Search farms...",
+    "carbonFootprint": "Carbon Footprint",
+    "projectedFootprint": "Projected Footprint",
+    "sequestration": "Sequestration",
+    "regenerativePractices": "Regenerative Practices",
+    "tons": "tons",
+    "kgPerHectare": "kg/hectare",
+    "selectFarm": "Select a farm",
+    "selectYear": "Select a year"
+  },
+  "dashboard": {
+    "welcome": "Welcome to GreenEarth Insights",
+    "subtitle": "View your farm performance and regenerative potential",
+    "addYourFirstFarm": "Add Your First Farm",
+    "viewFarmDetails": "View Farm Details",
+    "netCarbonImpact": "Net Carbon Impact",
+    "soilHealthScore": "Soil Health Score",
+    "cattleProduction": "Cattle Production",
+    "profitPerHectare": "Profit per Hectare",
+    "recommendedActions": "Recommended Actions"
+  },
+  "analytics": {
+    "title": "Farm Analytics",
+    "selectFarmAndYear": "Select Farm & Year",
+    "currentYearOverview": "Current Year Overview",
+    "analyticsChart": "Analytics Chart"
+  },
+  "farms": {
+    "title": "Farm Management",
+    "subtitle": "View and manage your farms",
+    "noFarms": "No farms found",
+    "confirmDelete": "Are you sure you want to delete this farm? This action cannot be undone."
+  },
+  "farmDetails": {
+    "overview": "Overview",
+    "details": "Farm Details",
+    "projections": "Projections",
+    "actions": "Recommended Actions",
+    "farmSummary": "Farm Summary",
+    "ownerManager": "Owner/Manager",
+    "location": "Location",
+    "farmSize": "Farm Size",
+    "created": "Created",
+    "lastUpdated": "Last Updated",
+    "cattle": "Cattle",
+    "pasture": "Pasture Management",
+    "carbonImpact": "Carbon Impact",
+    "totalHead": "Total Head",
+    "cattleType": "Cattle Type/Breed",
+    "averageWeight": "Average Weight",
+    "methodOfRaising": "Method of Raising",
+    "totalPastures": "Total Pastures",
+    "avgPastureSize": "Average Pasture Size",
+    "rotationsPerSeason": "Rotations Per Season",
+    "restingDaysPerPasture": "Resting Days Per Pasture",
+    "grassTypes": "Grass/Forage Types",
+    "soilHealthScore": "Soil Health Score",
+    "currentForageDensity": "Current Forage Density",
+    "exportData": "Export Data",
+    "deleteFarm": "Delete Farm",
+    "keyRecommendations": "Key Recommendations",
+    "projectionInsights": "Projection Insights"
+  },
+  "addFarm": {
+    "title": "Add New Farm",
+    "subtitle": "Create a new farm profile to get regenerative agriculture insights"
+  },
+  "exportData": {
+    "title": "Export Data",
+    "subtitle": "Download your farm data in various formats"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "returnHome": "Return to Home"
+  }
+}

@@ -1,0 +1,101 @@
+
+{
+  "app": {
+    "title": "Ruuts",
+    "subtitle": "Tu plataforma para gestión agrícola regenerativa"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "farm": "Establecimiento",
+    "farms": "Establecimientos",
+    "settings": "Configuración",
+    "dashboard": "Panel Principal",
+    "analytics": "Análisis",
+    "export": "Exportar Datos",
+    "addFarm": "Agregar Nuevo Establecimiento",
+    "viewDetails": "Ver Detalles",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "year": "Año",
+    "search": "Buscar",
+    "searchFarms": "Buscar establecimientos...",
+    "carbonFootprint": "Huella de Carbono",
+    "projectedFootprint": "Huella Proyectada",
+    "sequestration": "Secuestro",
+    "regenerativePractices": "Prácticas Regenerativas",
+    "tons": "toneladas",
+    "kgPerHectare": "kg/hectárea",
+    "selectFarm": "Seleccionar un establecimiento",
+    "selectYear": "Seleccionar un año"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido a Ruuts",
+    "subtitle": "Visualiza el rendimiento y potencial regenerativo de tu establecimiento",
+    "addYourFirstFarm": "Agrega tu Primer Establecimiento",
+    "viewFarmDetails": "Ver Detalles del Establecimiento",
+    "netCarbonImpact": "Impacto Neto de Carbono",
+    "soilHealthScore": "Puntuación de Salud del Suelo",
+    "cattleProduction": "Producción de Ganado",
+    "profitPerHectare": "Ganancia por Hectárea",
+    "recommendedActions": "Acciones Recomendadas"
+  },
+  "analytics": {
+    "title": "Análisis de Establecimientos",
+    "selectFarmAndYear": "Seleccionar Establecimiento y Año",
+    "currentYearOverview": "Resumen del Año Actual",
+    "analyticsChart": "Gráfico de Análisis"
+  },
+  "farms": {
+    "title": "Gestión de Establecimientos",
+    "subtitle": "Ver y gestionar tus establecimientos",
+    "noFarms": "No se encontraron establecimientos",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar este establecimiento? Esta acción no se puede deshacer."
+  },
+  "farmDetails": {
+    "overview": "Resumen",
+    "details": "Detalles del Establecimiento",
+    "projections": "Proyecciones",
+    "actions": "Acciones Recomendadas",
+    "farmSummary": "Resumen del Establecimiento",
+    "ownerManager": "Propietario/Gestor",
+    "location": "Ubicación",
+    "farmSize": "Tamaño del Establecimiento",
+    "created": "Creado",
+    "lastUpdated": "Última Actualización",
+    "cattle": "Ganado",
+    "pasture": "Gestión de Pastizales",
+    "carbonImpact": "Impacto de Carbono",
+    "totalHead": "Total de Cabezas",
+    "cattleType": "Tipo/Raza de Ganado",
+    "averageWeight": "Peso Promedio",
+    "methodOfRaising": "Método de Crianza",
+    "totalPastures": "Total de Pastizales",
+    "avgPastureSize": "Tamaño Promedio de Pastizal",
+    "rotationsPerSeason": "Rotaciones por Temporada",
+    "restingDaysPerPasture": "Días de Descanso por Pastizal",
+    "grassTypes": "Tipos de Pasto/Forraje",
+    "soilHealthScore": "Puntuación de Salud del Suelo",
+    "currentForageDensity": "Densidad Actual de Forraje",
+    "exportData": "Exportar Datos",
+    "deleteFarm": "Eliminar Establecimiento",
+    "keyRecommendations": "Recomendaciones Clave",
+    "projectionInsights": "Información de Proyecciones"
+  },
+  "addFarm": {
+    "title": "Agregar Nuevo Establecimiento",
+    "subtitle": "Crea un nuevo perfil de establecimiento para obtener información sobre agricultura regenerativa"
+  },
+  "exportData": {
+    "title": "Exportar Datos",
+    "subtitle": "Descarga los datos de tu establecimiento en varios formatos"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "¡Ups! Página no encontrada",
+    "returnHome": "Volver al Inicio"
+  }
+}
