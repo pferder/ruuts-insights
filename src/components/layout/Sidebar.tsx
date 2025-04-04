@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Home, LayoutDashboard, LineChart, Plus, Settings, Menu, X, Leaf, Download } from "lucide-react";
+import { Home, LayoutDashboard, LineChart, Plus, Settings, Menu, X, Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -38,12 +38,14 @@ export function Sidebar() {
         <div className="flex items-center justify-between px-4 py-6">
           <div className="flex flex-col">
             <div className="flex items-center">
-              <Leaf className="w-8 h-8 mr-2 text-farm-green-500" />
-              <h1 className="text-xl font-bold">Ruuts</h1>
+              <img
+                src="/ruuts-blanco.svg"
+                alt="Ruuts Logo"
+                className="w-32"
+              />
             </div>
-            <p className="text-xs text-sidebar-foreground/70 ml-10">Regenerative Insights</p>
+            <p className="text-xs text-sidebar-foreground/70 ml-2">Regenerative Insights</p>
           </div>
-          <LanguageSelector />
         </div>
 
         <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
@@ -77,11 +79,16 @@ export function Sidebar() {
         </nav>
 
         <div className="p-4 border-t border-sidebar-border">
-          <NavItem
-            to="/settings"
-            icon={<Settings size={20} />}
-            label={t("common.settings")}
-          />
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <NavItem
+                to="/settings"
+                icon={<Settings size={20} />}
+                label={t("common.settings")}
+              />
+              <LanguageSelector className="text-sidebar-foreground hover:text-sidebar-accent-foreground" />
+            </div>
+          </div>
         </div>
       </div>
     </>

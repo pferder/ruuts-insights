@@ -1,8 +1,8 @@
 
 {
   "app": {
-    "title": "GreenEarth Insights",
-    "subtitle": "Your platform for regenerative agriculture insights and farm management"
+    "title": "Ruuts Regenerative Farming Insights",
+    "subtitle": "Your journey to regenerative farming"
   },
   "common": {
     "loading": "Loading...",
@@ -33,7 +33,7 @@
     "selectYear": "Select a year"
   },
   "dashboard": {
-    "welcome": "Welcome to GreenEarth Insights",
+    "welcome": "Welcome to Ruuts Regenerative Farming Insights",
     "subtitle": "View your farm performance and regenerative potential",
     "addYourFirstFarm": "Add Your First Farm",
     "viewFarmDetails": "View Farm Details",

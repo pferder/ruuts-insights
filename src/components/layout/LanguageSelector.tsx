@@ -1,24 +1,23 @@
-
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Globe } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const languages = [
-  { code: 'en-US', name: 'English' },
-  { code: 'es-AR', name: 'Español (Argentina)' },
+  { code: "en-US", name: "English" },
+  { code: "es-AR", name: "Español (Argentina)" },
 ];
 
-export function LanguageSelector() {
+interface LanguageSelectorProps {
+  className?: string;
+}
+
+export function LanguageSelector({ className }: LanguageSelectorProps) {
   const { i18n } = useTranslation();
-  const [currentLang, setCurrentLang] = useState(i18n.language || 'en-US');
-  
+  const [currentLang, setCurrentLang] = useState(i18n.language || "en-US");
+
   useEffect(() => {
     setCurrentLang(i18n.language);
   }, [i18n.language]);
@@ -31,7 +30,11 @@ export function LanguageSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="w-9 h-9">
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn("w-9 h-9", className)}
+        >
           <Globe className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
