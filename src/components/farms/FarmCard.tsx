@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { 
   Calendar, 
   MapPin, 
@@ -19,6 +20,7 @@ interface FarmCardProps {
 }
 
 export function FarmCard({ farm }: FarmCardProps) {
+  const { t } = useTranslation();
   const { farm: farmData, cattle, pasture } = farm;
   
   return (
@@ -58,7 +60,7 @@ export function FarmCard({ farm }: FarmCardProps) {
       <CardFooter className="pt-2">
         <Button asChild className="w-full bg-farm-green-700 hover:bg-farm-green-800">
           <Link to={`/farms/${farmData.id}`}>
-            View Details
+            {t('common.viewDetails')}
             <ArrowRight size={16} className="ml-2" />
           </Link>
         </Button>

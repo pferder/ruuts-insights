@@ -4,6 +4,7 @@ import {
   AlertCircle,
   Clock
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { RecommendedAction } from "@/types/farm";
 import { 
   Card, 
@@ -21,6 +22,8 @@ interface ActionCardProps {
 }
 
 export function ActionCard({ action }: ActionCardProps) {
+  const { t } = useTranslation();
+  
   const getImpactColor = () => {
     switch (action.impact) {
       case "high": return "bg-green-100 text-green-800 border-green-300";
@@ -59,17 +62,17 @@ export function ActionCard({ action }: ActionCardProps) {
         <div className="flex flex-wrap gap-2">
           <Badge variant="outline" className={cn("flex items-center gap-1", getImpactColor())}>
             <AlertCircle size={12} />
-            {action.impact.charAt(0).toUpperCase() + action.impact.slice(1)} Impact
+            {t(`common.actions.impact.${action.impact}`)}
           </Badge>
           <Badge variant="outline" className={cn("flex items-center gap-1", getTimeFrameColor())}>
             <Clock size={12} />
-            {action.timeFrame.charAt(0).toUpperCase() + action.timeFrame.slice(1)} Term
+            {t(`common.actions.timeFrame.${action.timeFrame}`)}
           </Badge>
         </div>
       </CardContent>
       <CardFooter className="pt-2">
         <Button variant="outline" className="w-full text-farm-green-700 border-farm-green-700 hover:bg-farm-green-50 hover:text-farm-green-800">
-          Learn More
+          {t('common.actions.learnMore')}
           <ArrowRight size={16} className="ml-2" />
         </Button>
       </CardFooter>

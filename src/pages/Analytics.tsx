@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,7 +11,6 @@ import { calculateCarbonFootprint, calculateProjectedFootprint, calculateSequest
 import { Skeleton } from "@/components/ui/skeleton";
 import { Layout } from "@/components/layout/Layout";
 import { Header } from "@/components/layout/Header";
-import { useTranslation } from "react-i18next";
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 
 interface AnalyticsData {
@@ -86,21 +86,21 @@ const Analytics: React.FC = () => {
 
   const chartConfig = {
     carbonFootprint: {
-      label: "Carbon Footprint",
+      label: t('common.carbonFootprint'),
       theme: {
         light: "#8884d8",
         dark: "#9995e9"
       }
     },
     projectedFootprint: {
-      label: "Projected Footprint",
+      label: t('common.projectedFootprint'),
       theme: {
         light: "#82ca9d",
         dark: "#93dbae"
       }
     },
     sequestration: {
-      label: "Sequestration",
+      label: t('common.sequestration'),
       theme: {
         light: "#ffc658",
         dark: "#ffd769"
@@ -120,7 +120,7 @@ const Analytics: React.FC = () => {
           {/* Farm Selection Card */}
           <Card className="dashboard-card">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-gray-800">{t('analytics.selectFarmYear')}</CardTitle>
+              <CardTitle className="text-lg font-semibold text-gray-800">{t('analytics.selectFarmAndYear')}</CardTitle>
             </CardHeader>
             <CardContent className="p-4">
               <div className="mb-4">
@@ -166,40 +166,40 @@ const Analytics: React.FC = () => {
                 <>
                   {analyticsData.length > 0 && (
                     <div className="mb-2">
-                      <div className="text-sm font-medium text-gray-700">{t('analytics.carbonFootprint')}:</div>
+                      <div className="text-sm font-medium text-gray-700">{t('common.carbonFootprint')}:</div>
                       <div className="text-xl font-bold text-farm-green-700">
                         {typeof analyticsData[5]?.carbonFootprint === 'number' 
                           ? analyticsData[5].carbonFootprint.toFixed(2) 
-                          : Number(analyticsData[5]?.carbonFootprint || 0).toFixed(2)} tons
+                          : Number(analyticsData[5]?.carbonFootprint || 0).toFixed(2)} {t('common.tons')}
                       </div>
                     </div>
                   )}
 
                   {analyticsData.length > 0 && (
                     <div className="mb-2">
-                      <div className="text-sm font-medium text-gray-700">{t('analytics.projectedFootprint')}:</div>
+                      <div className="text-sm font-medium text-gray-700">{t('common.projectedFootprint')}:</div>
                       <div className="text-xl font-bold text-farm-green-700">
                         {typeof analyticsData[5]?.projectedFootprint === 'number' 
                           ? analyticsData[5].projectedFootprint.toFixed(2) 
-                          : Number(analyticsData[5]?.projectedFootprint || 0).toFixed(2)} tons
+                          : Number(analyticsData[5]?.projectedFootprint || 0).toFixed(2)} {t('common.tons')}
                       </div>
                     </div>
                   )}
 
                   {analyticsData.length > 0 && (
                     <div className="mb-2">
-                      <div className="text-sm font-medium text-gray-700">{t('analytics.sequestration')}:</div>
+                      <div className="text-sm font-medium text-gray-700">{t('common.sequestration')}:</div>
                       <div className="text-xl font-bold text-farm-green-700">
                         {typeof analyticsData[5]?.sequestration === 'number' 
                           ? analyticsData[5].sequestration.toFixed(2) 
-                          : Number(analyticsData[5]?.sequestration || 0).toFixed(2)} tons
+                          : Number(analyticsData[5]?.sequestration || 0).toFixed(2)} {t('common.tons')}
                       </div>
                     </div>
                   )}
 
                   {analyticsData.length > 0 && (
                     <div className="mb-2">
-                      <div className="text-sm font-medium text-gray-700">{t('analytics.regenerativePractices')}:</div>
+                      <div className="text-sm font-medium text-gray-700">{t('common.regenerativePractices')}:</div>
                       <div className="text-xl font-bold text-farm-green-700">
                         {typeof analyticsData[5]?.regenerative === 'number'
                           ? analyticsData[5].regenerative.toFixed(2)
@@ -239,7 +239,7 @@ const Analytics: React.FC = () => {
                   <Line 
                     type="monotone" 
                     dataKey="carbonFootprint" 
-                    name="Carbon Footprint" 
+                    name={t('common.carbonFootprint')} 
                     stroke="var(--color-carbonFootprint)" 
                     strokeWidth={2}
                     activeDot={{ r: 8 }} 
@@ -247,7 +247,7 @@ const Analytics: React.FC = () => {
                   <Line 
                     type="monotone" 
                     dataKey="projectedFootprint" 
-                    name="Projected Footprint" 
+                    name={t('common.projectedFootprint')} 
                     stroke="var(--color-projectedFootprint)" 
                     strokeWidth={2}
                     activeDot={{ r: 8 }} 
@@ -255,7 +255,7 @@ const Analytics: React.FC = () => {
                   <Line 
                     type="monotone" 
                     dataKey="sequestration" 
-                    name="Sequestration" 
+                    name={t('common.sequestration')} 
                     stroke="var(--color-sequestration)" 
                     strokeWidth={2}
                     activeDot={{ r: 8 }} 

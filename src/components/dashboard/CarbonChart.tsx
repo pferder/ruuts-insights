@@ -1,4 +1,6 @@
+
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CarbonData } from "@/types/farm";
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
@@ -8,19 +10,21 @@ interface CarbonChartProps {
 }
 
 export function CarbonChart({ carbonData }: CarbonChartProps) {
+  const { t } = useTranslation();
+  
   const data = [
     {
-      name: "Emissions",
+      name: t('dashboard.emissions'),
       current: carbonData.currentEmissions,
       potential: carbonData.potentialEmissions,
     },
     {
-      name: "Capture",
+      name: t('dashboard.capture'),
       current: carbonData.currentCapture,
       potential: carbonData.potentialCapture,
     },
     {
-      name: "Net Impact",
+      name: t('dashboard.netImpact'),
       current: carbonData.currentCapture - carbonData.currentEmissions,
       potential: carbonData.potentialCapture - carbonData.potentialEmissions,
     },
@@ -28,14 +32,14 @@ export function CarbonChart({ carbonData }: CarbonChartProps) {
 
   const chartConfig = {
     current: {
-      label: "Current Practices",
+      label: t('dashboard.currentPractices'),
       theme: {
         light: "#8B5E34",
         dark: "#A77B58",
       },
     },
     potential: {
-      label: "Regenerative Potential",
+      label: t('dashboard.regenerativePotential'),
       theme: {
         light: "#2D6A4F",
         dark: "#3A8A68",
@@ -46,7 +50,7 @@ export function CarbonChart({ carbonData }: CarbonChartProps) {
   return (
     <Card className="dashboard-card">
       <CardHeader>
-        <CardTitle className="text-xl">Carbon Emissions & Capture</CardTitle>
+        <CardTitle className="text-xl">{t('dashboard.carbonEmissionsCapture')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer
@@ -72,7 +76,7 @@ export function CarbonChart({ carbonData }: CarbonChartProps) {
                 tickLine={false}
               />
               <YAxis
-                unit=" tons"
+                unit={` ${t('common.tons')}`}
                 axisLine={false}
                 tickLine={false}
               />
@@ -80,13 +84,13 @@ export function CarbonChart({ carbonData }: CarbonChartProps) {
               <Legend wrapperStyle={{ fontSize: "12px" }} />
               <Bar
                 dataKey="current"
-                name="Current Practices"
+                name={t('dashboard.currentPractices')}
                 fill="var(--color-current)"
                 radius={[4, 4, 0, 0]}
               />
               <Bar
                 dataKey="potential"
-                name="Regenerative Potential"
+                name={t('dashboard.regenerativePotential')}
                 fill="var(--color-potential)"
                 radius={[4, 4, 0, 0]}
               />

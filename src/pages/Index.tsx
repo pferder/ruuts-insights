@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -111,7 +112,7 @@ const Dashboard = () => {
           fiveYearData={projections.fiveYear}
           tenYearData={projections.tenYear}
           metricKey="netCarbon"
-          title="Carbon Balance"
+          title={t('dashboard.carbonBalance')}
           yAxisLabel="Net Carbon Balance (tons CO2)"
         />
       </div>
@@ -122,7 +123,7 @@ const Dashboard = () => {
           fiveYearData={projections.fiveYear}
           tenYearData={projections.tenYear}
           metricKey="totalProduction"
-          title="Production"
+          title={t('dashboard.production')}
           yAxisLabel="Total Production (kg)"
         />
         
@@ -131,7 +132,7 @@ const Dashboard = () => {
           fiveYearData={projections.fiveYear}
           tenYearData={projections.tenYear}
           metricKey="profitability"
-          title="Profitability"
+          title={t('dashboard.profitability')}
           yAxisLabel="Profit ($)"
         />
       </div>

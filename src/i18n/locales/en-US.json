@@ -30,7 +30,26 @@
     "tons": "tons",
     "kgPerHectare": "kg/hectare",
     "selectFarm": "Select a farm",
-    "selectYear": "Select a year"
+    "selectYear": "Select a year",
+    "actions": {
+      "learnMore": "Learn More",
+      "impact": {
+        "high": "High Impact",
+        "medium": "Medium Impact",
+        "low": "Low Impact"
+      },
+      "timeFrame": {
+        "short": "Short Term",
+        "medium": "Medium Term",
+        "long": "Long Term"
+      },
+      "category": {
+        "pasture": "Pasture",
+        "cattle": "Cattle",
+        "soil": "Soil",
+        "management": "Management"
+      }
+    }
   },
   "dashboard": {
     "welcome": "Welcome to Ruuts Regenerative Farming Insights",
@@ -41,13 +60,26 @@
     "soilHealthScore": "Soil Health Score",
     "cattleProduction": "Cattle Production",
     "profitPerHectare": "Profit per Hectare",
-    "recommendedActions": "Recommended Actions"
+    "recommendedActions": "Recommended Actions",
+    "carbonBalance": "Carbon Balance",
+    "production": "Production",
+    "profitability": "Profitability",
+    "carbonEmissionsCapture": "Carbon Emissions & Capture",
+    "currentPractices": "Current Practices", 
+    "regenerativePotential": "Regenerative Potential",
+    "netImpact": "Net Impact",
+    "emissions": "Emissions",
+    "capture": "Capture"
   },
   "analytics": {
     "title": "Farm Analytics",
+    "subtitle": "Analyze your farm's performance and potential",
     "selectFarmAndYear": "Select Farm & Year",
+    "selectFarm": "Select a farm",
+    "selectYear": "Select a year",
     "currentYearOverview": "Current Year Overview",
-    "analyticsChart": "Analytics Chart"
+    "analyticsChart": "Analytics Chart",
+    "chart": "Analytics Chart"
   },
   "farms": {
     "title": "Farm Management",
@@ -91,7 +123,26 @@
   },
   "exportData": {
     "title": "Export Data",
-    "subtitle": "Download your farm data in various formats"
+    "subtitle": "Download your farm data in various formats",
+    "guide": "Data Export Guide",
+    "farmInfo": "Farm Information",
+    "farmInfoDesc": "Basic farm details including size, location, and ownership information.",
+    "cattleData": "Cattle Data",
+    "cattleDataDesc": "Information about your cattle including total head, breed, average weight, and management practices.",
+    "pastureManagement": "Pasture Management",
+    "pastureManagementDesc": "Details about pasture management including rotation patterns, resting periods, and grass types.",
+    "carbonData": "Carbon Data",
+    "carbonDataDesc": "Current and potential carbon emissions and capture values based on your management practices.",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "noFarms": "No farms available",
+    "addFarmsToExport": "Add farms to export their data",
+    "farmsSelected": "of farms selected",
+    "exporting": "Exporting...",
+    "exportSelected": "Export Selected",
+    "exportSuccess": "Successfully exported farm(s)",
+    "exportError": "An error occurred during export",
+    "selectAtLeastOne": "Please select at least one farm to export"
   },
   "notFound": {
     "title": "404",

@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Download, FileDown, Check } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Layout } from "@/components/layout/Layout";
@@ -11,6 +12,7 @@ import { exportFarmDataToCsv } from "@/lib/farm-utils";
 import { toast } from "sonner";
 
 const ExportData = () => {
+  const { t } = useTranslation();
   const { farms, loading } = useFarm();
   const [selectedFarms, setSelectedFarms] = useState<Record<string, boolean>>({});
   const [isExporting, setIsExporting] = useState(false);
@@ -39,7 +41,7 @@ const ExportData = () => {
       .map(([id, _]) => id);
     
     if (selectedFarmIds.length === 0) {
-      toast.error("Please select at least one farm to export");
+      toast.error(t('exportData.selectAtLeastOne'));
       return;
     }
     
@@ -107,10 +109,10 @@ const ExportData = () => {
         downloadCSV(csvContent, "farm_data_export.csv");
       }
       
-      toast.success(`Successfully exported ${selectedFarmIds.length} farm(s)`);
+      toast.success(t('exportData.exportSuccess'));
     } catch (error) {
       console.error("Export error:", error);
-      toast.error("An error occurred during export");
+      toast.error(t('exportData.exportError'));
     } finally {
       setIsExporting(false);
     }
@@ -136,7 +138,7 @@ const ExportData = () => {
   if (loading) {
     return (
       <Layout>
-        <Header title="Export Data" subtitle="Export your farm data for analysis or reporting" />
+        <Header title={t('exportData.title')} subtitle={t('exportData.subtitle')} />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-farm-green-700"></div>
         </div>
@@ -146,13 +148,13 @@ const ExportData = () => {
   
   return (
     <Layout>
-      <Header title="Export Data" subtitle="Export your farm data for analysis or reporting" />
+      <Header title={t('exportData.title')} subtitle={t('exportData.subtitle')} />
       
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Export Farm Data</CardTitle>
+          <CardTitle>{t('exportData.title')}</CardTitle>
           <CardDescription>
-            Select the farms you want to export data from and download as CSV.
+            {t('exportData.subtitle')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -162,15 +164,15 @@ const ExportData = () => {
               onClick={handleSelectAll}
               className="mb-4"
             >
-              {farms.every(farm => selectedFarms[farm.farm.id]) ? "Deselect All" : "Select All"} 
+              {farms.every(farm => selectedFarms[farm.farm.id]) ? t('exportData.deselectAll') : t('exportData.selectAll')} 
             </Button>
             
             {farms.length === 0 ? (
               <div className="text-center py-8">
                 <FileDown className="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
-                <h3 className="mt-4 text-lg font-medium">No farms available</h3>
+                <h3 className="mt-4 text-lg font-medium">{t('exportData.noFarms')}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Add farms to export their data
+                  {t('exportData.addFarmsToExport')}
                 </p>
               </div>
             ) : (
@@ -205,7 +207,7 @@ const ExportData = () => {
         </CardContent>
         <CardFooter className="bg-muted/10 flex justify-between items-center">
           <div className="text-sm text-muted-foreground">
-            {getSelectedCount()} of {farms.length} farms selected
+            {getSelectedCount()} {t('exportData.farmsSelected')} {farms.length}
           </div>
           <Button 
             onClick={handleExportSelected} 
@@ -215,12 +217,12 @@ const ExportData = () => {
             {isExporting ? (
               <>
                 <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
-                Exporting...
+                {t('exportData.exporting')}
               </>
             ) : (
               <>
                 <Download className="mr-2 h-4 w-4" />
-                Export Selected
+                {t('exportData.exportSelected')}
               </>
             )}
           </Button>
@@ -229,7 +231,7 @@ const ExportData = () => {
       
       <Card>
         <CardHeader>
-          <CardTitle>Data Export Guide</CardTitle>
+          <CardTitle>{t('exportData.guide')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -238,9 +240,9 @@ const ExportData = () => {
                 <Check className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="font-medium">Farm Information</h4>
+                <h4 className="font-medium">{t('exportData.farmInfo')}</h4>
                 <p className="text-sm text-muted-foreground">
-                  Basic farm details including size, location, and ownership information.
+                  {t('exportData.farmInfoDesc')}
                 </p>
               </div>
             </div>
@@ -250,9 +252,9 @@ const ExportData = () => {
                 <Check className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="font-medium">Cattle Data</h4>
+                <h4 className="font-medium">{t('exportData.cattleData')}</h4>
                 <p className="text-sm text-muted-foreground">
-                  Information about your cattle including total head, breed, average weight, and management practices.
+                  {t('exportData.cattleDataDesc')}
                 </p>
               </div>
             </div>
@@ -262,9 +264,9 @@ const ExportData = () => {
                 <Check className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="font-medium">Pasture Management</h4>
+                <h4 className="font-medium">{t('exportData.pastureManagement')}</h4>
                 <p className="text-sm text-muted-foreground">
-                  Details about pasture management including rotation patterns, resting periods, and grass types.
+                  {t('exportData.pastureManagementDesc')}
                 </p>
               </div>
             </div>
@@ -274,9 +276,9 @@ const ExportData = () => {
                 <Check className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="font-medium">Carbon Data</h4>
+                <h4 className="font-medium">{t('exportData.carbonData')}</h4>
                 <p className="text-sm text-muted-foreground">
-                  Current and potential carbon emissions and capture values based on your management practices.
+                  {t('exportData.carbonDataDesc')}
                 </p>
               </div>
             </div>

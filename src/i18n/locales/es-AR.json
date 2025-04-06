@@ -30,7 +30,26 @@
     "tons": "toneladas",
     "kgPerHectare": "kg/hectárea",
     "selectFarm": "Seleccionar un establecimiento",
-    "selectYear": "Seleccionar un año"
+    "selectYear": "Seleccionar un año",
+    "actions": {
+      "learnMore": "Saber Más",
+      "impact": {
+        "high": "Alto Impacto",
+        "medium": "Impacto Medio",
+        "low": "Bajo Impacto"
+      },
+      "timeFrame": {
+        "short": "Corto Plazo",
+        "medium": "Mediano Plazo",
+        "long": "Largo Plazo"
+      },
+      "category": {
+        "pasture": "Pasturas",
+        "cattle": "Ganado",
+        "soil": "Suelo",
+        "management": "Gestión"
+      }
+    }
   },
   "dashboard": {
     "welcome": "Bienvenido a Ruuts",
@@ -41,13 +60,26 @@
     "soilHealthScore": "Puntuación de Salud del Suelo",
     "cattleProduction": "Producción de Ganado",
     "profitPerHectare": "Ganancia por Hectárea",
-    "recommendedActions": "Acciones Recomendadas"
+    "recommendedActions": "Acciones Recomendadas",
+    "carbonBalance": "Balance de Carbono",
+    "production": "Producción",
+    "profitability": "Rentabilidad",
+    "carbonEmissionsCapture": "Emisiones y Captura de Carbono",
+    "currentPractices": "Prácticas Actuales", 
+    "regenerativePotential": "Potencial Regenerativo",
+    "netImpact": "Impacto Neto",
+    "emissions": "Emisiones",
+    "capture": "Captura"
   },
   "analytics": {
     "title": "Análisis de Establecimientos",
+    "subtitle": "Analiza el rendimiento y potencial de tu establecimiento",
     "selectFarmAndYear": "Seleccionar Establecimiento y Año",
+    "selectFarm": "Seleccionar establecimiento",
+    "selectYear": "Seleccionar año",
     "currentYearOverview": "Resumen del Año Actual",
-    "analyticsChart": "Gráfico de Análisis"
+    "analyticsChart": "Gráfico de Análisis",
+    "chart": "Gráfico de Análisis"
   },
   "farms": {
     "title": "Gestión de Establecimientos",
@@ -91,7 +123,26 @@
   },
   "exportData": {
     "title": "Exportar Datos",
-    "subtitle": "Descarga los datos de tu establecimiento en varios formatos"
+    "subtitle": "Descarga los datos de tu establecimiento en varios formatos",
+    "guide": "Guía de Exportación de Datos",
+    "farmInfo": "Información del Establecimiento",
+    "farmInfoDesc": "Detalles básicos del establecimiento incluyendo tamaño, ubicación e información de propiedad.",
+    "cattleData": "Datos de Ganado",
+    "cattleDataDesc": "Información sobre tu ganado incluyendo total de cabezas, raza, peso promedio y prácticas de manejo.",
+    "pastureManagement": "Gestión de Pastizales",
+    "pastureManagementDesc": "Detalles sobre la gestión de pastizales incluyendo patrones de rotación, períodos de descanso y tipos de pasto.",
+    "carbonData": "Datos de Carbono",
+    "carbonDataDesc": "Valores de emisiones y captura de carbono actuales y potenciales basados en tus prácticas de manejo.",
+    "selectAll": "Seleccionar Todos",
+    "deselectAll": "Deseleccionar Todos",
+    "noFarms": "No hay establecimientos disponibles",
+    "addFarmsToExport": "Agrega establecimientos para exportar sus datos",
+    "farmsSelected": "de establecimientos seleccionados",
+    "exporting": "Exportando...",
+    "exportSelected": "Exportar Seleccionados",
+    "exportSuccess": "Exportación de establecimiento(s) exitosa",
+    "exportError": "Ocurrió un error durante la exportación",
+    "selectAtLeastOne": "Por favor selecciona al menos un establecimiento para exportar"
   },
   "notFound": {
     "title": "404",
