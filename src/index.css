@@ -98,6 +98,7 @@
 }
 
 @layer components {
+  /* Gradientes existentes */
   .gradient-green {
     background: linear-gradient(135deg, #9AC168 0%, #76D3B6 100%);
   }
@@ -106,12 +107,56 @@
     background: linear-gradient(135deg, #D9785F 0%, #A06048 100%);
   }
 
+  /* Nuevos estilos neumórficos */
+  .neumorph {
+    @apply bg-white rounded-xl shadow-[5px_5px_15px_rgba(0,0,0,0.1),-5px_-5px_15px_rgba(255,255,255,0.7)] border-none transition-all duration-300;
+  }
+  
+  .neumorph-dark {
+    @apply bg-[#303030] rounded-xl shadow-[5px_5px_15px_rgba(0,0,0,0.3),-5px_-5px_15px_rgba(70,70,70,0.5)] border-none transition-all duration-300;
+  }
+  
+  .neumorph-inset {
+    @apply bg-white rounded-xl shadow-[inset_5px_5px_10px_rgba(0,0,0,0.1),inset_-5px_-5px_10px_rgba(255,255,255,0.7)] border-none;
+  }
+  
+  .neumorph-dark-inset {
+    @apply bg-[#303030] rounded-xl shadow-[inset_5px_5px_10px_rgba(0,0,0,0.3),inset_-5px_-5px_10px_rgba(70,70,70,0.5)] border-none;
+  }
+  
+  .neumorph-btn {
+    @apply hover:shadow-[2px_2px_5px_rgba(0,0,0,0.1),-2px_-2px_5px_rgba(255,255,255,0.7)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.1),inset_-2px_-2px_5px_rgba(255,255,255,0.7)];
+  }
+  
+  .neumorph-btn-dark {
+    @apply hover:shadow-[2px_2px_5px_rgba(0,0,0,0.3),-2px_-2px_5px_rgba(70,70,70,0.5)] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.3),inset_-2px_-2px_5px_rgba(70,70,70,0.5)];
+  }
+
+  /* Gradientes modernos para cards */
+  .card-gradient-green {
+    @apply bg-gradient-to-br from-[#E8F5E9] to-[#F1F8E9] dark:from-[#1B5E20]/30 dark:to-[#2E7D32]/30;
+  }
+  
+  .card-gradient-brown {
+    @apply bg-gradient-to-br from-[#EFEBE9] to-[#D7CCC8] dark:from-[#4E342E]/30 dark:to-[#5D4037]/30;
+  }
+  
+  .card-gradient-gold {
+    @apply bg-gradient-to-br from-[#FFF8E1] to-[#FFECB3] dark:from-[#F57F17]/30 dark:to-[#FF8F00]/30;
+  }
+  
+  .card-gradient-blue {
+    @apply bg-gradient-to-br from-[#E3F2FD] to-[#BBDEFB] dark:from-[#0D47A1]/30 dark:to-[#1565C0]/30;
+  }
+
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
   }
 
+  /* Actualización de dashboard-card para usar neumorfismo */
   .dashboard-card {
-    @apply rounded-xl border bg-card p-6 shadow-sm card-hover;
+    @apply rounded-xl p-6 transition-all duration-300 dark:bg-transparent;
+    @apply neumorph dark:neumorph-dark;
   }
   
   /* Modern chart styling */

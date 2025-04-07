@@ -107,13 +107,14 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
   const coordinates = geoJson.geometry.coordinates[0][0];
   const centerPosition: [number, number] = [coordinates[0], coordinates[1]];
   
+  // Define MapContainer props explicitly
+  const mapContainerProps: MapContainerProps = {
+    className: `rounded-xl border border-border ${className}`,
+    style: { height, width: "100%" },
+  };
+  
   return (
-    <MapContainer 
-      zoom={13} 
-      style={{ height, width: "100%" }}
-      className={`rounded-xl border border-border ${className}`}
-      center={centerPosition}
-    >
+    <MapContainer {...mapContainerProps}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -123,9 +124,7 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
         pathOptions={geoJsonStyle}
       >
         {showTooltip && (
-          <Tooltip 
-            permanent
-          >
+          <Tooltip>
             <div className="font-medium">{farm.farm.name}</div>
             <div>{farm.farm.size} {t('common.hectares')}</div>
           </Tooltip>

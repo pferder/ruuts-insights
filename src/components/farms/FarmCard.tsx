@@ -25,7 +25,7 @@ export function FarmCard({ farm }: FarmCardProps) {
   const { farm: farmData, cattle, pasture } = farm;
   
   return (
-    <Card className="dashboard-card h-full flex flex-col">
+    <Card className="dashboard-card h-full flex flex-col card-gradient-green">
       <CardHeader className="pb-2">
         <CardTitle className="text-xl text-primary">{farmData.name}</CardTitle>
         <div className="flex items-center text-sm text-muted-foreground mt-1">
@@ -34,7 +34,7 @@ export function FarmCard({ farm }: FarmCardProps) {
         </div>
       </CardHeader>
       
-      <div className="h-32 w-full px-6">
+      <div className="h-32 w-full px-6 neumorph-inset dark:neumorph-dark-inset rounded-xl overflow-hidden">
         <FarmMap 
           farm={farm} 
           height="100%" 
@@ -68,7 +68,7 @@ export function FarmCard({ farm }: FarmCardProps) {
         </div>
       </CardContent>
       <CardFooter className="pt-2">
-        <Button asChild className="w-full bg-primary hover:bg-primary/90">
+        <Button asChild className="w-full bg-primary hover:bg-primary/90 neumorph-btn dark:neumorph-btn-dark">
           <Link to={`/farms/${farmData.id}`}>
             {t('common.viewDetails')}
             <ArrowRight size={16} className="ml-2" />

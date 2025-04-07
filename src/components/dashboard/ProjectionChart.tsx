@@ -66,15 +66,15 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
     current: {
       label: t("dashboard.currentPractices"),
       theme: {
-        light: "#A06048", // Usando color secundario (brown)
-        dark: "#D9785F", // Usando color primario (orange)
+        light: "#D9785F", // Cambiado a un color más brillante
+        dark: "#FF9E80",
       },
     },
     regenerative: {
       label: t("dashboard.regenerativePractices"),
       theme: {
-        light: "#9AC168", // Usando color primario (green)
-        dark: "#76D3B6", // Usando color secundario (teal)
+        light: "#9AC168", // Cambiado a un color más brillante
+        dark: "#AED581",
       },
     },
   };
@@ -141,7 +141,7 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
   );
 
   return (
-    <Card className="dashboard-card">
+    <Card className="dashboard-card card-gradient-green">
       <CardHeader>
         <CardTitle className="text-xl">{title} {t("dashboard.projection")}</CardTitle>
       </CardHeader>
@@ -150,22 +150,22 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
           defaultValue="five"
           className="w-full"
         >
-          <TabsList className="mb-4 w-full justify-start space-x-2">
+          <TabsList className="mb-4 w-full justify-start space-x-2 neumorph-inset dark:neumorph-dark-inset bg-transparent">
             <TabsTrigger
               value="two"
-              className="flex-1 md:flex-none"
+              className="flex-1 md:flex-none data-[state=active]:neumorph dark:data-[state=active]:neumorph-dark data-[state=active]:shadow-none"
             >
               {t("dashboard.twoYear")}
             </TabsTrigger>
             <TabsTrigger
               value="five"
-              className="flex-1 md:flex-none"
+              className="flex-1 md:flex-none data-[state=active]:neumorph dark:data-[state=active]:neumorph-dark data-[state=active]:shadow-none"
             >
               {t("dashboard.fiveYear")}
             </TabsTrigger>
             <TabsTrigger
               value="ten"
-              className="flex-1 md:flex-none"
+              className="flex-1 md:flex-none data-[state=active]:neumorph dark:data-[state=active]:neumorph-dark data-[state=active]:shadow-none"
             >
               {t("dashboard.tenYear")}
             </TabsTrigger>

@@ -27,10 +27,16 @@ export function MetricCard({
   const formattedCurrent = Number.isInteger(current) ? current : current.toFixed(1);
   const formattedPotential = Number.isInteger(potential) ? potential : potential.toFixed(1);
   
+  // Determine which gradient to use based on colorClass
+  const gradientClass = 
+    colorClass === "farm-green" ? "card-gradient-green" :
+    colorClass === "farm-brown" ? "card-gradient-brown" :
+    colorClass === "farm-gold" ? "card-gradient-gold" : "card-gradient-blue";
+  
   return (
     <div className={cn(
-      "dashboard-card border-l-4",
-      `border-l-${colorClass}-600`
+      "dashboard-card",
+      gradientClass
     )}>
       <div className="flex justify-between items-start">
         <div>
@@ -41,7 +47,8 @@ export function MetricCard({
         </div>
         <div className={cn(
           "p-2 rounded-full",
-          `bg-${colorClass}-100`
+          `bg-${colorClass}-100`,
+          "neumorph-inset dark:neumorph-dark-inset"
         )}>
           {icon}
         </div>
