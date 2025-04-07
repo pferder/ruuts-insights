@@ -1,14 +1,21 @@
-
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { LanguageSelector } from "./LanguageSelector";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
-export function Header() {
+interface HeaderProps {
+  title?: string;
+  subtitle?: string;
+  showSearch?: boolean;
+}
+
+export function Header({ title, subtitle, showSearch }: HeaderProps) {
   const { t } = useTranslation();
   const location = useLocation();
 
   const getPageTitle = () => {
+    if (title) return title;
+    
     const path = location.pathname;
     if (path === "/") return t("navigation.dashboard");
     if (path === "/farms") return t("navigation.farms");
@@ -22,7 +29,12 @@ export function Header() {
   return (
     <header className="border-b px-6 py-4 sticky top-0 z-10 bg-background">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">{getPageTitle()}</h1>
+        <div>
+          <h1 className="text-2xl font-semibold">{getPageTitle()}</h1>
+          {subtitle && (
+            <p className="text-muted-foreground">{subtitle}</p>
+          )}
+        </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />
           <LanguageSelector />
