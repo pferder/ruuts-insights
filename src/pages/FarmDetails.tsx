@@ -53,6 +53,7 @@ import {
   exportFarmDataToCsv 
 } from "@/lib/farm-utils";
 import { FarmComplete } from "@/types/farm";
+import { FarmMap } from "@/components/maps/FarmMap";
 
 const FarmDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -194,6 +195,7 @@ const FarmDetails = () => {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="details">Farm Details</TabsTrigger>
+          <TabsTrigger value="map">Map</TabsTrigger>
           <TabsTrigger value="projections">Projections</TabsTrigger>
           <TabsTrigger value="actions">Recommended Actions</TabsTrigger>
         </TabsList>
@@ -499,6 +501,26 @@ const FarmDetails = () => {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+        
+        <TabsContent value="map" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Farm Map</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[600px] w-full">
+                <FarmMap 
+                  farm={farm} 
+                  height="100%" 
+                  showTooltip={true}
+                />
+              </div>
+              <div className="mt-4 text-sm text-muted-foreground">
+                <p>Este mapa muestra el perímetro del establecimiento. Los límites son aproximados y basados en los datos registrados.</p>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
         
         <TabsContent value="projections" className="space-y-6">

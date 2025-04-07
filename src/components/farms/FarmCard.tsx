@@ -14,6 +14,7 @@ import { FarmComplete } from "@/types/farm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
+import { FarmMap } from "@/components/maps/FarmMap";
 
 interface FarmCardProps {
   farm: FarmComplete;
@@ -32,6 +33,15 @@ export function FarmCard({ farm }: FarmCardProps) {
           <span>{farmData.location}</span>
         </div>
       </CardHeader>
+      
+      <div className="h-32 w-full px-6">
+        <FarmMap 
+          farm={farm} 
+          height="100%" 
+          showTooltip={false} 
+        />
+      </div>
+      
       <CardContent className="flex-1 py-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="flex items-center text-sm">

@@ -52,6 +52,8 @@
     }
   },
   "farms": {
+    "title": "Farms",
+    "subtitle": "Manage your farms and view their details",
     "allFarms": "All Farms",
     "addFarm": "Add Farm",
     "filters": "Filters",
@@ -61,7 +63,10 @@
     "clearFilters": "Clear Filters",
     "noFarmsFound": "No farms found with these filters",
     "noFarmsYet": "No farms added yet",
-    "addYourFirstFarm": "Add your first farm"
+    "addYourFirstFarm": "Add your first farm",
+    "listView": "List View",
+    "mapView": "Map View",
+    "farmList": "Farm List"
   },
   "farmDetails": {
     "backToFarms": "Back to Farms",
@@ -204,6 +209,7 @@
     },
     "updated": "Updated",
     "pastures": "Pastures",
+    "cattle": "Cattle",
     "noData": "No data available",
     "toggleTheme": "Toggle Theme",
     "light": "Light",
