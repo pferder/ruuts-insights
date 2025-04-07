@@ -111,41 +111,35 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
     );
   }
 
+  // Prepare center coordinates for the map
+  const coordinates = geoJson.geometry.coordinates[0][0];
+  const centerPosition: [number, number] = [coordinates[0], coordinates[1]];
+
+  // Define MapContainer props explicitly
+  const mapContainerProps: MapContainerProps = {
+    className: `rounded-xl border border-border ${className}`,
+    style: { height, width: "100%" },
+  };
+
   return (
-    <div
-      className="relative w-full"
-      style={{ height }}
-    >
-      <MapContainer
-        center={mapCenter}
-        zoom={zoom}
-        style={{ height: "100%", width: "100%" }}
-        className={`rounded-xl border border-border shadow-sm ${className}`}
-        scrollWheelZoom={false}
+    <MapContainer {...mapContainerProps}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <GeoJSON
+        data={geoJson as any}
+        pathOptions={geoJsonStyle}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {geoJson && (
-          <GeoJSON
-            data={geoJson}
-            pathOptions={geoJsonStyle}
-          >
-            {showTooltip && (
-              <Tooltip className="bg-white px-3 py-2 rounded-lg shadow-lg border-none">
-                <div className="font-medium text-gray-900">{farm.farm.name}</div>
-                <div className="text-gray-600">
-                  {farm.farm.size} {t("common.hectares")}
-                </div>
-              </Tooltip>
-            )}
-          </GeoJSON>
+        {showTooltip && (
+          <Tooltip>
+            <div className="font-medium">{farm.farm.name}</div>
+            <div>
+              {farm.farm.size} {t("common.hectares")}
+            </div>
+          </Tooltip>
         )}
-      </MapContainer>
-      <div className="absolute bottom-2 right-2 z-[400]">
-        <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-sm px-2 py-1 text-xs text-gray-500">© OpenStreetMap contributors</div>
-      </div>
-    </div>
+      </GeoJSON>
+    </MapContainer>
   );
 }

@@ -49,8 +49,14 @@ export function ActionCard({ action }: ActionCardProps) {
     }
   };
 
+  // Determine gradient based on category
+  const gradientClass = 
+    action.category === "pasture" ? "card-gradient-green" :
+    action.category === "cattle" ? "card-gradient-brown" :
+    action.category === "soil" ? "card-gradient-gold" : "card-gradient-blue";
+
   return (
-    <Card className="dashboard-card h-full flex flex-col">
+    <Card className={cn("dashboard-card h-full flex flex-col", gradientClass)}>
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
           <CardTitle className="text-lg font-semibold">{action.title}</CardTitle>
@@ -71,7 +77,10 @@ export function ActionCard({ action }: ActionCardProps) {
         </div>
       </CardContent>
       <CardFooter className="pt-2">
-        <Button variant="outline" className="w-full text-secondary border-secondary hover:bg-secondary/10 hover:text-secondary">
+        <Button 
+          variant="outline" 
+          className="w-full text-secondary border-secondary hover:bg-secondary/10 hover:text-secondary neumorph-btn dark:neumorph-btn-dark"
+        >
           {t('common.actions.learnMore')}
           <ArrowRight size={16} className="ml-2" />
         </Button>

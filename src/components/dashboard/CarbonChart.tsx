@@ -34,21 +34,21 @@ export function CarbonChart({ carbonData }: CarbonChartProps) {
     current: {
       label: t('dashboard.currentPractices'),
       theme: {
-        light: "#A06048", // Usando color secundario (brown)
-        dark: "#D9785F", // Usando color primario (orange)
+        light: "#D9785F", // Cambiado a un color más brillante
+        dark: "#FF9E80", 
       },
     },
     potential: {
       label: t('dashboard.regenerativePotential'),
       theme: {
-        light: "#9AC168", // Usando color primario (green)
-        dark: "#76D3B6", // Usando color secundario (teal)
+        light: "#9AC168", // Cambiado a un color más brillante
+        dark: "#AED581", 
       },
     },
   };
 
   return (
-    <Card className="dashboard-card">
+    <Card className="dashboard-card card-gradient-blue">
       <CardHeader>
         <CardTitle className="text-xl">{t('dashboard.carbonEmissionsCapture')}</CardTitle>
       </CardHeader>
