@@ -1,8 +1,10 @@
+
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Projection } from "@/types/farm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { useTranslation } from "react-i18next";
 
 interface ProjectionChartProps {
   twoYearData: Projection[];
@@ -20,6 +22,8 @@ interface ChartDataPoint {
 }
 
 export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metricKey, title, yAxisLabel }: ProjectionChartProps) {
+  const { t } = useTranslation();
+
   // Transform data for visualization
   const transformData = (projections: Projection[], key: keyof Projection) => {
     const current = projections.find((p) => p.type === "current");
@@ -60,17 +64,17 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
 
   const chartConfig = {
     current: {
-      label: "Current Practices",
+      label: t("dashboard.currentPractices"),
       theme: {
-        light: "#8B5E34",
-        dark: "#A77B58",
+        light: "#A06048", // Usando color secundario (brown)
+        dark: "#D9785F", // Usando color primario (orange)
       },
     },
     regenerative: {
-      label: "Regenerative Practices",
+      label: t("dashboard.regenerativePractices"),
       theme: {
-        light: "#2D6A4F",
-        dark: "#3A8A68",
+        light: "#9AC168", // Usando color primario (green)
+        dark: "#76D3B6", // Usando color secundario (teal)
       },
     },
   };
@@ -95,7 +99,7 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
         >
           <XAxis
             dataKey="year"
-            label={{ value: "Years", position: "insideBottomRight", offset: -5 }}
+            label={{ value: t("dashboard.years"), position: "insideBottomRight", offset: -5 }}
             axisLine={false}
             tickLine={false}
           />
@@ -116,7 +120,7 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
           <Line
             type="monotone"
             dataKey="current"
-            name="Current Practices"
+            name={t("dashboard.currentPractices")}
             stroke="var(--color-current)"
             strokeWidth={2}
             dot={{ r: 3 }}
@@ -125,7 +129,7 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
           <Line
             type="monotone"
             dataKey="regenerative"
-            name="Regenerative Practices"
+            name={t("dashboard.regenerativePractices")}
             stroke="var(--color-regenerative)"
             strokeWidth={2}
             dot={{ r: 3 }}
@@ -139,7 +143,7 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
   return (
     <Card className="dashboard-card">
       <CardHeader>
-        <CardTitle className="text-xl">{title} Projection</CardTitle>
+        <CardTitle className="text-xl">{title} {t("dashboard.projection")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs
@@ -151,19 +155,19 @@ export function ProjectionChart({ twoYearData, fiveYearData, tenYearData, metric
               value="two"
               className="flex-1 md:flex-none"
             >
-              2 Year
+              {t("dashboard.twoYear")}
             </TabsTrigger>
             <TabsTrigger
               value="five"
               className="flex-1 md:flex-none"
             >
-              5 Year
+              {t("dashboard.fiveYear")}
             </TabsTrigger>
             <TabsTrigger
               value="ten"
               className="flex-1 md:flex-none"
             >
-              10 Year
+              {t("dashboard.tenYear")}
             </TabsTrigger>
           </TabsList>
 

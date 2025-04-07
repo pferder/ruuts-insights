@@ -34,15 +34,15 @@ export function CarbonChart({ carbonData }: CarbonChartProps) {
     current: {
       label: t('dashboard.currentPractices'),
       theme: {
-        light: "#8B5E34",
-        dark: "#A77B58",
+        light: "#A06048", // Usando color secundario (brown)
+        dark: "#D9785F", // Usando color primario (orange)
       },
     },
     potential: {
       label: t('dashboard.regenerativePotential'),
       theme: {
-        light: "#2D6A4F",
-        dark: "#3A8A68",
+        light: "#9AC168", // Usando color primario (green)
+        dark: "#76D3B6", // Usando color secundario (teal)
       },
     },
   };
