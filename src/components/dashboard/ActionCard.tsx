@@ -26,17 +26,17 @@ export function ActionCard({ action }: ActionCardProps) {
   
   const getImpactColor = () => {
     switch (action.impact) {
-      case "high": return "bg-green-100 text-green-800 border-green-300";
-      case "medium": return "bg-blue-100 text-blue-800 border-blue-300";
-      case "low": return "bg-gray-100 text-gray-800 border-gray-300";
+      case "high": return "bg-theme-green-primary/10 text-theme-green-primary border-theme-green-primary/30";
+      case "medium": return "bg-theme-blue-secondary/10 text-theme-blue-secondary border-theme-blue-secondary/30";
+      case "low": return "bg-muted text-muted-foreground border-muted-foreground/30";
     }
   };
   
   const getTimeFrameColor = () => {
     switch (action.timeFrame) {
-      case "short": return "bg-emerald-100 text-emerald-800 border-emerald-300";
-      case "medium": return "bg-amber-100 text-amber-800 border-amber-300";
-      case "long": return "bg-orange-100 text-orange-800 border-orange-300";
+      case "short": return "bg-theme-teal-secondary/10 text-theme-teal-secondary border-theme-teal-secondary/30";
+      case "medium": return "bg-theme-yellow-secondary/10 text-theme-yellow-secondary border-theme-yellow-secondary/30";
+      case "long": return "bg-theme-orange-primary/10 text-theme-orange-primary border-theme-orange-primary/30";
     }
   };
 
@@ -71,7 +71,7 @@ export function ActionCard({ action }: ActionCardProps) {
         </div>
       </CardContent>
       <CardFooter className="pt-2">
-        <Button variant="outline" className="w-full text-farm-green-700 border-farm-green-700 hover:bg-farm-green-50 hover:text-farm-green-800">
+        <Button variant="outline" className="w-full text-secondary border-secondary hover:bg-secondary/10 hover:text-secondary">
           {t('common.actions.learnMore')}
           <ArrowRight size={16} className="ml-2" />
         </Button>

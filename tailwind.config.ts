@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,7 +62,20 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Farm app custom colors
+				// New theme colors
+				theme: {
+					// Primary colors
+					"green-primary": "#9AC168",
+					"brown-primary": "#3F3938",
+					"orange-primary": "#D9785F",
+					"white-primary": "#FFFFFF",
+					// Secondary colors
+					"teal-secondary": "#76D3B6",
+					"blue-secondary": "#698BE2",
+					"yellow-secondary": "#F4D07D",
+					"brown-secondary": "#A06048",
+				},
+				// Farm app custom colors (keeping for compatibility)
 				farm: {
 					green: {
 						100: '#E6FAF4',
