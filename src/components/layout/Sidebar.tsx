@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Home, LayoutDashboard, LineChart, Plus, Settings, Menu, X, Download } from "lucide-react";
+import { Home, LayoutDashboard, LineChart, Plus, Settings, Menu, X, Download, LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { LanguageSelector } from "./LanguageSelector";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import RuutsLogo from "@/assets/ruuts-blanco.svg";
 
 export function Sidebar() {
@@ -50,7 +51,7 @@ export function Sidebar() {
                 className="w-32"
               />
             </div>
-            <p className="text-xs text-sidebar-foreground/70">Regenerative Insights</p>
+            <p className="text-xs text-sidebar-foreground/70">Regenerative Analytics</p>
           </div>
           {/* Botón de cierre - dentro del sidebar */}
           <Button
@@ -65,7 +66,7 @@ export function Sidebar() {
 
         <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
           <NavItem
-            to="/"
+            to="/dashboard"
             icon={<LayoutDashboard size={20} />}
             label={t("common.dashboard")}
             end
@@ -94,14 +95,28 @@ export function Sidebar() {
         </nav>
 
         <div className="p-4 border-t border-sidebar-border">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <NavItem
-                to="/settings"
-                icon={<Settings size={20} />}
-                label={t("common.settings")}
-              />
+          <div className="flex items-center justify-between">
+            <NavLink to="/settings">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-sidebar-foreground hover:text-sidebar-accent-foreground"
+              >
+                <Settings size={20} />
+              </Button>
+            </NavLink>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
               <LanguageSelector className="text-sidebar-foreground hover:text-sidebar-accent-foreground" />
+              <NavLink to="/landing">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-red-500 hover:bg-red-500/10 hover:text-red-500"
+                >
+                  <LogOut size={20} />
+                </Button>
+              </NavLink>
             </div>
           </div>
         </div>

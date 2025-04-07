@@ -1,34 +1,36 @@
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
 
-export type FarmData = {
+export interface FarmData {
   id: string;
   name: string;
   location: string;
   size: number; // in hectares
+  coordinates: Coordinates;
   ownerName: string;
   createdAt: Date;
   updatedAt: Date;
-};
+}
 
-export type CattleData = {
+export interface CropData {
   id: string;
-  farmId: string;
-  totalHead: number;
-  cattleType: string;
-  averageWeight: number; // in kg
-  methodOfRaising: "conventional" | "regenerative" | "mixed";
-};
+  name: string;
+  area: number;
+}
 
-export type PastureData = {
+export interface CattleData {
   id: string;
-  farmId: string;
-  totalPastures: number;
-  averagePastureSize: number; // in hectares
-  rotationsPerSeason: number;
-  restingDaysPerPasture: number;
-  grassTypes: string[];
-  soilHealthScore?: number; // 1-10
-  currentForageDensity?: number; // kg/hectare
-};
+  type: string;
+  quantity: number;
+}
+
+export interface PastureData {
+  id: string;
+  type: string;
+  area: number;
+}
 
 export type CarbonData = {
   id: string;
@@ -39,12 +41,13 @@ export type CarbonData = {
   potentialCapture: number; // tons of CO2 per year under regenerative practices
 };
 
-export type FarmComplete = {
+export interface FarmComplete {
   farm: FarmData;
-  cattle: CattleData;
-  pasture: PastureData;
+  crops: CropData[];
+  cattle?: CattleData[];
+  pasture?: PastureData[];
   carbon?: CarbonData;
-};
+}
 
 export type Projection = {
   year: number;

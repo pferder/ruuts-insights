@@ -1,4 +1,3 @@
-
 {
   "navigation": {
     "dashboard": "Tablero",
@@ -61,7 +60,12 @@
     "clearFilters": "Limpiar Filtros",
     "noFarmsFound": "No se encontraron establecimientos con estos filtros",
     "noFarmsYet": "Aún no hay establecimientos",
-    "addYourFirstFarm": "Agrega tu primer establecimiento"
+    "addYourFirstFarm": "Agrega tu primer establecimiento",
+    "title": "Establecimientos",
+    "subtitle": "Gestiona y monitorea tus establecimientos",
+    "listView": "Vista de Lista",
+    "mapView": "Vista de Mapa",
+    "farmList": "Lista de Establecimientos"
   },
   "farmDetails": {
     "backToFarms": "Volver a establecimientos",
@@ -145,7 +149,12 @@
     "generating": "Generando Informe...",
     "compare": "Comparar establecimientos",
     "performance": "Rendimiento",
-    "efficiency": "Eficiencia"
+    "efficiency": "Eficiencia",
+    "selectFarmAndYear": "Seleccionar establecimiento y año",
+    "selectFarm": "Seleccionar establecimiento",
+    "selectYear": "Seleccionar año",
+    "currentYearOverview": "Resumen del año actual",
+    "chart": "Gráfico"
   },
   "export": {
     "title": "Exportar Datos",
@@ -265,6 +274,21 @@
     "analytics": "Analíticas",
     "export": "Exportar",
     "settings": "Configuración",
-    "addFarm": "Agregar establecimiento"
+    "addFarm": "Agregar establecimiento",
+    "cattle": "cabezas",
+    "farm": "Establecimiento"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "message": "Lo sentimos, la página que estás buscando no existe.",
+    "returnHome": "Volver al inicio"
+  },
+  "exportData": {
+    "selectAtLeastOne": "Por favor selecciona al menos un establecimiento",
+    "exportSuccess": "Datos exportados exitosamente",
+    "exportError": "Error al exportar los datos"
+  },
+  "app": {
+    "subtitle": "Gestiona tus establecimientos de manera eficiente y sostenible"
   }
 }

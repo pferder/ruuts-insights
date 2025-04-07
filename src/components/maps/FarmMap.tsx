@@ -1,6 +1,6 @@
-
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, GeoJSON, Tooltip, MapContainerProps } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON, Tooltip } from "react-leaflet";
+import { Feature, Polygon } from "geojson";
 import "leaflet/dist/leaflet.css";
 import { FarmComplete } from "@/types/farm";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,7 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 // Fix Leaflet icon issue
 const fixLeafletIcon = () => {
   delete (L.Icon.Default.prototype as any)._getIconUrl;
-  
+
   L.Icon.Default.mergeOptions({
     iconRetinaUrl,
     iconUrl,
@@ -29,108 +29,123 @@ interface FarmMapProps {
   className?: string;
 }
 
+// Coordenadas por defecto (centro de Argentina aproximadamente)
+const DEFAULT_CENTER: [number, number] = [-38.4161, -63.6167];
+const DEFAULT_ZOOM = 4;
+
 export function FarmMap({ farm, height = "400px", showTooltip = true, className = "" }: FarmMapProps) {
   const { t } = useTranslation();
-  const [geoJson, setGeoJson] = useState<any>(null);
-  
+  const [geoJson, setGeoJson] = useState<Feature<Polygon>>(null);
+  const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER);
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+
   // Call once to fix icons
   useEffect(() => {
     fixLeafletIcon();
   }, []);
 
-  // In a real environment, we would load GeoJSON from an API
-  // For this example, we generate a simple polygon based on farm location and size
+  // Generate a polygon around the farm coordinates
   useEffect(() => {
-    // Generate simulated coordinates based on location name (demo only)
-    const generateCoordinates = (location: string, size: number) => {
-      // Create a simple hash based on location name
-      let hash = 0;
-      for (let i = 0; i < location.length; i++) {
-        hash = ((hash << 5) - hash) + location.charCodeAt(i);
-        hash |= 0;
-      }
-      
-      // Use hash to generate base coordinates (South America approximately)
-      const baseLat = -34 + (hash % 10);
-      const baseLng = -58 + ((hash >> 4) % 15);
-      
-      // Generate polygon based on farm size
-      const scale = Math.sqrt(size) / 20;
-      const polygon = [
-        [baseLat, baseLng],
-        [baseLat + scale, baseLng],
-        [baseLat + scale, baseLng + scale],
-        [baseLat, baseLng + scale],
-        [baseLat, baseLng] // Close polygon
-      ];
-      
-      return polygon;
-    };
-    
-    // Create GeoJSON object with generated polygon
-    const polygon = generateCoordinates(farm.farm.location, farm.farm.size);
-    const geoJsonData = {
+    // Validación temprana de la existencia de farm y sus propiedades
+    if (!farm?.farm) {
+      console.warn("Farm data is not available");
+      return;
+    }
+
+    const coordinates = farm.farm.coordinates;
+    if (!coordinates?.lat || !coordinates?.lng) {
+      console.warn("Farm coordinates are not available");
+      return;
+    }
+
+    const { lat, lng } = coordinates;
+    const size = farm.farm.size;
+
+    // Calculamos el tamaño del polígono basado en el tamaño de la granja
+    // 1 hectárea ≈ 0.01 km² ≈ 0.0001 grados de lat/lng
+    const scale = Math.sqrt(size) * 0.001; // Ajustamos la escala para que sea visible en el mapa
+
+    // Para GeoJSON, el orden es [longitude, latitude]
+    const polygon = [
+      [lng - scale, lat - scale],
+      [lng + scale, lat - scale],
+      [lng + scale, lat + scale],
+      [lng - scale, lat + scale],
+      [lng - scale, lat - scale], // Cerramos el polígono
+    ];
+
+    const geoJsonData: Feature<Polygon> = {
       type: "Feature",
       properties: {
         name: farm.farm.name,
         location: farm.farm.location,
-        size: farm.farm.size
+        size: farm.farm.size,
       },
       geometry: {
         type: "Polygon",
-        coordinates: [polygon]
-      }
+        coordinates: [polygon],
+      },
     };
-    
+
     setGeoJson(geoJsonData);
+    setMapCenter([lat, lng]);
+    setZoom(13);
   }, [farm]);
-  
-  // GeoJSON style
+
+  // GeoJSON style - More modern and minimal style
   const geoJsonStyle = {
-    fillColor: "#4CAF50",
-    weight: 2,
+    fillColor: "#38bdf8", // Un azul más moderno
+    weight: 1.5, // Borde más fino
     opacity: 1,
-    color: "#2E7D32",
-    fillOpacity: 0.4
+    color: "#0284c7", // Borde un poco más oscuro que el relleno
+    fillOpacity: 0.25, // Más transparente para un look más sutil
   };
-  
-  if (!geoJson) {
+
+  // Loading state o datos no disponibles
+  if (!farm?.farm) {
     return (
-      <div 
-        className={`bg-gray-100 animate-pulse rounded-xl ${className}`} 
+      <div
+        className={`bg-gray-100 animate-pulse rounded-xl ${className}`}
         style={{ height }}
       />
     );
   }
-  
-  // Prepare center coordinates for the map
-  const coordinates = geoJson.geometry.coordinates[0][0];
-  const centerPosition: [number, number] = [coordinates[0], coordinates[1]];
-  
+
   return (
-    <MapContainer 
-      zoom={13} 
-      style={{ height, width: "100%" }}
-      className={`rounded-xl border border-border ${className}`}
-      center={centerPosition}
+    <div
+      className="relative w-full"
+      style={{ height }}
     >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <GeoJSON 
-        data={geoJson as any} 
-        pathOptions={geoJsonStyle}
+      <MapContainer
+        center={mapCenter}
+        zoom={zoom}
+        style={{ height: "100%", width: "100%" }}
+        className={`rounded-xl border border-border shadow-sm ${className}`}
+        scrollWheelZoom={false}
       >
-        {showTooltip && (
-          <Tooltip 
-            permanent
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {geoJson && (
+          <GeoJSON
+            data={geoJson}
+            pathOptions={geoJsonStyle}
           >
-            <div className="font-medium">{farm.farm.name}</div>
-            <div>{farm.farm.size} {t('common.hectares')}</div>
-          </Tooltip>
+            {showTooltip && (
+              <Tooltip className="bg-white px-3 py-2 rounded-lg shadow-lg border-none">
+                <div className="font-medium text-gray-900">{farm.farm.name}</div>
+                <div className="text-gray-600">
+                  {farm.farm.size} {t("common.hectares")}
+                </div>
+              </Tooltip>
+            )}
+          </GeoJSON>
         )}
-      </GeoJSON>
-    </MapContainer>
+      </MapContainer>
+      <div className="absolute bottom-2 right-2 z-[400]">
+        <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-sm px-2 py-1 text-xs text-gray-500">© OpenStreetMap contributors</div>
+      </div>
+    </div>
   );
 }
