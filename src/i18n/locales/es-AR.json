@@ -174,6 +174,57 @@
     "deselectAll": "Deseleccionar Todo",
     "estimatedSize": "Tamaño Estimado"
   },
+  "landing": {
+    "hero": {
+      "title": "Ruuts, tu camino hacia la regeneración",
+      "subtitle": "Transforma tu establecimiento con prácticas regenerativas y monitorea el impacto de tus decisiones en tiempo real.",
+      "cta": "Acceder a Ruuts Regen Analytics",
+      "learnMore": "Conocer más"
+    },
+    "features": {
+      "title": "Ruuts Regen Analytics",
+      "subtitle": "Descubre todas las herramientas que necesitas para transformar tu establecimiento con prácticas regenerativas.",
+      "carbon": "Análisis de Carbono",
+      "carbonDesc": "Monitorea la huella de carbono de tu establecimiento y descubre oportunidades de mejora.",
+      "practices": "Prácticas Regenerativas",
+      "practicesDesc": "Implementa y haz seguimiento de prácticas que mejoran la salud del suelo y los ecosistemas.",
+      "metrics": "Métricas de Sostenibilidad",
+      "metricsDesc": "Visualiza indicadores clave de sostenibilidad y rendimiento de tu establecimiento.",
+      "projections": "Proyecciones a Futuro",
+      "projectionsDesc": "Anticipa el impacto de tus decisiones con proyecciones a corto y largo plazo.",
+      "ecosystem": "Salud del Ecosistema",
+      "ecosystemDesc": "Evalúa la biodiversidad y salud general del ecosistema de tu establecimiento.",
+      "analytics": "Analítica Avanzada",
+      "analyticsDesc": "Obtén insights profundos basados en datos para mejorar la gestión de tu establecimiento."
+    },
+    "about": {
+      "title": "Impulsa el potencial regenerativo de tu establecimiento",
+      "subtitle1": "Nuestra plataforma de análisis te proporciona las herramientas para tomar decisiones informadas que beneficien tanto tu producción como el medio ambiente.",
+      "subtitle2": "Con Ruuts Regen Analytics podrás medir, gestionar y visualizar el impacto de tus prácticas agrícolas, maximizando la salud del suelo y la rentabilidad de tu establecimiento.",
+      "cta": "Comenzar ahora"
+    },
+    "cta": {
+      "title": "Comienza tu camino hacia la regeneración",
+      "subtitle": "Únete a la comunidad de agricultores regenerativos y transforma tu establecimiento con Ruuts Regen Analytics.",
+      "button": "Acceder al Dashboard"
+    },
+    "navbar": {
+      "regen": "Regen Analytics",
+      "measurements": "Mediciones y Monitoreos",
+      "grass": "GRASS",
+      "carbon": "Programas de carbono",
+      "dashboard": "Acceder al Dashboard"
+    },
+    "footer": {
+      "platform": "Plataforma",
+      "resources": "Recursos",
+      "blog": "Blog",
+      "guides": "Guías prácticas",
+      "helpCenter": "Centro de ayuda",
+      "contact": "Contacto",
+      "rights": "Todos los derechos reservados"
+    }
+  },
   "common": {
     "viewDetails": "Ver Detalles",
     "viewAll": "Ver Todo",
@@ -208,6 +259,12 @@
     "toggleTheme": "Cambiar Tema",
     "light": "Claro",
     "dark": "Oscuro",
-    "system": "Sistema"
+    "system": "Sistema",
+    "dashboard": "Tablero",
+    "farms": "Establecimientos",
+    "analytics": "Analíticas",
+    "export": "Exportar",
+    "settings": "Configuración",
+    "addFarm": "Agregar establecimiento"
   }
 }

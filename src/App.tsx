@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { FarmProvider } from "@/context/FarmContext";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Farms from "./pages/Farms";
 import FarmDetails from "./pages/FarmDetails";
@@ -27,6 +28,10 @@ const App = () => (
             <Routes>
               <Route
                 path="/"
+                element={<Landing />}
+              />
+              <Route
+                path="/dashboard"
                 element={<Index />}
               />
               <Route
