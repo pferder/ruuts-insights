@@ -109,21 +109,23 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
   
   return (
     <MapContainer 
-      center={centerPosition} 
       zoom={13} 
       style={{ height, width: "100%" }}
       className={`rounded-xl border border-border ${className}`}
+      center={centerPosition}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       <GeoJSON 
         data={geoJson as any} 
         pathOptions={geoJsonStyle}
       >
         {showTooltip && (
-          <Tooltip permanent>
+          <Tooltip 
+            permanent
+          >
             <div className="font-medium">{farm.farm.name}</div>
             <div>{farm.farm.size} {t('common.hectares')}</div>
           </Tooltip>
