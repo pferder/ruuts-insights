@@ -4,6 +4,7 @@ import { Feature, Polygon } from "geojson";
 import "leaflet/dist/leaflet.css";
 import { FarmComplete } from "@/types/farm";
 import { useTranslation } from "react-i18next";
+import { LatLngExpression } from "leaflet";
 
 // Fix for Leaflet icon in production environments
 import L from "leaflet";
@@ -13,7 +14,7 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 // Fix Leaflet icon issue
 const fixLeafletIcon = () => {
-  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  delete L.Icon.Default.prototype._getIconUrl;
 
   L.Icon.Default.mergeOptions({
     iconRetinaUrl,
@@ -30,13 +31,13 @@ interface FarmMapProps {
 }
 
 // Coordenadas por defecto (centro de Argentina aproximadamente)
-const DEFAULT_CENTER: [number, number] = [-38.4161, -63.6167];
+const DEFAULT_CENTER: LatLngExpression = [-38.4161, -63.6167];
 const DEFAULT_ZOOM = 4;
 
 export function FarmMap({ farm, height = "400px", showTooltip = true, className = "" }: FarmMapProps) {
   const { t } = useTranslation();
   const [geoJson, setGeoJson] = useState<Feature<Polygon>>(null);
-  const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER);
+  const [mapCenter, setMapCenter] = useState<LatLngExpression>(DEFAULT_CENTER);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
 
   // Call once to fix icons
@@ -111,24 +112,36 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
     );
   }
 
-  // Prepare center coordinates for the map
-  const coordinates = geoJson.geometry.coordinates[0][0];
-  const centerPosition: [number, number] = [coordinates[0], coordinates[1]];
-
-  // Define MapContainer props explicitly
-  const mapContainerProps: MapContainerProps = {
-    className: `rounded-xl border border-border ${className}`,
-    style: { height, width: "100%" },
-  };
+  // Solo renderizar el mapa si tenemos geoJson
+  if (!geoJson) {
+    return (
+      <MapContainer
+        center={DEFAULT_CENTER}
+        zoom={DEFAULT_ZOOM}
+        className={`rounded-xl border border-border ${className}`}
+        style={{ height, width: "100%" }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+      </MapContainer>
+    );
+  }
 
   return (
-    <MapContainer {...mapContainerProps}>
+    <MapContainer
+      center={mapCenter}
+      zoom={zoom}
+      className={`rounded-xl border border-border ${className}`}
+      style={{ height, width: "100%" }}
+    >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       <GeoJSON
-        data={geoJson as any}
+        data={geoJson}
         pathOptions={geoJsonStyle}
       >
         {showTooltip && (

@@ -26,13 +26,12 @@ export function Header({ title, subtitle, showSearch }: HeaderProps) {
   };
 
   return (
-    <header className="border-b px-6 py-4 sticky top-0 z-10 bg-background">
+    <header className="border-b px-6 py-4 sticky top-0 z-10 bg-background mb-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-semibold">{getPageTitle()}</h1>
           {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
         </div>
-        <div className="flex items-center gap-4"></div>
       </div>
     </header>
   );
