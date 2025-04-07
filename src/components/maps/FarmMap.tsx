@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, GeoJSON, Tooltip } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON, Tooltip, MapContainerProps } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { FarmComplete } from "@/types/farm";
 import { useTranslation } from "react-i18next";
@@ -86,14 +86,12 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
   }, [farm]);
   
   // GeoJSON style
-  const geoJsonStyle = () => {
-    return {
-      fillColor: "#4CAF50",
-      weight: 2,
-      opacity: 1,
-      color: "#2E7D32",
-      fillOpacity: 0.4
-    };
+  const geoJsonStyle = {
+    fillColor: "#4CAF50",
+    weight: 2,
+    opacity: 1,
+    color: "#2E7D32",
+    fillOpacity: 0.4
   };
   
   if (!geoJson) {
@@ -107,11 +105,11 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
   
   // Prepare center coordinates for the map
   const coordinates = geoJson.geometry.coordinates[0][0];
-  const center: [number, number] = [coordinates[0], coordinates[1]];
+  const centerPosition: [number, number] = [coordinates[0], coordinates[1]];
   
   return (
     <MapContainer 
-      center={center} 
+      center={centerPosition} 
       zoom={13} 
       style={{ height, width: "100%" }}
       className={`rounded-xl border border-border ${className}`}
@@ -122,7 +120,7 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
       />
       <GeoJSON 
         data={geoJson as any} 
-        style={geoJsonStyle}
+        pathOptions={geoJsonStyle}
       >
         {showTooltip && (
           <Tooltip permanent>
