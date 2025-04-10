@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Download, FileDown, Check } from "lucide-react";
@@ -51,13 +50,10 @@ const ExportData = () => {
       const selectedFarmData = farms.filter(farm => selectedFarmIds.includes(farm.farm.id));
       
       if (selectedFarmData.length === 1) {
-        // Export single farm
         const farmData = selectedFarmData[0];
         const csvContent = exportFarmDataToCsv(farmData);
         downloadCSV(csvContent, `${farmData.farm.name.replace(/\s+/g, '_')}_data.csv`);
       } else {
-        // Export multiple farms
-        // Create a combined CSV with all farms
         const headers = [
           "Farm Name",
           "Location",
@@ -82,6 +78,9 @@ const ExportData = () => {
         const rows = selectedFarmData.map(farm => {
           const { farm: farmData, cattle, pasture, carbon } = farm;
           const carbonData = carbon || { currentEmissions: 0, currentCapture: 0, potentialEmissions: 0, potentialCapture: 0 };
+          const grassTypesString = Array.isArray(pasture.grassTypes) 
+            ? pasture.grassTypes.join("; ") 
+            : pasture.grassTypes;
           
           return [
             farmData.name,
@@ -96,7 +95,7 @@ const ExportData = () => {
             pasture.averagePastureSize,
             pasture.rotationsPerSeason,
             pasture.restingDaysPerPasture,
-            pasture.grassTypes.join("; "),
+            grassTypesString,
             pasture.soilHealthScore || "N/A",
             carbonData.currentEmissions,
             carbonData.currentCapture,

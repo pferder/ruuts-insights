@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  ArrowLeft, 
-  Home, 
-  MapPin, 
-  Ruler, 
-  User, 
+import {
+  ArrowLeft,
+  Home,
+  MapPin,
+  Ruler,
+  User,
   Calendar,
   PackagePlus,
   Leaf,
@@ -414,11 +414,18 @@ const FarmDetails = () => {
                   <div>
                     <dt className="text-sm font-medium text-muted-foreground">Grass/Forage Types</dt>
                     <dd className="mt-1 flex flex-wrap gap-2">
-                      {pasture.grassTypes.map((grass, index) => (
-                        <Badge key={index} variant="outline" className="bg-farm-green-50">
-                          {grass}
-                        </Badge>
-                      ))}
+                      {Array.isArray(pasture.grassTypes) 
+                        ? pasture.grassTypes.map((grass, index) => (
+                            <Badge key={index} variant="outline" className="bg-farm-green-50">
+                              {grass}
+                            </Badge>
+                          ))
+                        : pasture.grassTypes.split(',').map((grass, index) => (
+                            <Badge key={index} variant="outline" className="bg-farm-green-50">
+                              {grass.trim()}
+                            </Badge>
+                          ))
+                      }
                     </dd>
                   </div>
                   

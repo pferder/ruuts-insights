@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { FarmComplete, FarmData, CattleData, PastureData, CarbonData, RegionalAverages } from "@/types/farm";
 import { mockFarmData, getFarmById as getMockFarmById } from "@/lib/mock-data";
@@ -20,7 +19,7 @@ interface FarmContextType {
                farmData?: Partial<FarmData>, 
                cattleData?: Partial<CattleData>, 
                pastureData?: Partial<PastureData>,
-               regionalAverages?: Partial<RegionalAverages>) => void;
+               regionalAveragesPartial?: Partial<RegionalAverages>) => void;
   deleteFarm: (farmId: string) => void;
   selectFarm: (farmId: string) => void;
   searchFarms: (query: string) => void;
@@ -36,10 +35,8 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Initialize with mock data
   useEffect(() => {
     try {
-      // Simulating API fetch delay
       setTimeout(() => {
         setFarms(mockFarmData);
         setFilteredFarms(mockFarmData);
@@ -65,43 +62,37 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const farmId = `farm-${uuidv4()}`;
     const now = new Date();
     
-    // Create the farm object with default coordinates
     const farm: FarmData = {
       id: farmId,
       ...newFarmData,
-      coordinates: { lat: Math.random() * 10 + 30, lng: Math.random() * 10 - 90 }, // Random coordinates for demo
+      coordinates: { lat: Math.random() * 10 + 30, lng: Math.random() * 10 - 90 },
       createdAt: now,
       updatedAt: now
     };
     
-    // Create the cattle object
     const cattle: CattleData = {
       id: `cattle-${uuidv4()}`,
       farmId,
       ...newCattleData
     };
     
-    // Create the pasture object
     const pasture: PastureData = {
       id: `pasture-${uuidv4()}`,
       farmId,
       ...newPastureData
     };
     
-    // Calculate carbon data
     const carbon = calculateCarbonData(cattle, pasture);
     
-    // Create the complete farm object
     const newFarm: FarmComplete = {
       farm,
       cattle,
       pasture,
       carbon,
       regionalAverages,
-      crops: [] // Empty array for crops since we're not collecting that data
+      crops: []
     };
     
-    // Update state
     setFarms(prev => [...prev, newFarm]);
     setFilteredFarms(prev => [...prev, newFarm]);
     toast.success(`Farm "${farm.name}" created successfully`);
@@ -113,7 +104,7 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
     farmData?: Partial<FarmData>, 
     cattleData?: Partial<CattleData>, 
     pastureData?: Partial<PastureData>,
-    regionalAverages?: Partial<RegionalAverages>
+    regionalAveragesPartial?: Partial<RegionalAverages>
   ) => {
     setFarms(prev => {
       return prev.map(item => {
@@ -132,12 +123,19 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
             ? { ...item.pasture, ...pastureData } 
             : item.pasture;
           
-          // Update regional averages if provided
-          const updatedRegionalAverages = regionalAverages
-            ? { ...(item.regionalAverages || {}), ...regionalAverages }
+          const updatedRegionalAverages = regionalAveragesPartial
+            ? item.regionalAverages 
+              ? { ...item.regionalAverages, ...regionalAveragesPartial }
+              : {
+                  biomassDensity: regionalAveragesPartial.biomassDensity || 3500,
+                  animalLoad: regionalAveragesPartial.animalLoad || 1.5,
+                  paddockCount: regionalAveragesPartial.paddockCount || 6,
+                  rotationsCount: regionalAveragesPartial.rotationsCount || 3,
+                  carbonCapture: regionalAveragesPartial.carbonCapture || 5,
+                  carbonEmissions: regionalAveragesPartial.carbonEmissions || 7,
+                }
             : item.regionalAverages;
           
-          // Recalculate carbon data if cattle or pasture data changed
           const updatedCarbon = (cattleData || pastureData) 
             ? calculateCarbonData(updatedCattle, updatedPasture) 
             : item.carbon;
@@ -155,7 +153,6 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     });
     
-    // Also update the filtered farms
     setFilteredFarms(prev => {
       return prev.map(item => {
         if (item.farm.id === farmId) {
@@ -173,12 +170,19 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
             ? { ...item.pasture, ...pastureData } 
             : item.pasture;
           
-          // Update regional averages if provided
-          const updatedRegionalAverages = regionalAverages
-            ? { ...(item.regionalAverages || {}), ...regionalAverages }
+          const updatedRegionalAverages = regionalAveragesPartial
+            ? item.regionalAverages 
+              ? { ...item.regionalAverages, ...regionalAveragesPartial }
+              : {
+                  biomassDensity: regionalAveragesPartial.biomassDensity || 3500,
+                  animalLoad: regionalAveragesPartial.animalLoad || 1.5,
+                  paddockCount: regionalAveragesPartial.paddockCount || 6,
+                  rotationsCount: regionalAveragesPartial.rotationsCount || 3,
+                  carbonCapture: regionalAveragesPartial.carbonCapture || 5,
+                  carbonEmissions: regionalAveragesPartial.carbonEmissions || 7,
+                }
             : item.regionalAverages;
           
-          // Recalculate carbon data if cattle or pasture data changed
           const updatedCarbon = (cattleData || pastureData) 
             ? calculateCarbonData(updatedCattle, updatedPasture) 
             : item.carbon;
@@ -196,7 +200,6 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     });
     
-    // Update selected farm if it's the one being updated
     if (selectedFarm && selectedFarm.farm.id === farmId) {
       const updatedFarm = getFarmById(farmId);
       if (updatedFarm) {
@@ -208,11 +211,9 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteFarm = (farmId: string) => {
-    // Remove the farm from state
     setFarms(prev => prev.filter(farm => farm.farm.id !== farmId));
     setFilteredFarms(prev => prev.filter(farm => farm.farm.id !== farmId));
     
-    // Clear selected farm if it was the deleted one
     if (selectedFarm && selectedFarm.farm.id === farmId) {
       setSelectedFarm(null);
     }
