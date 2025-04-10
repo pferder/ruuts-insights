@@ -190,7 +190,11 @@ export function generateRecommendedActions(farm: FarmComplete): RecommendedActio
   }
   
   // Check grass diversity
-  if (pasture.grassTypes.length < 3) {
+  const grassTypesArray = Array.isArray(pasture.grassTypes) 
+    ? pasture.grassTypes 
+    : pasture.grassTypes.split(',').map(g => g.trim());
+    
+  if (grassTypesArray.length < 3) {
     actions.push({
       id: "diversity-1",
       title: "Increase Plant Diversity",
@@ -253,6 +257,11 @@ export function exportFarmDataToCsv(farm: FarmComplete): string {
     "Potential CO2 Capture (tons/year)"
   ];
   
+  // Handle both string and array types for grassTypes
+  const grassTypesStr = Array.isArray(pasture.grassTypes) 
+    ? pasture.grassTypes.join("; ") 
+    : pasture.grassTypes;
+  
   const values = [
     farmData.name,
     farmData.location,
@@ -266,7 +275,7 @@ export function exportFarmDataToCsv(farm: FarmComplete): string {
     pasture.averagePastureSize,
     pasture.rotationsPerSeason,
     pasture.restingDaysPerPasture,
-    pasture.grassTypes.join("; "),
+    grassTypesStr,
     pasture.soilHealthScore || "N/A",
     carbonData.currentEmissions,
     carbonData.currentCapture,

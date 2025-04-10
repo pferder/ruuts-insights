@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, GeoJSON, Tooltip } from "react-leaflet";
 import { Feature, Polygon } from "geojson";
@@ -30,13 +31,13 @@ interface FarmMapProps {
   className?: string;
 }
 
-// Coordenadas por defecto (centro de Argentina aproximadamente)
+// Default coordinates (approximate center of Argentina)
 const DEFAULT_CENTER: LatLngExpression = [-38.4161, -63.6167];
 const DEFAULT_ZOOM = 4;
 
 export function FarmMap({ farm, height = "400px", showTooltip = true, className = "" }: FarmMapProps) {
   const { t } = useTranslation();
-  const [geoJson, setGeoJson] = useState<Feature<Polygon>>(null);
+  const [geoJson, setGeoJson] = useState<Feature<Polygon> | null>(null);
   const [mapCenter, setMapCenter] = useState<LatLngExpression>(DEFAULT_CENTER);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
 
@@ -47,7 +48,7 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
 
   // Generate a polygon around the farm coordinates
   useEffect(() => {
-    // Validación temprana de la existencia de farm y sus propiedades
+    // Early validation of farm data existence
     if (!farm?.farm) {
       console.warn("Farm data is not available");
       return;
@@ -62,17 +63,17 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
     const { lat, lng } = coordinates;
     const size = farm.farm.size;
 
-    // Calculamos el tamaño del polígono basado en el tamaño de la granja
-    // 1 hectárea ≈ 0.01 km² ≈ 0.0001 grados de lat/lng
-    const scale = Math.sqrt(size) * 0.001; // Ajustamos la escala para que sea visible en el mapa
+    // Calculate polygon size based on farm size
+    // 1 hectare ≈ 0.01 km² ≈ 0.0001 degrees of lat/lng
+    const scale = Math.sqrt(size) * 0.001; // Adjust scale to be visible on the map
 
-    // Para GeoJSON, el orden es [longitude, latitude]
+    // For GeoJSON, the order is [longitude, latitude]
     const polygon = [
       [lng - scale, lat - scale],
       [lng + scale, lat - scale],
       [lng + scale, lat + scale],
       [lng - scale, lat + scale],
-      [lng - scale, lat - scale], // Cerramos el polígono
+      [lng - scale, lat - scale], // Close the polygon
     ];
 
     const geoJsonData: Feature<Polygon> = {
@@ -95,14 +96,14 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
 
   // GeoJSON style - More modern and minimal style
   const geoJsonStyle = {
-    fillColor: "#38bdf8", // Un azul más moderno
-    weight: 1.5, // Borde más fino
+    fillColor: "#38bdf8", // A more modern blue
+    weight: 1.5, // Finer border
     opacity: 1,
-    color: "#0284c7", // Borde un poco más oscuro que el relleno
-    fillOpacity: 0.25, // Más transparente para un look más sutil
+    color: "#0284c7", // Border slightly darker than the fill
+    fillOpacity: 0.25, // More transparent for a more subtle look
   };
 
-  // Loading state o datos no disponibles
+  // Loading state or unavailable data
   if (!farm?.farm) {
     return (
       <div
@@ -112,14 +113,14 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
     );
   }
 
-  // Solo renderizar el mapa si tenemos geoJson
+  // Only render the map if we have geoJson
   if (!geoJson) {
     return (
       <MapContainer
-        center={DEFAULT_CENTER}
-        zoom={DEFAULT_ZOOM}
         className={`rounded-xl border border-border ${className}`}
         style={{ height, width: "100%" }}
+        center={DEFAULT_CENTER}
+        zoom={DEFAULT_ZOOM}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -131,10 +132,10 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
 
   return (
     <MapContainer
-      center={mapCenter}
-      zoom={zoom}
       className={`rounded-xl border border-border ${className}`}
       style={{ height, width: "100%" }}
+      center={mapCenter}
+      zoom={zoom}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

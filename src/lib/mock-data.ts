@@ -14,6 +14,7 @@ export const mockFarms: FarmData[] = [
     name: "Green Valley Ranch",
     location: "Montana, USA",
     size: 1200,
+    coordinates: { lat: 46.8797, lng: -110.3626 }, // Montana coordinates
     ownerName: "John Smith",
     createdAt: new Date("2023-01-15"),
     updatedAt: new Date("2023-12-10")
@@ -23,6 +24,7 @@ export const mockFarms: FarmData[] = [
     name: "Highland Cattle Co.",
     location: "Colorado, USA",
     size: 850,
+    coordinates: { lat: 39.5501, lng: -105.7821 }, // Colorado coordinates
     ownerName: "Maria Rodriguez",
     createdAt: new Date("2022-06-22"),
     updatedAt: new Date("2023-11-05")
@@ -32,6 +34,7 @@ export const mockFarms: FarmData[] = [
     name: "Sunset Meadows",
     location: "Wyoming, USA",
     size: 2100,
+    coordinates: { lat: 43.0760, lng: -107.2903 }, // Wyoming coordinates
     ownerName: "Robert Johnson",
     createdAt: new Date("2021-03-10"),
     updatedAt: new Date("2023-10-18")
@@ -113,7 +116,8 @@ export const mockFarmData: FarmComplete[] = mockFarms.map((farm, index) => ({
   farm,
   cattle: mockCattle[index],
   pasture: mockPastures[index],
-  carbon: mockCarbon[index]
+  carbon: mockCarbon[index],
+  crops: [] // Add empty crops array to conform to FarmComplete interface
 }));
 
 // Function to get a complete farm by ID

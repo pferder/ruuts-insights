@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { FarmProvider } from "@/context/FarmContext";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import React from "react";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Farms from "./pages/Farms";
@@ -15,17 +16,17 @@ import Analytics from "./pages/Analytics";
 import ExportData from "./pages/ExportData";
 import NotFound from "./pages/NotFound";
 
-// Create a QueryClient instance outside the component
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1,
-    },
-  },
-});
-
 const App = () => {
+  // Create QueryClient instance inside the component
+  const [queryClient] = React.useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        retry: 1,
+      },
+    },
+  }));
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
