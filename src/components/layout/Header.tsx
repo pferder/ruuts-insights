@@ -1,6 +1,10 @@
+
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { LanguageSelector } from "./LanguageSelector";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useFarm } from "@/context/FarmContext";
 
 interface HeaderProps {
   title?: string;
@@ -11,6 +15,7 @@ interface HeaderProps {
 export function Header({ title, subtitle, showSearch }: HeaderProps) {
   const { t } = useTranslation();
   const location = useLocation();
+  const { searchFarms } = useFarm();
 
   const getPageTitle = () => {
     if (title) return title;
@@ -32,6 +37,18 @@ export function Header({ title, subtitle, showSearch }: HeaderProps) {
           <h1 className="text-2xl font-semibold">{getPageTitle()}</h1>
           {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
         </div>
+        
+        {showSearch && (
+          <div className="relative hidden sm:block w-64 lg:w-80">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input 
+              type="search" 
+              placeholder={t("common.search")}
+              className="pl-8 neumorph-inset dark:neumorph-dark-inset"
+              onChange={(e) => searchFarms(e.target.value)}
+            />
+          </div>
+        )}
       </div>
     </header>
   );

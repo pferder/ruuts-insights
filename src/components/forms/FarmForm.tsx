@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +25,13 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { FarmData, CattleData, PastureData } from "@/types/farm";
+import { 
+  FarmData, 
+  CattleData, 
+  PastureData, 
+  RegionalAverages 
+} from "@/types/farm";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 // Validation schema
 const formSchema = z.object({
@@ -50,12 +55,21 @@ const formSchema = z.object({
   grassTypes: z.string().min(2, "Grass types must be at least 2 characters"),
   soilHealthScore: z.number().min(1, "Soil health score must be at least 1").max(10, "Soil health score must be at most 10").optional(),
   currentForageDensity: z.number().min(1, "Forage density must be at least 1 kg/hectare").optional(),
+  
+  // Regional Averages
+  regionalBiomassDensity: z.number().min(1, "Regional biomass density must be at least 1 kg/hectare").optional(),
+  regionalAnimalLoad: z.number().min(0.1, "Regional animal load must be at least 0.1").optional(),
+  regionalPaddockCount: z.number().min(1, "Regional paddock count must be at least 1").optional(),
+  regionalRotationsCount: z.number().min(1, "Regional rotations count must be at least 1").optional(),
+  regionalCarbonCapture: z.number().min(0.1, "Regional carbon capture must be at least 0.1").optional(),
+  regionalCarbonEmissions: z.number().min(0.1, "Regional carbon emissions must be at least 0.1").optional(),
 });
 
 export function FarmForm() {
   const { createFarm } = useFarm();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [regionalDataOpen, setRegionalDataOpen] = useState(false);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,6 +89,12 @@ export function FarmForm() {
       grassTypes: "",
       soilHealthScore: 5,
       currentForageDensity: 0,
+      regionalBiomassDensity: 3500,
+      regionalAnimalLoad: 1.5,
+      regionalPaddockCount: 6,
+      regionalRotationsCount: 3,
+      regionalCarbonCapture: 5,
+      regionalCarbonEmissions: 7,
     },
   });
   
@@ -83,7 +103,7 @@ export function FarmForm() {
     
     try {
       // Extract farm data
-      const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt"> = {
+      const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt" | "coordinates"> = {
         name: data.name,
         location: data.location,
         size: data.size,
@@ -109,8 +129,18 @@ export function FarmForm() {
         currentForageDensity: data.currentForageDensity,
       };
       
+      // Extract regional averages
+      const regionalAverages: RegionalAverages = {
+        biomassDensity: data.regionalBiomassDensity || 3500,
+        animalLoad: data.regionalAnimalLoad || 1.5,
+        paddockCount: data.regionalPaddockCount || 6,
+        rotationsCount: data.regionalRotationsCount || 3,
+        carbonCapture: data.regionalCarbonCapture || 5,
+        carbonEmissions: data.regionalCarbonEmissions || 7,
+      };
+      
       // Create the farm
-      createFarm(farmData, cattleData, pastureData);
+      createFarm(farmData, cattleData, pastureData, regionalAverages);
       
       // Navigate to farms list
       navigate("/farms");
@@ -436,6 +466,164 @@ export function FarmForm() {
                 />
               </div>
             </div>
+            
+            <Collapsible
+              open={regionalDataOpen}
+              onOpenChange={setRegionalDataOpen}
+              className="space-y-4"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium">Regional Averages (Optional)</h3>
+                <CollapsibleTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    {regionalDataOpen ? "Hide" : "Show"}
+                  </Button>
+                </CollapsibleTrigger>
+              </div>
+              
+              <CollapsibleContent className="space-y-4">
+                <FormDescription>
+                  These values represent the regional averages for your area. They will be used for comparison in the dashboard.
+                </FormDescription>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="regionalBiomassDensity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Regional Biomass Density (kg/hectare)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            placeholder="3500" 
+                            {...field} 
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Average biomass production in your region
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="regionalAnimalLoad"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Regional Animal Load (animals/hectare)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            placeholder="1.5" 
+                            step="0.1"
+                            {...field} 
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Average animal load in your region
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="regionalPaddockCount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Regional Paddock Count</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            placeholder="6" 
+                            {...field} 
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Average number of paddocks per farm in your region
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="regionalRotationsCount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Regional Rotations Count</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            placeholder="3" 
+                            {...field} 
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Average number of rotations per season in your region
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="regionalCarbonCapture"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Regional Carbon Capture (tons CO2/hectare/year)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            placeholder="5" 
+                            step="0.1"
+                            {...field} 
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Average carbon capture in your region
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="regionalCarbonEmissions"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Regional Carbon Emissions (tons CO2/hectare/year)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            placeholder="7" 
+                            step="0.1"
+                            {...field} 
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Average carbon emissions in your region
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
             
             <div className="flex justify-end space-x-4">
               <Button 

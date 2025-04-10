@@ -22,14 +22,23 @@ export interface CropData {
 
 export interface CattleData {
   id: string;
-  type: string;
-  quantity: number;
+  farmId?: string;
+  totalHead: number;
+  cattleType: string;
+  averageWeight: number;
+  methodOfRaising: "conventional" | "regenerative" | "mixed";
 }
 
 export interface PastureData {
   id: string;
-  type: string;
-  area: number;
+  farmId?: string;
+  totalPastures: number;
+  averagePastureSize: number;
+  rotationsPerSeason: number;
+  restingDaysPerPasture: number;
+  grassTypes: string[] | string;
+  soilHealthScore?: number;
+  currentForageDensity?: number; // kg/hectare
 }
 
 export type CarbonData = {
@@ -41,12 +50,22 @@ export type CarbonData = {
   potentialCapture: number; // tons of CO2 per year under regenerative practices
 };
 
+export interface RegionalAverages {
+  biomassDensity: number; // kg/hectare
+  animalLoad: number; // animals per hectare
+  paddockCount: number; 
+  rotationsCount: number;
+  carbonCapture: number; // tons CO2/year/hectare
+  carbonEmissions: number; // tons CO2/year/hectare
+}
+
 export interface FarmComplete {
   farm: FarmData;
   crops: CropData[];
-  cattle?: CattleData[];
-  pasture?: PastureData[];
+  cattle: CattleData;
+  pasture: PastureData;
   carbon?: CarbonData;
+  regionalAverages?: RegionalAverages;
 }
 
 export type Projection = {

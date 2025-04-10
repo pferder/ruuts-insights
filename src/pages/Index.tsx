@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,6 +8,7 @@ import { MetricCard } from "@/components/dashboard/MetricCard";
 import { CarbonChart } from "@/components/dashboard/CarbonChart";
 import { ProjectionChart } from "@/components/dashboard/ProjectionChart";
 import { ActionCard } from "@/components/dashboard/ActionCard";
+import { ComparativeMetrics } from "@/components/dashboard/ComparativeMetrics";
 import { Button } from "@/components/ui/button";
 import { useFarm } from "@/context/FarmContext";
 import { generateDashboardMetrics, generateProjections, generateRecommendedActions } from "@/lib/farm-utils";
@@ -104,9 +104,17 @@ const Dashboard = () => {
         />
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <CarbonChart carbonData={farm.carbon!} />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="lg:col-span-2">
+          <CarbonChart carbonData={farm.carbon!} />
+        </div>
         
+        <div className="lg:col-span-1">
+          <ComparativeMetrics farm={farm} />
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <ProjectionChart 
           twoYearData={projections.twoYear}
           fiveYearData={projections.fiveYear}
@@ -115,9 +123,7 @@ const Dashboard = () => {
           title={t('dashboard.carbonBalance')}
           yAxisLabel="Net Carbon Balance (tons CO2)"
         />
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        
         <ProjectionChart 
           twoYearData={projections.twoYear}
           fiveYearData={projections.fiveYear}
