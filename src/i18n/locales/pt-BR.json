@@ -243,5 +243,37 @@
   },
   "app": {
     "subtitle": "Gerencie suas fazendas de forma eficiente e sustentável"
+  },
+  "landing": {
+    "heroTitle": "Descubra o potencial regenerativo de sua propriedade",
+    "heroSubtitle": "Transforme sua produção com práticas regenerativas e monitore o impacto de suas decisões em tempo real.",
+    "startNow": "Começar agora",
+    "learnMore": "Saiba mais",
+    "ctaTitle": "Comece seu caminho para a regeneração",
+    "ctaDescription": "Junte-se à comunidade de agricultores regenerativos e transforme sua propriedade com Ruuts Regen Analytics.",
+    "ctaButton": "Criar conta gratuita"
+  },
+  "signup": {
+    "selectUserType": "Como você se identifica?",
+    "selectUserTypeDescription": "Selecione o tipo de conta que deseja criar.",
+    "producer": "Produtor Agropecuário",
+    "producerDescription": "Gerencio uma ou mais propriedades agropecuárias",
+    "company": "Empresa",
+    "companyDescription": "Represento uma empresa na cadeia de suprimentos",
+    "producerRegistration": "Registro de Produtor",
+    "companyRegistration": "Registro de Empresa",
+    "registrationDescription": "Complete as informações para criar sua conta.",
+    "name": "Nome e Sobrenome",
+    "contactName": "Nome de contato",
+    "companyName": "Razão Social",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "location": "Localização",
+    "farmCount": "Número de propriedades",
+    "supplierCount": "Número de fornecedores",
+    "back": "Voltar",
+    "createAccount": "Criar conta",
+    "successTitle": "Registro bem-sucedido",
+    "successDescription": "Bem-vindo ao Ruuts! Sua conta foi criada."
   }
 }

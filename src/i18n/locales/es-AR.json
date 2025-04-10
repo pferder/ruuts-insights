@@ -195,6 +195,13 @@
     "estimatedSize": "Tamaño Estimado"
   },
   "landing": {
+    "heroTitle": "Descubrí el potencial regenerativo de tu establecimiento",
+    "heroSubtitle": "Transforma tu producción con prácticas regenerativas y monitorea el impacto de tus decisiones en tiempo real.",
+    "startNow": "Comenzar ahora",
+    "learnMore": "Conocer más",
+    "ctaTitle": "Comienza tu camino hacia la regeneración",
+    "ctaDescription": "Únete a la comunidad de agricultores regenerativos y transforma tu establecimiento con Ruuts Regen Analytics.",
+    "ctaButton": "Crear cuenta gratis",
     "hero": {
       "title": "Ruuts, tu camino hacia la regeneración",
       "subtitle": "Transforma tu establecimiento con prácticas regenerativas y monitorea el impacto de tus decisiones en tiempo real.",
@@ -244,6 +251,29 @@
       "contact": "Contacto",
       "rights": "Todos los derechos reservados"
     }
+  },
+  "signup": {
+    "selectUserType": "¿Cómo te identificas?",
+    "selectUserTypeDescription": "Selecciona el tipo de cuenta que deseas crear.",
+    "producer": "Productor Agropecuario",
+    "producerDescription": "Gestiono uno o más establecimientos agropecuarios",
+    "company": "Empresa",
+    "companyDescription": "Represento a una empresa en la cadena de suministros",
+    "producerRegistration": "Registro de Productor",
+    "companyRegistration": "Registro de Empresa",
+    "registrationDescription": "Completa la información para crear tu cuenta.",
+    "name": "Nombre y Apellido",
+    "contactName": "Nombre de contacto",
+    "companyName": "Razón Social",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "location": "Ubicación",
+    "farmCount": "Cantidad de establecimientos",
+    "supplierCount": "Cantidad de proveedores",
+    "back": "Volver",
+    "createAccount": "Crear cuenta",
+    "successTitle": "Registro exitoso",
+    "successDescription": "¡Bienvenido a Ruuts! Tu cuenta ha sido creada."
   },
   "common": {
     "viewDetails": "Ver Detalles",

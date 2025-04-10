@@ -244,5 +244,37 @@
   },
   "app": {
     "subtitle": "Manage your farms efficiently and sustainably"
+  },
+  "landing": {
+    "heroTitle": "Discover the regenerative potential of your farm",
+    "heroSubtitle": "Transform your production with regenerative practices and monitor the impact of your decisions in real time.",
+    "startNow": "Start now",
+    "learnMore": "Learn more",
+    "ctaTitle": "Begin your path to regeneration",
+    "ctaDescription": "Join the regenerative farming community and transform your farm with Ruuts Regen Analytics.",
+    "ctaButton": "Create free account"
+  },
+  "signup": {
+    "selectUserType": "How do you identify?",
+    "selectUserTypeDescription": "Select the type of account you wish to create.",
+    "producer": "Agricultural Producer",
+    "producerDescription": "I manage one or more agricultural establishments",
+    "company": "Company",
+    "companyDescription": "I represent a company in the supply chain",
+    "producerRegistration": "Producer Registration",
+    "companyRegistration": "Company Registration",
+    "registrationDescription": "Complete the information to create your account.",
+    "name": "Name and Surname",
+    "contactName": "Contact Name",
+    "companyName": "Company Name",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "farmCount": "Number of farms",
+    "supplierCount": "Number of suppliers",
+    "back": "Back",
+    "createAccount": "Create account",
+    "successTitle": "Registration successful",
+    "successDescription": "Welcome to Ruuts! Your account has been created."
   }
 }
