@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { Features } from "@/components/landing/Features";
@@ -19,7 +19,7 @@ export default function Landing() {
   };
   
   // Set up event listener for hash changes
-  useState(() => {
+  useEffect(() => {
     window.addEventListener("hashchange", handleHashChange);
     
     // Check if the initial URL has the #signup hash
