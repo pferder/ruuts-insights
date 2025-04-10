@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, GeoJSON, Tooltip } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON, Tooltip, MapContainerProps } from "react-leaflet";
 import { Feature, Polygon } from "geojson";
 import "leaflet/dist/leaflet.css";
 import { FarmComplete } from "@/types/farm";
@@ -118,13 +118,11 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
     return (
       <div className={`rounded-xl border border-border ${className}`} style={{ height, width: "100%" }}>
         <MapContainer 
-          center={DEFAULT_CENTER} 
-          zoom={DEFAULT_ZOOM}
           className="h-full w-full"
+          style={{ height: "100%", width: "100%" }}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
         </MapContainer>
       </div>
@@ -134,13 +132,11 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
   return (
     <div className={`rounded-xl border border-border ${className}`} style={{ height, width: "100%" }}>
       <MapContainer 
-        center={mapCenter} 
-        zoom={zoom}
         className="h-full w-full"
+        style={{ height: "100%", width: "100%" }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <GeoJSON
           data={geoJson}

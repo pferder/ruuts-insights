@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { FarmProvider } from "@/context/FarmContext";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import React from "react";
+import { useState } from "react";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Farms from "./pages/Farms";
@@ -17,8 +17,8 @@ import ExportData from "./pages/ExportData";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
-  // Create QueryClient instance inside the component
-  const [queryClient] = React.useState(() => new QueryClient({
+  // Create QueryClient instance inside the component using useState hook
+  const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: 5 * 60 * 1000, // 5 minutes
