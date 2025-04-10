@@ -48,7 +48,18 @@
       "cattleHealth": "Saúde do Gado",
       "soilQuality": "Qualidade do Solo",
       "waterEfficiency": "Eficiência da Água"
-    }
+    },
+    "regionalComparison": "Comparação Regional",
+    "biomassDensity": "Densidade de Biomassa",
+    "animalLoad": "Carga Animal",
+    "paddockCount": "Número de Piquetes",
+    "rotationsCount": "Número de Rotações",
+    "carbonCapture": "Captura de Carbono",
+    "animalsPerHa": "animais/ha",
+    "paddocks": "piquetes",
+    "rotationsPerSeason": "rotações/temporada",
+    "tonsPerHa": "tons CO2/ha/ano",
+    "regionalAvg": "média regional"
   },
   "farms": {
     "title": "Fazendas",
@@ -233,4 +244,4 @@
   "app": {
     "subtitle": "Gerencie suas fazendas de forma eficiente e sustentável"
   }
-} 
+}

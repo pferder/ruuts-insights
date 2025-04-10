@@ -118,9 +118,9 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
     return (
       <div className={`rounded-xl border border-border ${className}`} style={{ height, width: "100%" }}>
         <MapContainer 
-          className="h-full w-full"
           center={DEFAULT_CENTER} 
           zoom={DEFAULT_ZOOM}
+          className="h-full w-full"
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -134,9 +134,9 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
   return (
     <div className={`rounded-xl border border-border ${className}`} style={{ height, width: "100%" }}>
       <MapContainer 
-        className="h-full w-full"
         center={mapCenter} 
         zoom={zoom}
+        className="h-full w-full"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

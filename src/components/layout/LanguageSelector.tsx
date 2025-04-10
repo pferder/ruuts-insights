@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -8,6 +9,7 @@ import { cn } from "@/lib/utils";
 const languages = [
   { code: "en-US", name: "English" },
   { code: "es-AR", name: "Español (Argentina)" },
+  { code: "pt-BR", name: "Português (Brasil)" }
 ];
 
 interface LanguageSelectorProps {

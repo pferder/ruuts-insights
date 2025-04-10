@@ -48,7 +48,18 @@
       "cattleHealth": "Salud del Ganado",
       "soilQuality": "Calidad del Suelo",
       "waterEfficiency": "Eficiencia del Agua"
-    }
+    },
+    "regionalComparison": "Comparación Regional",
+    "biomassDensity": "Densidad de Biomasa",
+    "animalLoad": "Carga Animal",
+    "paddockCount": "Cantidad de Potreros",
+    "rotationsCount": "Cantidad de Rotaciones",
+    "carbonCapture": "Captura de Carbono",
+    "animalsPerHa": "animales/ha",
+    "paddocks": "potreros",
+    "rotationsPerSeason": "rotaciones/temporada",
+    "tonsPerHa": "tons CO2/ha/año",
+    "regionalAvg": "promedio regional"
   },
   "farms": {
     "allFarms": "Todos los establecimientos",
