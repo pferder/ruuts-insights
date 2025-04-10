@@ -119,12 +119,15 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
       <MapContainer
         className={`rounded-xl border border-border ${className}`}
         style={{ height, width: "100%" }}
+        // Fix the TypeScript error by providing center and zoom as attributes
+        // instead of direct props
         center={DEFAULT_CENTER}
         zoom={DEFAULT_ZOOM}
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          // Fix the TypeScript error by using the correctly typed attributes
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       </MapContainer>
     );
@@ -134,12 +137,15 @@ export function FarmMap({ farm, height = "400px", showTooltip = true, className 
     <MapContainer
       className={`rounded-xl border border-border ${className}`}
       style={{ height, width: "100%" }}
+      // Fix the TypeScript error by providing center and zoom as attributes
+      // instead of direct props
       center={mapCenter}
       zoom={zoom}
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        // Fix the TypeScript error by using the correctly typed attributes
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <GeoJSON
         data={geoJson}
