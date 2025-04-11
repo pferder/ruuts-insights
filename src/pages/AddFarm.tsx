@@ -8,11 +8,6 @@ const AddFarm = () => {
 
   return (
     <Layout>
-      <Header
-        title={t("addFarm.title")}
-        subtitle={t("addFarm.subtitle")}
-      />
-
       <div className="mt-6">
         <FarmWizard />
       </div>
