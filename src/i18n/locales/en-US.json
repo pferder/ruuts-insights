@@ -1,3 +1,4 @@
+
 {
   "navigation": {
     "dashboard": "Dashboard",
@@ -230,7 +231,11 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System",
-    "farm": "Farm"
+    "farm": "Farm",
+    "next": "Next",
+    "back": "Back",
+    "creating": "Creating...",
+    "create": "Create Farm"
   },
   "notFound": {
     "title": "Page Not Found",
@@ -276,5 +281,61 @@
     "createAccount": "Create account",
     "successTitle": "Registration successful",
     "successDescription": "Welcome to Ruuts! Your account has been created."
+  },
+  "farmWizard": {
+    "title": "Add New Farm",
+    "description": "Add information about your farm to get started with regenerative insights.",
+    "successTitle": "Farm Created",
+    "successDescription": "Your farm has been successfully added.",
+    "errorTitle": "Error",
+    "errorDescription": "There was an error adding your farm. Please try again.",
+    "geoFileUploaded": "Geographic file uploaded",
+    "geoFileUploadSuccess": "Farm boundary uploaded successfully",
+    "steps": {
+      "generalInfo": "General Information",
+      "generalInfoDesc": "Farm details",
+      "cattleInfo": "Cattle Information",
+      "cattleInfoDesc": "Herd details",
+      "grazingInfo": "Grazing Management",
+      "grazingInfoDesc": "Pasture details",
+      "productionInfo": "Production Data",
+      "productionInfoDesc": "Production type"
+    },
+    "farmName": "Farm Name",
+    "location": "Location",
+    "farmSize": "Farm Size (hectares)",
+    "ownerName": "Owner/Manager Name",
+    "contactEmail": "Contact Email (optional)",
+    "farmBoundary": "Farm Boundary",
+    "uploadDescription": "Upload a KML, GeoJSON, or Shapefile with your farm's boundary",
+    "clickToUpload": "Click to upload",
+    "totalHead": "Total Head of Cattle",
+    "cattleType": "Cattle Breed/Type",
+    "averageWeight": "Average Weight (kg)",
+    "methodOfRaising": "Method of Raising",
+    "conventional": "Conventional",
+    "regenerative": "Regenerative",
+    "mixed": "Mixed Approach",
+    "totalPastures": "Number of Pastures/Paddocks",
+    "averagePastureSize": "Average Pasture Size (hectares)",
+    "rotationsPerSeason": "Average Rotations Per Season",
+    "restingDays": "Average Resting Days Per Pasture",
+    "grassTypes": "Grass/Forage Types",
+    "grassTypesDesc": "Enter the grass and forage species in your pastures, separated by commas.",
+    "soilHealthScore": "Soil Health Score (1-10, if known)",
+    "soilHealthScoreDesc": "Estimate the current soil health on a scale of 1-10.",
+    "forageDensity": "Current Forage Density (kg/hectare, if known)",
+    "forageDensityDesc": "Estimate the current forage production in kg per hectare.",
+    "productionType": "Production Type",
+    "dairy": "Dairy",
+    "livestock": "Livestock",
+    "livestockType": "Livestock Type",
+    "selectLivestockType": "Select livestock type",
+    "breeding": "Breeding",
+    "rearing": "Rearing",
+    "fattening": "Fattening",
+    "completeCycle": "Complete Cycle",
+    "supplementation": "Supplementation (kg/animal/day)",
+    "supplementationDesc": "Average amount of supplementary feed per animal per day"
   }
 }

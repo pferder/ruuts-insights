@@ -191,16 +191,20 @@ export function FarmWizard() {
           currentForageDensity: data.currentForageDensity,
         };
 
-        const regionalAverages: RegionalAverages = {
-          biomassDensity: data.regionalBiomassDensity || 3500,
+        const productionData = {
+          productionType: data.productionType,
+          livestockType: data.productionType === "livestock" ? data.livestockType : undefined,
+          supplementationKg: data.supplementationKg,
+        };
+
+        createFarm(farmData, cattleData, pastureData, data.regionalBiomassDensity ? {
+          biomassDensity: data.regionalBiomassDensity,
           animalLoad: data.regionalAnimalLoad || 1.5,
           paddockCount: data.regionalPaddockCount || 6,
           rotationsCount: data.regionalRotationsCount || 3,
           carbonCapture: data.regionalCarbonCapture || 5,
           carbonEmissions: data.regionalCarbonEmissions || 7,
-        };
-
-        createFarm(farmData, cattleData, pastureData, regionalAverages);
+        } : undefined, productionData);
 
         toast({
           title: t("farmWizard.successTitle", "Farm Created"),
