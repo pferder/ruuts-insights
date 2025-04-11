@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { useFarm } from "@/context/FarmContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { FarmData, CattleData, PastureData, RegionalAverages } from "@/types/farm";
 import { StepWizard, Step } from "@/components/ui/step-wizard";
-import { Info, Leaf, BarChart, ArrowLeft, ArrowRight, FileUp } from "lucide-react";
+import { Info, Leaf, BarChart, ArrowLeft, ArrowRight, FileUp, Sprout } from "lucide-react";
 import Icon from "@mdi/react";
 import { mdiCow } from "@mdi/js";
 
@@ -51,6 +51,10 @@ const formSchema = z.object({
   regionalCarbonEmissions: z.number().min(0.1, "Regional carbon emissions must be at least 0.1").optional(),
 });
 
+type FarmFormValues = z.infer<typeof formSchema>;
+
+export type { FarmFormValues };
+
 export function FarmWizard() {
   const { t } = useTranslation();
   const { createFarm } = useFarm();
@@ -58,7 +62,7 @@ export function FarmWizard() {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [farmGeometry, setFarmGeometry] = useState<any>(null);
+  const [farmGeometry, setFarmGeometry] = useState<GeoJSON.Geometry | null>(null);
 
   const steps: Step[] = [
     {
@@ -74,7 +78,7 @@ export function FarmWizard() {
       icon: (
         <Icon
           path={mdiCow}
-          size={18}
+          size={1}
         />
       ),
     },
@@ -82,7 +86,7 @@ export function FarmWizard() {
       id: "grazing-info",
       title: t("farmWizard.steps.grazingInfo", "Grazing Management"),
       description: t("farmWizard.steps.grazingInfoDesc", "Pasture details"),
-      icon: <Leaf size={18} />,
+      icon: <Sprout size={18} />,
     },
     {
       id: "production-info",
@@ -97,20 +101,20 @@ export function FarmWizard() {
     defaultValues: {
       name: "",
       location: "",
-      size: 0,
+      size: undefined,
       ownerName: "",
       contactEmail: "",
-      totalHead: 0,
+      totalHead: undefined,
       cattleType: "",
-      averageWeight: 0,
+      averageWeight: undefined,
       methodOfRaising: "conventional",
-      totalPastures: 0,
-      averagePastureSize: 0,
-      rotationsPerSeason: 0,
-      restingDaysPerPasture: 0,
+      totalPastures: undefined,
+      averagePastureSize: undefined,
+      rotationsPerSeason: undefined,
+      restingDaysPerPasture: undefined,
       grassTypes: "",
       soilHealthScore: 5,
-      currentForageDensity: 0,
+      currentForageDensity: undefined,
       productionType: "livestock",
       livestockType: "complete_cycle",
       supplementationKg: 0,
@@ -131,7 +135,7 @@ export function FarmWizard() {
       3: ["productionType", "livestockType", "supplementationKg"],
     };
 
-    const result = await form.trigger(stepFields[currentStep as keyof typeof stepFields] as any, { shouldFocus: true });
+    const result = await form.trigger(stepFields[currentStep as keyof typeof stepFields] as (keyof FarmFormValues)[], { shouldFocus: true });
 
     if (result) {
       if (currentStep < steps.length - 1) {
@@ -148,7 +152,7 @@ export function FarmWizard() {
     }
   };
 
-  const handleGeoFileUpload = (geometry: any) => {
+  const handleGeoFileUpload = (geometry: GeoJSON.Geometry) => {
     setFarmGeometry(geometry);
     toast({
       title: t("farmWizard.geoFileUploaded", "Geographic file uploaded"),
@@ -185,9 +189,6 @@ export function FarmWizard() {
           grassTypes: data.grassTypes.split(",").map((type) => type.trim()),
           soilHealthScore: data.soilHealthScore,
           currentForageDensity: data.currentForageDensity,
-          productionType: data.productionType,
-          livestockType: data.livestockType,
-          supplementationKg: data.supplementationKg,
         };
 
         const regionalAverages: RegionalAverages = {
@@ -254,7 +255,9 @@ export function FarmWizard() {
           onStepClick={(step) => setCurrentStep(step)}
         />
 
-        <form className="space-y-6">{renderStepContent()}</form>
+        <FormProvider {...form}>
+          <form className="space-y-6">{renderStepContent()}</form>
+        </FormProvider>
       </CardContent>
 
       <CardFooter className="flex justify-between border-t pt-6">
