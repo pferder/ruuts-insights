@@ -253,7 +253,7 @@
     }
   },
   "signup": {
-    "selectUserType": "¿Cómo te identificas?",
+    "selectUserType": "Ayúdanos a personalizar tu experiencia",
     "selectUserTypeDescription": "Selecciona el tipo de cuenta que deseas crear.",
     "producer": "Productor Agropecuario",
     "producerDescription": "Gestiono uno o más establecimientos agropecuarios",

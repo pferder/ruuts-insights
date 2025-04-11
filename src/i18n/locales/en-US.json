@@ -255,12 +255,12 @@
     "ctaButton": "Create free account"
   },
   "signup": {
-    "selectUserType": "How do you identify?",
+    "selectUserType": "Help us personalize your experience",
     "selectUserTypeDescription": "Select the type of account you wish to create.",
     "producer": "Agricultural Producer",
     "producerDescription": "I manage one or more agricultural establishments",
     "company": "Company",
-    "companyDescription": "I represent a company in the supply chain",
+    "companyDescription": "I represent a company in the supply chain or sustainability areas",
     "producerRegistration": "Producer Registration",
     "companyRegistration": "Company Registration",
     "registrationDescription": "Complete the information to create your account.",

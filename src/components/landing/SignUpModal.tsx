@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -18,7 +17,7 @@ export function SignUpModal({ open, onOpenChange }: SignUpModalProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const navigate = useNavigate();
-  
+
   const [step, setStep] = useState(1);
   const [userType, setUserType] = useState<"producer" | "company" | "">("");
   const [formData, setFormData] = useState({
@@ -27,7 +26,7 @@ export function SignUpModal({ open, onOpenChange }: SignUpModalProps) {
     companyName: "",
     farmCount: "",
     location: "",
-    phoneNumber: ""
+    phoneNumber: "",
   });
 
   const handleTypeSelect = (value: "producer" | "company") => {
@@ -39,170 +38,187 @@ export function SignUpModal({ open, onOpenChange }: SignUpModalProps) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simulamos el proceso de registro
+
     toast({
       title: t("signup.successTitle", "Registro exitoso"),
       description: t("signup.successDescription", "¡Bienvenido a Ruuts! Tu cuenta ha sido creada."),
     });
-    
-    // Cerramos el modal y redireccionamos al dashboard
+
     onOpenChange(false);
     navigate("/dashboard");
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+    >
+      <DialogContent className="sm:max-w-[520px] p-6 rounded-lg">
         {step === 1 ? (
           <>
-            <DialogHeader>
-              <DialogTitle>{t("signup.selectUserType", "¿Cómo te identificas?")}</DialogTitle>
-              <DialogDescription>
+            <DialogHeader className="mb-4">
+              <DialogTitle className="text-2xl font-semibold">{t("signup.selectUserType", "Ayúdanos a personalizar tu experiencia")}</DialogTitle>
+              <DialogDescription className="text-sm mt-1">
                 {t("signup.selectUserTypeDescription", "Selecciona el tipo de cuenta que deseas crear.")}
               </DialogDescription>
             </DialogHeader>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
-              <Button 
-                variant="outline" 
-                className="h-32 flex flex-col gap-2"
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+              <Button
+                variant="outline"
+                className="h-28 flex flex-col gap-2 p-4 hover:bg-gray-50 transition-colors border-green-500"
                 onClick={() => handleTypeSelect("producer")}
               >
-                <span className="text-lg font-medium">{t("signup.producer", "Productor Agropecuario")}</span>
-                <span className="text-sm text-muted-foreground text-center">
-                  {t("signup.producerDescription", "Gestiono uno o más establecimientos agropecuarios")}
-                </span>
+                <span className="text-base font-medium">{t("signup.producer", "Productor")}</span>
+                <span className="text-xs text-muted-foreground text-center px-1 text-wrap">{t("signup.producerDescription", "Gestiono campos agrícolas")}</span>
               </Button>
-              
-              <Button 
-                variant="outline" 
-                className="h-32 flex flex-col gap-2"
+
+              <Button
+                variant="outline"
+                className="h-28 flex flex-col gap-2 p-4 hover:bg-gray-50 transition-colors border-green-500"
                 onClick={() => handleTypeSelect("company")}
               >
-                <span className="text-lg font-medium">{t("signup.company", "Empresa")}</span>
-                <span className="text-sm text-muted-foreground text-center">
-                  {t("signup.companyDescription", "Represento a una empresa en la cadena de suministros")}
-                </span>
+                <span className="text-base font-medium">{t("signup.company", "Empresa")}</span>
+                <span className="text-xs text-muted-foreground text-center px-1 text-wrap">{t("signup.companyDescription", "Empresa proveedora")}</span>
               </Button>
             </div>
           </>
         ) : (
           <form onSubmit={handleSubmit}>
-            <DialogHeader>
-              <DialogTitle>
-                {userType === "producer" 
-                  ? t("signup.producerRegistration", "Registro de Productor") 
-                  : t("signup.companyRegistration", "Registro de Empresa")}
+            <DialogHeader className="mb-4">
+              <DialogTitle className="text-2xl font-semibold">
+                {userType === "producer" ? t("signup.producerRegistration", "Registro de Productor") : t("signup.companyRegistration", "Registro de Empresa")}
               </DialogTitle>
-              <DialogDescription>
-                {t("signup.registrationDescription", "Completa la información para crear tu cuenta.")}
+              <DialogDescription className="text-sm mt-1">
+                {t("signup.registrationDescription", "Completa tu información para crear tu cuenta.")}
               </DialogDescription>
             </DialogHeader>
-            
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  {userType === "producer" 
-                    ? t("signup.name", "Nombre y Apellido") 
-                    : t("signup.contactName", "Nombre de contacto")}
+
+            <div className="space-y-4 py-2">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-medium"
+                >
+                  {userType === "producer" ? t("signup.name", "Nombre y Apellido") : t("signup.contactName", "Nombre de contacto")}
                 </Label>
                 <Input
                   id="name"
                   name="name"
-                  className="col-span-3"
+                  placeholder={userType === "producer" ? "Juan Pérez" : "María González"}
                   value={formData.name}
                   onChange={handleInputChange}
                   required
                 />
               </div>
-              
+
               {userType === "company" && (
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="companyName" className="text-right">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="companyName"
+                    className="text-sm font-medium"
+                  >
                     {t("signup.companyName", "Razón Social")}
                   </Label>
                   <Input
                     id="companyName"
                     name="companyName"
-                    className="col-span-3"
+                    placeholder="Empresa S.A."
                     value={formData.companyName}
                     onChange={handleInputChange}
                     required={userType === "company"}
                   />
                 </div>
               )}
-              
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-medium"
+                >
                   {t("signup.email", "Correo electrónico")}
                 </Label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  className="col-span-3"
+                  placeholder="correo@ejemplo.com"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
                 />
               </div>
-              
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="phoneNumber" className="text-right">
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="phoneNumber"
+                  className="text-sm font-medium"
+                >
                   {t("signup.phone", "Teléfono")}
                 </Label>
                 <Input
                   id="phoneNumber"
                   name="phoneNumber"
-                  className="col-span-3"
+                  placeholder="+54 9 11 1234 5678"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
                 />
               </div>
-              
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="location" className="text-right">
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="location"
+                  className="text-sm font-medium"
+                >
                   {t("signup.location", "Ubicación")}
                 </Label>
                 <Input
                   id="location"
                   name="location"
-                  className="col-span-3"
+                  placeholder="Ciudad, Provincia"
                   value={formData.location}
                   onChange={handleInputChange}
                 />
               </div>
-              
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="farmCount" className="text-right">
-                  {userType === "producer" 
-                    ? t("signup.farmCount", "Cantidad de establecimientos") 
-                    : t("signup.supplierCount", "Cantidad de proveedores")}
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="farmCount"
+                  className="text-sm font-medium"
+                >
+                  {userType === "producer" ? t("signup.farmCount", "Establecimientos") : t("signup.supplierCount", "Proveedores")}
                 </Label>
                 <Input
                   id="farmCount"
                   name="farmCount"
                   type="number"
-                  className="col-span-3"
+                  placeholder="1"
                   value={formData.farmCount}
                   onChange={handleInputChange}
                   min="1"
                 />
               </div>
             </div>
-            
-            <DialogFooter className="flex flex-col sm:flex-row gap-2">
-              <Button type="button" variant="outline" onClick={() => setStep(1)}>
+
+            <DialogFooter className="flex justify-between mt-6 pt-4 border-t border-gray-100">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setStep(1)}
+                className="px-4"
+              >
                 {t("signup.back", "Volver")}
               </Button>
-              <Button type="submit" className="bg-theme-green-primary hover:bg-farm-green-600">
+              <Button
+                type="submit"
+                className="bg-theme-green-primary hover:bg-theme-green-primary/90 px-5"
+              >
                 {t("signup.createAccount", "Crear cuenta")}
               </Button>
             </DialogFooter>
