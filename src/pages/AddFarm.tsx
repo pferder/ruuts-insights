@@ -2,7 +2,7 @@
 import { useTranslation } from "react-i18next";
 import { Header } from "@/components/layout/Header";
 import { Layout } from "@/components/layout/Layout";
-import { FarmForm } from "@/components/forms/FarmForm";
+import { FarmWizard } from "@/components/forms/FarmWizard";
 
 const AddFarm = () => {
   const { t } = useTranslation();
@@ -15,7 +15,7 @@ const AddFarm = () => {
       />
       
       <div className="mt-6">
-        <FarmForm />
+        <FarmWizard />
       </div>
     </Layout>
   );
