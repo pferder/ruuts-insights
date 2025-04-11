@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -23,28 +22,24 @@ import {
   RegionalAverages 
 } from "@/types/farm";
 import { StepWizard, Step } from "@/components/ui/step-wizard";
-import { Info, Farm, Leaf, BarChart, ArrowLeft, ArrowRight, FileUp } from "lucide-react";
+import { Info, Cattle, Leaf, BarChart, ArrowLeft, ArrowRight, FileUp } from "lucide-react";
 import { GeneralInfoStep } from "./wizard-steps/GeneralInfoStep";
 import { CattleInfoStep } from "./wizard-steps/CattleInfoStep";
 import { GrazingInfoStep } from "./wizard-steps/GrazingInfoStep";
 import { ProductionInfoStep } from "./wizard-steps/ProductionInfoStep";
 
-// Full form schema
 const formSchema = z.object({
-  // Farm Info
   name: z.string().min(2, "Farm name must be at least 2 characters"),
   location: z.string().min(2, "Location must be at least 2 characters"),
   size: z.number().min(1, "Size must be at least 1 hectare"),
   ownerName: z.string().min(2, "Owner name must be at least 2 characters"),
   contactEmail: z.string().email("Please enter a valid email").optional(),
   
-  // Cattle Info
   totalHead: z.number().min(1, "Total head must be at least 1"),
   cattleType: z.string().min(2, "Cattle type must be at least 2 characters"),
   averageWeight: z.number().min(100, "Average weight must be at least 100 kg"),
   methodOfRaising: z.enum(["conventional", "regenerative", "mixed"]),
   
-  // Pasture Info
   totalPastures: z.number().min(1, "Total pastures must be at least 1"),
   averagePastureSize: z.number().min(1, "Average pasture size must be at least 1 hectare"),
   rotationsPerSeason: z.number().min(1, "Rotations must be at least 1"),
@@ -53,12 +48,10 @@ const formSchema = z.object({
   soilHealthScore: z.number().min(1, "Soil health score must be at least 1").max(10, "Soil health score must be at most 10").optional(),
   currentForageDensity: z.number().min(1, "Forage density must be at least 1 kg/hectare").optional(),
   
-  // Production Info
   productionType: z.enum(["dairy", "livestock"]),
   livestockType: z.enum(["breeding", "rearing", "fattening", "complete_cycle"]).optional(),
   supplementationKg: z.number().min(0, "Supplementation must be at least 0 kg").default(0),
   
-  // Regional Averages (hidden)
   regionalBiomassDensity: z.number().min(1, "Regional biomass density must be at least 1 kg/hectare").optional(),
   regionalAnimalLoad: z.number().min(0.1, "Regional animal load must be at least 0.1").optional(),
   regionalPaddockCount: z.number().min(1, "Regional paddock count must be at least 1").optional(),
@@ -76,7 +69,6 @@ export function FarmWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [farmGeometry, setFarmGeometry] = useState<any>(null);
   
-  // Define wizard steps
   const steps: Step[] = [
     { 
       id: "general-info", 
@@ -88,7 +80,7 @@ export function FarmWizard() {
       id: "cattle-info", 
       title: t("farmWizard.steps.cattleInfo", "Cattle Information"),
       description: t("farmWizard.steps.cattleInfoDesc", "Herd details"),
-      icon: <Farm size={18} />
+      icon: <Cattle size={18} />
     },
     { 
       id: "grazing-info", 
@@ -136,7 +128,6 @@ export function FarmWizard() {
   });
   
   const goToNextStep = async () => {
-    // Get the fields in the current step
     const stepFields = {
       0: ["name", "location", "size", "ownerName", "contactEmail"],
       1: ["totalHead", "cattleType", "averageWeight", "methodOfRaising"],
@@ -144,7 +135,6 @@ export function FarmWizard() {
       3: ["productionType", "livestockType", "supplementationKg"]
     };
     
-    // Validate only the fields in the current step
     const result = await form.trigger(stepFields[currentStep as keyof typeof stepFields] as any, { shouldFocus: true });
     
     if (result) {
@@ -175,18 +165,15 @@ export function FarmWizard() {
       setIsSubmitting(true);
       
       try {
-        // Extract farm data
         const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt" | "coordinates"> = {
           name: data.name,
           location: data.location,
           size: data.size,
           ownerName: data.ownerName,
-          // Add coordinates from the uploaded geometry if available
           ...(farmGeometry && { coordinates: farmGeometry }),
           ...(data.contactEmail && { contactEmail: data.contactEmail }),
         };
         
-        // Extract cattle data
         const cattleData: Omit<CattleData, "id" | "farmId"> = {
           totalHead: data.totalHead,
           cattleType: data.cattleType,
@@ -194,7 +181,6 @@ export function FarmWizard() {
           methodOfRaising: data.methodOfRaising,
         };
         
-        // Extract pasture data & convert grassTypes string to array
         const pastureData: Omit<PastureData, "id" | "farmId"> = {
           totalPastures: data.totalPastures,
           averagePastureSize: data.averagePastureSize,
@@ -208,7 +194,6 @@ export function FarmWizard() {
           supplementationKg: data.supplementationKg,
         };
         
-        // Extract regional averages
         const regionalAverages: RegionalAverages = {
           biomassDensity: data.regionalBiomassDensity || 3500,
           animalLoad: data.regionalAnimalLoad || 1.5,
@@ -218,7 +203,6 @@ export function FarmWizard() {
           carbonEmissions: data.regionalCarbonEmissions || 7,
         };
         
-        // Create the farm
         createFarm(farmData, cattleData, pastureData, regionalAverages);
         
         toast({
@@ -226,7 +210,6 @@ export function FarmWizard() {
           description: t("farmWizard.successDescription", "Your farm has been successfully added."),
         });
         
-        // Navigate to farms list
         navigate("/farms");
       } catch (error) {
         console.error("Error creating farm:", error);

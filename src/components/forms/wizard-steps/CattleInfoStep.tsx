@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Farm } from "lucide-react";
+import { Cattle } from "lucide-react";
 
 interface CattleInfoStepProps {
   form: UseFormReturn<any>;
@@ -22,7 +22,7 @@ export function CattleInfoStep({ form }: CattleInfoStepProps) {
   return (
     <div className="space-y-6">
       <div className="flex justify-center mb-6">
-        <Farm className="h-12 w-12 text-farm-green-600" />
+        <Cattle className="h-12 w-12 text-farm-green-600" />
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
