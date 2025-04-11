@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { FarmData, CattleData, PastureData, RegionalAverages } from "@/types/farm";
 import { StepWizard, Step } from "@/components/ui/step-wizard";
-import { Info, Leaf, BarChart, ArrowLeft, ArrowRight, FileUp, Sprout } from "lucide-react";
+import { Info, BarChart, ArrowLeft, ArrowRight, FileUp, Sprout } from "lucide-react";
 import Icon from "@mdi/react";
 import { mdiCow } from "@mdi/js";
 

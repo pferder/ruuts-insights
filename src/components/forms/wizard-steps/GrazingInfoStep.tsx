@@ -3,7 +3,6 @@ import { UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Leaf } from "lucide-react";
 import { FarmFormValues } from "../FarmWizard";
 
 interface GrazingInfoStepProps {
