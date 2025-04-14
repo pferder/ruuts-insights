@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FarmFormValues } from "../FarmWizard";
 import { GeoJSON } from "geojson";
 import { useState } from "react";
+import { MapPreview } from "@/components/maps/MapPreview";
 
 interface GeneralInfoStepProps {
   form: UseFormReturn<FarmFormValues>;
@@ -19,6 +20,7 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
   const { t } = useTranslation();
   const [uploadStatus, setUploadStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
   const [fileName, setFileName] = useState<string>("");
+  const [geometry, setGeometry] = useState<GeoJSON.Geometry | null>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -30,7 +32,7 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
     try {
       // Read file
       const text = await readFileAsText(file);
-      let geometry: GeoJSON.Geometry | null = null;
+      let parsedGeometry: GeoJSON.Geometry | null = null;
       
       // Process based on file type
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
@@ -39,16 +41,16 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
         // Parse GeoJSON
         const geoJson = JSON.parse(text);
         if (geoJson.type === 'FeatureCollection' && geoJson.features && geoJson.features.length > 0) {
-          geometry = geoJson.features[0].geometry;
+          parsedGeometry = geoJson.features[0].geometry;
         } else if (geoJson.type === 'Feature' && geoJson.geometry) {
-          geometry = geoJson.geometry;
+          parsedGeometry = geoJson.geometry;
         } else if (geoJson.type && (geoJson.coordinates || geoJson.geometries)) {
-          geometry = geoJson as GeoJSON.Geometry;
+          parsedGeometry = geoJson as GeoJSON.Geometry;
         }
       } else if (fileExtension === 'kml' || fileExtension === 'kmz') {
         // For KML/KMZ, we'll use a simple polygon for now
         // In a real implementation, you would parse the KML/KMZ properly
-        geometry = {
+        parsedGeometry = {
           type: "Polygon",
           coordinates: [
             [
@@ -62,8 +64,9 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
         };
       }
       
-      if (geometry) {
-        onGeoFileUpload(geometry, file);
+      if (parsedGeometry) {
+        setGeometry(parsedGeometry);
+        onGeoFileUpload(parsedGeometry, file);
         setUploadStatus("success");
       } else {
         throw new Error("No valid geometry found in the file");
@@ -252,6 +255,14 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
           </div>
         </CardContent>
       </Card>
+
+      {/* Mostrar el mapa después de cargar un archivo geoespacial */}
+      {geometry && (
+        <div className="mt-4">
+          <h4 className="text-base font-medium mb-2">{t("farmWizard.previewBoundary", "Vista previa del perímetro")}</h4>
+          <MapPreview geometry={geometry} height="300px" />
+        </div>
+      )}
     </div>
   );
 }

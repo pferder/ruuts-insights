@@ -1,5 +1,6 @@
+
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { FarmComplete, FarmData, CattleData, PastureData, CarbonData, RegionalAverages } from "@/types/farm";
+import { FarmComplete, FarmData, CattleData, PastureData, CarbonData, RegionalAverages, Coordinates } from "@/types/farm";
 import { calculateCarbonData } from "@/lib/farm-utils";
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from "sonner";
@@ -92,7 +93,26 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (pastureError && pastureError.code !== 'PGRST116') throw pastureError;
         
         if (cattleData && pastureData) {
-          const carbon = calculateCarbonData(cattleData, pastureData);
+          const carbon = calculateCarbonData({
+            totalHead: cattleData.total_head,
+            cattleType: cattleData.cattle_type,
+            averageWeight: cattleData.average_weight,
+            methodOfRaising: cattleData.method_of_raising as "conventional" | "regenerative" | "mixed",
+            id: cattleData.id,
+            farmId: cattleData.farm_id
+          }, {
+            totalPastures: pastureData.total_pastures,
+            averagePastureSize: pastureData.average_pasture_size,
+            rotationsPerSeason: pastureData.rotations_per_season,
+            restingDaysPerPasture: pastureData.resting_days_per_pasture,
+            grassTypes: pastureData.grass_types,
+            soilHealthScore: pastureData.soil_health_score,
+            currentForageDensity: pastureData.current_forage_density,
+            id: pastureData.id,
+            farmId: pastureData.farm_id
+          });
+          
+          const coordinates: Coordinates = farm.coordinates as Coordinates;
           
           completeFarms.push({
             farm: {
@@ -101,7 +121,7 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
               location: farm.location,
               size: farm.size,
               ownerName: farm.owner_name,
-              coordinates: farm.coordinates,
+              coordinates: coordinates,
               contactEmail: farm.contact_email || undefined,
               createdAt: new Date(farm.created_at),
               updatedAt: new Date(farm.updated_at)
@@ -219,7 +239,29 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (pastureError) throw pastureError;
       
-      const carbon = calculateCarbonData(cattleData, pastureData);
+      const cattleObj: CattleData = {
+        id: cattleData.id,
+        farmId: cattleData.farm_id,
+        totalHead: cattleData.total_head,
+        cattleType: cattleData.cattle_type,
+        averageWeight: cattleData.average_weight,
+        methodOfRaising: cattleData.method_of_raising as "conventional" | "regenerative" | "mixed"
+      };
+      
+      const pastureObj: PastureData = {
+        id: pastureData.id,
+        farmId: pastureData.farm_id,
+        totalPastures: pastureData.total_pastures,
+        averagePastureSize: pastureData.average_pasture_size,
+        rotationsPerSeason: pastureData.rotations_per_season,
+        restingDaysPerPasture: pastureData.resting_days_per_pasture,
+        grassTypes: pastureData.grass_types,
+        soilHealthScore: pastureData.soil_health_score,
+        currentForageDensity: pastureData.current_forage_density
+      };
+      
+      const carbon = calculateCarbonData(cattleObj, pastureObj);
+      const coordinates: Coordinates = farmData.coordinates as Coordinates;
       
       const newFarm: FarmComplete = {
         farm: {
@@ -228,30 +270,13 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
           location: farmData.location,
           size: farmData.size,
           ownerName: farmData.owner_name,
-          coordinates: farmData.coordinates,
+          coordinates: coordinates,
           contactEmail: farmData.contact_email || undefined,
           createdAt: new Date(farmData.created_at),
           updatedAt: new Date(farmData.updated_at)
         },
-        cattle: {
-          id: cattleData.id,
-          farmId: cattleData.farm_id,
-          totalHead: cattleData.total_head,
-          cattleType: cattleData.cattle_type,
-          averageWeight: cattleData.average_weight,
-          methodOfRaising: cattleData.method_of_raising as "conventional" | "regenerative" | "mixed"
-        },
-        pasture: {
-          id: pastureData.id,
-          farmId: pastureData.farm_id,
-          totalPastures: pastureData.total_pastures,
-          averagePastureSize: pastureData.average_pasture_size,
-          rotationsPerSeason: pastureData.rotations_per_season,
-          restingDaysPerPasture: pastureData.resting_days_per_pasture,
-          grassTypes: pastureData.grass_types,
-          soilHealthScore: pastureData.soil_health_score,
-          currentForageDensity: pastureData.current_forage_density
-        },
+        cattle: cattleObj,
+        pasture: pastureObj,
         carbon,
         crops: [],
         regionalAverages: regionalAverages || {

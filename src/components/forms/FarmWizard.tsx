@@ -196,7 +196,7 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
             lat: Math.random() * 10 + 30, 
             lng: Math.random() * 10 - 90 
           },
-          ...(data.contactEmail && { contactEmail: data.contactEmail }),
+          contactEmail: data.contactEmail,
         };
 
         if (farmGeometry) {
@@ -249,7 +249,7 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
         const newFarm = await createFarm(farmData, cattleData, pastureData, regionalAverages);
         
         // If we have a geospatial file and a new farm was created, upload it
-        if (geoFile && newFarm) {
+        if (geoFile && newFarm && farmGeometry) {
           try {
             // Upload the original file to storage
             const filePath = `${user.id}/${newFarm.farm.id}/${geoFile.name}`;
