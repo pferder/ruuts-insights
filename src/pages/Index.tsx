@@ -77,9 +77,13 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               {farms.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  <FarmGrid farms={farms.slice(0, 3)} />
-                  {farms.length > 3 && (
+                <>
+                  <FarmGrid 
+                    farms={farms.slice(0, 5)} 
+                    viewMode="list" 
+                    compact={true} 
+                  />
+                  {farms.length > 5 && (
                     <Button 
                       variant="link" 
                       onClick={() => navigate("/farms")}
@@ -88,7 +92,7 @@ const Index = () => {
                       {t("dashboard.viewAllFarms", "Ver todos los establecimientos")}
                     </Button>
                   )}
-                </div>
+                </>
               ) : (
                 <div className="text-center py-8">
                   <p className="text-muted-foreground mb-4">{t("dashboard.noFarms", "No tiene establecimientos registrados")}</p>

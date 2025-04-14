@@ -20,7 +20,7 @@ const fixLeafletIcon = () => {
 };
 
 interface MapPreviewProps {
-  geometry: GeoJSONType.Geometry;
+  geometry: GeoJSONType;
   height?: string;
   className?: string;
 }
@@ -101,14 +101,16 @@ export function MapPreview({ geometry, height = "400px", className = "" }: MapPr
         zoom={zoom}
         style={{ height: "100%", width: "100%" }}
         className="h-full w-full rounded-xl"
+        key={`map-${center[0]}-${center[1]}-${zoom}`}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <GeoJSON 
+          key={JSON.stringify(geometry)}
           data={geoJsonData as any}
-          style={geoJsonStyle}
+          style={() => geoJsonStyle}
         />
       </MapContainer>
     </div>
