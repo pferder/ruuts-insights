@@ -8,9 +8,9 @@ import { useFarm } from "@/context/FarmContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { FarmData, CattleData, PastureData, RegionalAverages } from "@/types/farm";
+import { FarmData, CattleData, PastureData } from "@/types/farm";
 import { StepWizard, Step } from "@/components/ui/step-wizard";
-import { Info, BarChart, ArrowLeft, ArrowRight, FileUp, Sprout } from "lucide-react";
+import { Info, BarChart, ArrowLeft, ArrowRight, Sprout } from "lucide-react";
 import Icon from "@mdi/react";
 import { mdiCow } from "@mdi/js";
 
@@ -165,7 +165,7 @@ export function FarmWizard() {
       setIsSubmitting(true);
 
       try {
-        const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt" | "coordinates"> = {
+        const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt"> = {
           name: data.name,
           location: data.location,
           size: data.size,
@@ -191,20 +191,22 @@ export function FarmWizard() {
           currentForageDensity: data.currentForageDensity,
         };
 
-        const productionData = {
-          productionType: data.productionType,
-          livestockType: data.productionType === "livestock" ? data.livestockType : undefined,
-          supplementationKg: data.supplementationKg,
-        };
-
-        createFarm(farmData, cattleData, pastureData, data.regionalBiomassDensity ? {
+        const regionalAverages = data.regionalBiomassDensity ? {
           biomassDensity: data.regionalBiomassDensity,
           animalLoad: data.regionalAnimalLoad || 1.5,
           paddockCount: data.regionalPaddockCount || 6,
           rotationsCount: data.regionalRotationsCount || 3,
           carbonCapture: data.regionalCarbonCapture || 5,
           carbonEmissions: data.regionalCarbonEmissions || 7,
-        } : undefined, productionData);
+        } : undefined;
+
+        const productionData = {
+          productionType: data.productionType,
+          livestockType: data.productionType === "livestock" ? data.livestockType : undefined,
+          supplementationKg: data.supplementationKg,
+        };
+
+        createFarm(farmData, cattleData, pastureData, regionalAverages, productionData);
 
         toast({
           title: t("farmWizard.successTitle", "Farm Created"),

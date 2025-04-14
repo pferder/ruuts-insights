@@ -1,131 +1,84 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { HashLink } from "react-router-hash-link";
 import { Button } from "@/components/ui/button";
-import RuutsLogo from "@/assets/ruuts-blanco.svg";
+import { Menu, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/layout/LanguageSelector";
 
-export function Navbar() {
+interface NavbarProps {
+  onLoginClick: () => void;
+  onSignUpClick: () => void;
+}
+
+export function Navbar({ onLoginClick, onSignUpClick }: NavbarProps) {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
 
   return (
-    <nav className="bg-sidebar text-sidebar-foreground sticky top-0 z-50 px-4 py-3 md:px-6">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo */}
+    <nav className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/60 px-4 md:px-6 py-3">
+      <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center">
-          <img src={RuutsLogo} alt="Ruuts Logo" className="h-10" />
+          <img src="/ruuts-blanco.svg" alt="Ruuts Logo" className="h-8" />
+          <span className="text-lg font-semibold ml-2">Ruuts</span>
         </div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
-          <Link 
-            to="/dashboard" 
-            className="text-white hover:text-sidebar-accent transition-colors"
-          >
-            Regen Analytics
-          </Link>
-          
-          <div className="relative">
-            <button
-              onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
-              className="flex items-center text-white hover:text-sidebar-accent transition-colors"
-            >
-              Mediciones y Monitoreos
-              <ChevronDown size={16} className="ml-1" />
-            </button>
-            
-            {isSubmenuOpen && (
-              <div className="absolute left-0 mt-2 w-60 bg-sidebar rounded-md shadow-lg py-2 z-10 border border-sidebar-border">
-                <Link 
-                  to="#" 
-                  className="block px-4 py-2 text-white hover:bg-sidebar-accent/50 transition-colors"
-                  onClick={() => setIsSubmenuOpen(false)}
-                >
-                  GRASS
-                </Link>
-              </div>
-            )}
+        <div className="hidden md:flex gap-6 items-center">
+          <HashLink smooth to="/#features" className="text-gray-700 hover:text-theme-green-primary transition-colors">
+            {t("landing.navFeatures", "Características")}
+          </HashLink>
+          <HashLink smooth to="/#about" className="text-gray-700 hover:text-theme-green-primary transition-colors">
+            {t("landing.navAbout", "Nosotros")}
+          </HashLink>
+          <div className="flex items-center gap-2 ml-4">
+            <LanguageSelector />
+            <Button variant="outline" onClick={onLoginClick}>
+              {t("landing.navLogin", "Iniciar sesión")}
+            </Button>
+            <Button className="bg-theme-green-primary hover:bg-theme-green-primary/90" onClick={onSignUpClick}>
+              {t("landing.navSignUp", "Registrarse")}
+            </Button>
           </div>
-          
-          <Link 
-            to="#" 
-            className="text-white hover:text-sidebar-accent transition-colors"
-          >
-            Programas de carbono
-          </Link>
         </div>
 
-        {/* Dashboard Button */}
-        <div className="hidden md:block">
-          <Button asChild className="bg-theme-green-primary hover:bg-farm-green-600 text-white">
-            <Link to="/dashboard">Acceder al Dashboard</Link>
-          </Button>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
+        <div className="flex md:hidden gap-2 items-center">
+          <LanguageSelector />
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white"
+            className="ml-1"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </Button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden mt-4 px-2 py-4 space-y-4">
-          <Link 
-            to="/dashboard" 
-            className="block px-3 py-2 rounded-md text-white hover:bg-sidebar-accent/50 transition-colors"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Regen Analytics
-          </Link>
-          
-          <div>
-            <button
-              onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
-              className="flex items-center w-full px-3 py-2 rounded-md text-white hover:bg-sidebar-accent/50 transition-colors"
+        <div className="md:hidden py-4 px-2">
+          <div className="flex flex-col gap-4">
+            <HashLink
+              smooth to="/#features"
+              className="px-2 py-1 text-gray-700 hover:text-theme-green-primary transition-colors"
+              onClick={() => setIsMenuOpen(false)}
             >
-              Mediciones y Monitoreos
-              <ChevronDown size={16} className="ml-1" />
-            </button>
-            
-            {isSubmenuOpen && (
-              <div className="ml-4 mt-2 space-y-2">
-                <Link 
-                  to="#" 
-                  className="block px-3 py-2 rounded-md text-white hover:bg-sidebar-accent/50 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  GRASS
-                </Link>
-              </div>
-            )}
-          </div>
-          
-          <Link 
-            to="#" 
-            className="block px-3 py-2 rounded-md text-white hover:bg-sidebar-accent/50 transition-colors"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Programas de carbono
-          </Link>
-          
-          <div className="pt-2">
-            <Button asChild className="w-full bg-theme-green-primary hover:bg-farm-green-600 text-white">
-              <Link 
-                to="/dashboard" 
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Acceder al Dashboard
-              </Link>
-            </Button>
+              {t("landing.navFeatures", "Características")}
+            </HashLink>
+            <HashLink
+              smooth to="/#about"
+              className="px-2 py-1 text-gray-700 hover:text-theme-green-primary transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {t("landing.navAbout", "Nosotros")}
+            </HashLink>
+            <div className="flex flex-col gap-2 mt-2">
+              <Button variant="outline" onClick={() => { onLoginClick(); setIsMenuOpen(false); }}>
+                {t("landing.navLogin", "Iniciar sesión")}
+              </Button>
+              <Button className="bg-theme-green-primary hover:bg-theme-green-primary/90" onClick={() => { onSignUpClick(); setIsMenuOpen(false); }}>
+                {t("landing.navSignUp", "Registrarse")}
+              </Button>
+            </div>
           </div>
         </div>
       )}

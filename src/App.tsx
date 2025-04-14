@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { FarmProvider } from "@/context/FarmContext";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { AuthProvider } from "@/hooks/useAuth";
 import { useState } from "react";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
@@ -31,22 +32,24 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ThemeProvider defaultTheme="light" storageKey="farm-theme">
-          <FarmProvider>
-            <Toaster />
-            <Sonner />
-            <HashRouter>
-              <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/dashboard" element={<Index />} />
-                <Route path="/farms" element={<Farms />} />
-                <Route path="/farms/:id" element={<FarmDetails />} />
-                <Route path="/add-farm" element={<AddFarm />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/export" element={<ExportData />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </HashRouter>
-          </FarmProvider>
+          <AuthProvider>
+            <FarmProvider>
+              <Toaster />
+              <Sonner />
+              <HashRouter>
+                <Routes>
+                  <Route path="/" element={<Landing />} />
+                  <Route path="/dashboard" element={<Index />} />
+                  <Route path="/farms" element={<Farms />} />
+                  <Route path="/farms/:id" element={<FarmDetails />} />
+                  <Route path="/add-farm" element={<AddFarm />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/export" element={<ExportData />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </HashRouter>
+            </FarmProvider>
+          </AuthProvider>
         </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>

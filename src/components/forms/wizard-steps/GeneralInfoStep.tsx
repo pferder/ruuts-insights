@@ -1,3 +1,4 @@
+
 import { useTranslation } from "react-i18next";
 import { UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
@@ -22,7 +23,7 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
 
     // In a real implementation, you would parse KML/GeoJSON/Shapefile here
     // For now, we'll just simulate successful upload with a sample geometry
-    const sampleGeometry = {
+    const sampleGeometry: GeoJSON.Polygon = {
       type: "Polygon",
       coordinates: [
         [

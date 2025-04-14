@@ -1,54 +1,68 @@
 
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
 import { LanguageSelector } from "./LanguageSelector";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { useFarm } from "@/context/FarmContext";
+import { useAuth } from "@/hooks/useAuth";
 
-interface HeaderProps {
-  title?: string;
-  subtitle?: string;
-  showSearch?: boolean;
-}
-
-export function Header({ title, subtitle, showSearch }: HeaderProps) {
+export function Header() {
   const { t } = useTranslation();
-  const location = useLocation();
-  const { searchFarms } = useFarm();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
-  const getPageTitle = () => {
-    if (title) return title;
-
-    const path = location.pathname;
-    if (path === "/") return t("navigation.dashboard");
-    if (path === "/farms") return t("navigation.farms");
-    if (path.startsWith("/farms/")) return t("navigation.farmDetails");
-    if (path === "/add-farm") return t("navigation.addFarm");
-    if (path === "/analytics") return t("navigation.analytics");
-    if (path === "/export") return t("navigation.export");
-    return "";
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
   };
 
   return (
-    <header className="border-b px-6 py-4 sticky top-0 z-10 bg-background mb-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold">{getPageTitle()}</h1>
-          {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
-        </div>
-        
-        {showSearch && (
-          <div className="relative hidden sm:block w-64 lg:w-80">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input 
-              type="search" 
-              placeholder={t("common.search")}
-              className="pl-8 neumorph-inset dark:neumorph-dark-inset"
-              onChange={(e) => searchFarms(e.target.value)}
+    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/95 border-b border-slate-100">
+      <div className="px-4 flex h-14 justify-between items-center md:px-6">
+        <div className="flex items-center gap-2">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle Menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <nav className="grid gap-6 text-lg font-medium px-4 py-8">
+                <Link to="/dashboard">{t("nav.dashboard", "Dashboard")}</Link>
+                <Link to="/farms">{t("nav.farms", "Farms")}</Link>
+                <Link to="/add-farm">{t("nav.addFarm", "Add Farm")}</Link>
+                <Link to="/analytics">{t("nav.analytics", "Analytics")}</Link>
+                <Link to="/export">{t("nav.export", "Export Data")}</Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              alt="Ruuts Logo"
+              className="h-8"
+              src="/ruuts-blanco.svg"
             />
-          </div>
-        )}
+            <div className="text-lg font-semibold">Ruuts</div>
+          </Link>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSelector />
+          {user && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLogout}
+            >
+              {t("auth.logout", "Cerrar sesión")}
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );
