@@ -8,35 +8,85 @@ import { FileUp, MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { FarmFormValues } from "../FarmWizard";
 import { GeoJSON } from "geojson";
+import { useState } from "react";
 
 interface GeneralInfoStepProps {
   form: UseFormReturn<FarmFormValues>;
-  onGeoFileUpload: (geometry: GeoJSON.Geometry) => void;
+  onGeoFileUpload: (geometry: GeoJSON.Geometry, file?: File) => void;
 }
 
 export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps) {
   const { t } = useTranslation();
+  const [uploadStatus, setUploadStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
+  const [fileName, setFileName] = useState<string>("");
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    // In a real implementation, you would parse KML/GeoJSON/Shapefile here
-    // For now, we'll just simulate successful upload with a sample geometry
-    const sampleGeometry: GeoJSON.Polygon = {
-      type: "Polygon",
-      coordinates: [
-        [
-          [-58.5, -34.5],
-          [-58.4, -34.5],
-          [-58.4, -34.4],
-          [-58.5, -34.4],
-          [-58.5, -34.5],
-        ],
-      ],
-    };
-
-    onGeoFileUpload(sampleGeometry);
+    
+    setUploadStatus("processing");
+    setFileName(file.name);
+    
+    try {
+      // Read file
+      const text = await readFileAsText(file);
+      let geometry: GeoJSON.Geometry | null = null;
+      
+      // Process based on file type
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      
+      if (fileExtension === 'geojson' || fileExtension === 'json') {
+        // Parse GeoJSON
+        const geoJson = JSON.parse(text);
+        if (geoJson.type === 'FeatureCollection' && geoJson.features && geoJson.features.length > 0) {
+          geometry = geoJson.features[0].geometry;
+        } else if (geoJson.type === 'Feature' && geoJson.geometry) {
+          geometry = geoJson.geometry;
+        } else if (geoJson.type && (geoJson.coordinates || geoJson.geometries)) {
+          geometry = geoJson as GeoJSON.Geometry;
+        }
+      } else if (fileExtension === 'kml' || fileExtension === 'kmz') {
+        // For KML/KMZ, we'll use a simple polygon for now
+        // In a real implementation, you would parse the KML/KMZ properly
+        geometry = {
+          type: "Polygon",
+          coordinates: [
+            [
+              [-58.5, -34.5],
+              [-58.4, -34.5],
+              [-58.4, -34.4],
+              [-58.5, -34.4],
+              [-58.5, -34.5],
+            ],
+          ],
+        };
+      }
+      
+      if (geometry) {
+        onGeoFileUpload(geometry, file);
+        setUploadStatus("success");
+      } else {
+        throw new Error("No valid geometry found in the file");
+      }
+    } catch (error) {
+      console.error("Error processing geo file:", error);
+      setUploadStatus("error");
+    }
+  };
+  
+  const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target && typeof event.target.result === 'string') {
+          resolve(event.target.result);
+        } else {
+          reject(new Error("Failed to read file"));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsText(file);
+    });
   };
 
   return (
@@ -47,7 +97,7 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("farmWizard.farmName", "Farm Name")}</FormLabel>
+              <FormLabel>{t("farmWizard.farmName", "Nombre del Establecimiento")}</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Green Meadows Ranch"
@@ -64,11 +114,11 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("farmWizard.location", "Location")}</FormLabel>
+              <FormLabel>{t("farmWizard.location", "Ubicación")}</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
-                    placeholder="County, State"
+                    placeholder="Provincia, País"
                     {...field}
                   />
                   <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -84,7 +134,7 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
           name="size"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("farmWizard.farmSize", "Farm Size (hectares)")}</FormLabel>
+              <FormLabel>{t("farmWizard.farmSize", "Tamaño del Establecimiento (hectáreas)")}</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -104,7 +154,7 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
           name="ownerName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("farmWizard.ownerName", "Owner/Manager Name")}</FormLabel>
+              <FormLabel>{t("farmWizard.ownerName", "Nombre del Propietario/Administrador")}</FormLabel>
               <FormControl>
                 <Input
                   placeholder="John Smith"
@@ -121,7 +171,7 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
           name="contactEmail"
           render={({ field }) => (
             <FormItem className="col-span-full">
-              <FormLabel>{t("farmWizard.contactEmail", "Contact Email (optional)")}</FormLabel>
+              <FormLabel>{t("farmWizard.contactEmail", "Email de Contacto (opcional)")}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -138,9 +188,9 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
       <Card className="border-dashed border-2 border-muted-foreground/30">
         <CardContent className="p-6">
           <div className="text-center">
-            <h3 className="text-base font-medium mb-2">{t("farmWizard.farmBoundary", "Farm Boundary")}</h3>
+            <h3 className="text-base font-medium mb-2">{t("farmWizard.farmBoundary", "Perímetro del Establecimiento")}</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              {t("farmWizard.uploadDescription", "Upload a KML, GeoJSON, or Shapefile with your farm's boundary")}
+              {t("farmWizard.uploadDescription", "Suba un archivo KML, GeoJSON o Shapefile con el perímetro de su establecimiento")}
             </p>
 
             <div className="flex justify-center">
@@ -149,16 +199,51 @@ export function GeneralInfoStep({ form, onGeoFileUpload }: GeneralInfoStepProps)
                 className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-background hover:bg-accent/50"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <FileUp className="w-8 h-8 mb-2 text-muted-foreground" />
-                  <p className="mb-2 text-sm text-foreground">
-                    <span className="font-medium">{t("farmWizard.clickToUpload", "Click to upload")}</span>
-                  </p>
-                  <p className="text-xs text-muted-foreground">KML, GeoJSON, or Shapefile</p>
+                  {uploadStatus === "idle" && (
+                    <>
+                      <FileUp className="w-8 h-8 mb-2 text-muted-foreground" />
+                      <p className="mb-2 text-sm text-foreground">
+                        <span className="font-medium">{t("farmWizard.clickToUpload", "Haga clic para subir")}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground">KML, GeoJSON o Shapefile</p>
+                    </>
+                  )}
+                  
+                  {uploadStatus === "processing" && (
+                    <>
+                      <div className="w-8 h-8 mb-2 border-2 border-muted-foreground border-t-primary rounded-full animate-spin"></div>
+                      <p className="text-sm text-foreground">Procesando archivo...</p>
+                    </>
+                  )}
+                  
+                  {uploadStatus === "success" && (
+                    <>
+                      <div className="w-8 h-8 mb-2 rounded-full bg-green-100 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                      </div>
+                      <p className="text-sm text-foreground">{fileName} cargado correctamente</p>
+                      <p className="text-xs text-muted-foreground mt-1">Haga clic para cambiar</p>
+                    </>
+                  )}
+                  
+                  {uploadStatus === "error" && (
+                    <>
+                      <div className="w-8 h-8 mb-2 rounded-full bg-red-100 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                      </div>
+                      <p className="text-sm text-foreground">Error al procesar el archivo</p>
+                      <p className="text-xs text-muted-foreground mt-1">Haga clic para intentar nuevamente</p>
+                    </>
+                  )}
                 </div>
                 <input
                   id="geo-file-upload"
                   type="file"
-                  accept=".kml,.geojson,.json,.zip,.shp"
+                  accept=".kml,.geojson,.json,.zip,.shp,.kmz"
                   className="hidden"
                   onChange={handleFileChange}
                 />

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -18,6 +19,8 @@ import { GeneralInfoStep } from "./wizard-steps/GeneralInfoStep";
 import { CattleInfoStep } from "./wizard-steps/CattleInfoStep";
 import { GrazingInfoStep } from "./wizard-steps/GrazingInfoStep";
 import { ProductionInfoStep } from "./wizard-steps/ProductionInfoStep";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 const formSchema = z.object({
   name: z.string().min(2, "Farm name must be at least 2 characters"),
@@ -55,14 +58,20 @@ type FarmFormValues = z.infer<typeof formSchema>;
 
 export type { FarmFormValues };
 
-export function FarmWizard() {
+interface FarmWizardProps {
+  onComplete?: () => void;
+}
+
+export function FarmWizard({ onComplete }: FarmWizardProps) {
   const { t } = useTranslation();
   const { createFarm } = useFarm();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [farmGeometry, setFarmGeometry] = useState<GeoJSON.Geometry | null>(null);
+  const [geoFile, setGeoFile] = useState<File | null>(null);
 
   const steps: Step[] = [
     {
@@ -152,16 +161,29 @@ export function FarmWizard() {
     }
   };
 
-  const handleGeoFileUpload = (geometry: GeoJSON.Geometry) => {
+  const handleGeoFileUpload = (geometry: GeoJSON.Geometry, file?: File) => {
     setFarmGeometry(geometry);
+    if (file) {
+      setGeoFile(file);
+    }
+    
     toast({
-      title: t("farmWizard.geoFileUploaded", "Geographic file uploaded"),
-      description: t("farmWizard.geoFileUploadSuccess", "Farm boundary uploaded successfully"),
+      title: t("farmWizard.geoFileUploaded", "Archivo geográfico subido"),
+      description: t("farmWizard.geoFileUploadSuccess", "Perímetro del establecimiento subido correctamente"),
     });
   };
 
-  const handleSubmit = () => {
-    form.handleSubmit((data) => {
+  const handleSubmit = async () => {
+    form.handleSubmit(async (data) => {
+      if (!user) {
+        toast({
+          title: t("farmWizard.errorTitle", "Error"),
+          description: t("farmWizard.authError", "Debe iniciar sesión para crear un establecimiento"),
+          variant: "destructive",
+        });
+        return;
+      }
+      
       setIsSubmitting(true);
 
       try {
@@ -224,19 +246,57 @@ export function FarmWizard() {
           supplementationKg: data.supplementationKg,
         };
 
-        createFarm(farmData, cattleData, pastureData, regionalAverages);
+        const newFarm = await createFarm(farmData, cattleData, pastureData, regionalAverages);
+        
+        // If we have a geospatial file and a new farm was created, upload it
+        if (geoFile && newFarm) {
+          try {
+            // Upload the original file to storage
+            const filePath = `${user.id}/${newFarm.farm.id}/${geoFile.name}`;
+            const { error: uploadError } = await supabase.storage
+              .from('farm_geospatial_files')
+              .upload(filePath, geoFile);
+              
+            if (uploadError) throw uploadError;
+            
+            // Store the geospatial data in the database
+            const { error: geospatialError } = await supabase
+              .from('farm_geospatial')
+              .insert({
+                farm_id: newFarm.farm.id,
+                file_name: geoFile.name,
+                file_type: geoFile.name.split('.').pop()?.toLowerCase() || 'unknown',
+                geometry: farmGeometry
+              });
+              
+            if (geospatialError) throw geospatialError;
+            
+          } catch (geoError) {
+            console.error("Error uploading geospatial file:", geoError);
+            // Don't fail the farm creation if just the geo file upload fails
+            toast({
+              title: t("farmWizard.geoFileError", "Advertencia"),
+              description: t("farmWizard.geoFileUploadError", "El establecimiento se creó correctamente, pero hubo un error al guardar el archivo geoespacial."),
+              variant: "default",
+            });
+          }
+        }
 
         toast({
-          title: t("farmWizard.successTitle", "Farm Created"),
-          description: t("farmWizard.successDescription", "Your farm has been successfully added."),
+          title: t("farmWizard.successTitle", "Establecimiento Creado"),
+          description: t("farmWizard.successDescription", "Su establecimiento ha sido agregado correctamente."),
         });
 
-        navigate("/farms");
+        if (onComplete) {
+          onComplete();
+        } else {
+          navigate("/farms");
+        }
       } catch (error) {
         console.error("Error creating farm:", error);
         toast({
           title: t("farmWizard.errorTitle", "Error"),
-          description: t("farmWizard.errorDescription", "There was an error adding your farm. Please try again."),
+          description: t("farmWizard.errorDescription", "Hubo un error al agregar su establecimiento. Por favor intente nuevamente."),
           variant: "destructive",
         });
       } finally {
@@ -268,8 +328,8 @@ export function FarmWizard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("farmWizard.title", "Add New Farm")}</CardTitle>
-        <CardDescription>{t("farmWizard.description", "Add information about your farm to get started with regenerative insights.")}</CardDescription>
+        <CardTitle>{t("farmWizard.title", "Agregar Nuevo Establecimiento")}</CardTitle>
+        <CardDescription>{t("farmWizard.description", "Agregue información sobre su establecimiento para comenzar con los análisis regenerativos.")}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -293,7 +353,7 @@ export function FarmWizard() {
           className="flex items-center gap-2"
         >
           <ArrowLeft size={16} />
-          {currentStep === 0 ? t("common.cancel", "Cancel") : t("common.back", "Back")}
+          {currentStep === 0 ? t("common.cancel", "Cancelar") : t("common.back", "Atrás")}
         </Button>
 
         <Button
@@ -304,9 +364,9 @@ export function FarmWizard() {
         >
           {currentStep === steps.length - 1
             ? isSubmitting
-              ? t("common.creating", "Creating...")
-              : t("common.create", "Create Farm")
-            : t("common.next", "Next")}
+              ? t("common.creating", "Creando...")
+              : t("common.create", "Crear Establecimiento")
+            : t("common.next", "Siguiente")}
           {currentStep < steps.length - 1 && <ArrowRight size={16} />}
         </Button>
       </CardFooter>

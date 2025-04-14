@@ -9,6 +9,136 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cattle: {
+        Row: {
+          average_weight: number
+          cattle_type: string
+          created_at: string
+          farm_id: string
+          id: string
+          method_of_raising: string
+          total_head: number
+          updated_at: string
+        }
+        Insert: {
+          average_weight: number
+          cattle_type: string
+          created_at?: string
+          farm_id: string
+          id?: string
+          method_of_raising: string
+          total_head: number
+          updated_at?: string
+        }
+        Update: {
+          average_weight?: number
+          cattle_type?: string
+          created_at?: string
+          farm_id?: string
+          id?: string
+          method_of_raising?: string
+          total_head?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cattle_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      farms: {
+        Row: {
+          contact_email: string | null
+          coordinates: Json
+          created_at: string
+          id: string
+          location: string
+          name: string
+          owner_name: string
+          size: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact_email?: string | null
+          coordinates: Json
+          created_at?: string
+          id?: string
+          location: string
+          name: string
+          owner_name: string
+          size: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contact_email?: string | null
+          coordinates?: Json
+          created_at?: string
+          id?: string
+          location?: string
+          name?: string
+          owner_name?: string
+          size?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pastures: {
+        Row: {
+          average_pasture_size: number
+          created_at: string
+          current_forage_density: number | null
+          farm_id: string
+          grass_types: string[]
+          id: string
+          resting_days_per_pasture: number
+          rotations_per_season: number
+          soil_health_score: number | null
+          total_pastures: number
+          updated_at: string
+        }
+        Insert: {
+          average_pasture_size: number
+          created_at?: string
+          current_forage_density?: number | null
+          farm_id: string
+          grass_types: string[]
+          id?: string
+          resting_days_per_pasture: number
+          rotations_per_season: number
+          soil_health_score?: number | null
+          total_pastures: number
+          updated_at?: string
+        }
+        Update: {
+          average_pasture_size?: number
+          created_at?: string
+          current_forage_density?: number | null
+          farm_id?: string
+          grass_types?: string[]
+          id?: string
+          resting_days_per_pasture?: number
+          rotations_per_season?: number
+          soil_health_score?: number | null
+          total_pastures?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pastures_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           company_name: string | null
