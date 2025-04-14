@@ -170,6 +170,10 @@ export function FarmWizard() {
           location: data.location,
           size: data.size,
           ownerName: data.ownerName,
+          coordinates: { 
+            lat: Math.random() * 10 + 30, 
+            lng: Math.random() * 10 - 90 
+          },
           ...(data.contactEmail && { contactEmail: data.contactEmail }),
         };
 
@@ -185,17 +189,7 @@ export function FarmWizard() {
               lat: firstPoint[1],
               lng: firstPoint[0]
             };
-          } else {
-            farmData.coordinates = { 
-              lat: Math.random() * 10 + 30, 
-              lng: Math.random() * 10 - 90 
-            };
           }
-        } else {
-          farmData.coordinates = { 
-            lat: Math.random() * 10 + 30, 
-            lng: Math.random() * 10 - 90 
-          };
         }
 
         const cattleData: Omit<CattleData, "id" | "farmId"> = {

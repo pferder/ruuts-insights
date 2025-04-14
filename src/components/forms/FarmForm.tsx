@@ -29,7 +29,8 @@ import {
   FarmData, 
   CattleData, 
   PastureData, 
-  RegionalAverages 
+  RegionalAverages,
+  Coordinates 
 } from "@/types/farm";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
@@ -102,12 +103,16 @@ export function FarmForm() {
     setIsSubmitting(true);
     
     try {
-      // Extract farm data
-      const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt" | "coordinates"> = {
+      // Extract farm data with coordinates
+      const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt"> = {
         name: data.name,
         location: data.location,
         size: data.size,
         ownerName: data.ownerName,
+        coordinates: { 
+          lat: Math.random() * 10 + 30, 
+          lng: Math.random() * 10 - 90 
+        }
       };
       
       // Extract cattle data
