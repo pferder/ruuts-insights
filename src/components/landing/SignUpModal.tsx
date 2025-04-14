@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { LoaderCircle } from "lucide-react";
 import { LoginModal } from "@/components/auth/LoginModal";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface SignUpModalProps {
   open: boolean;
@@ -38,6 +38,8 @@ export function SignUpModal({ open, onOpenChange }: SignUpModalProps) {
   const [userType, setUserType] = useState<"producer" | "company" | "">("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,8 +71,9 @@ export function SignUpModal({ open, onOpenChange }: SignUpModalProps) {
         phoneNumber: values.phoneNumber,
       });
       
-      onOpenChange(false);
-      navigate("/dashboard");
+      setRegisteredEmail(values.email);
+      setEmailSent(true);
+      form.reset();
     } catch (error) {
       // Error is handled in the signUp function
     } finally {
@@ -92,14 +95,55 @@ export function SignUpModal({ open, onOpenChange }: SignUpModalProps) {
     }, 100);
   };
 
+  const resetForm = () => {
+    setEmailSent(false);
+    setRegisteredEmail("");
+    setStep(1);
+    setUserType("");
+    form.reset();
+  };
+
   return (
     <>
       <Dialog
         open={open}
-        onOpenChange={onOpenChange}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            resetForm();
+          }
+          onOpenChange(isOpen);
+        }}
       >
         <DialogContent className="sm:max-w-[520px] p-6 rounded-lg">
-          {step === 1 ? (
+          {emailSent ? (
+            <div className="text-center py-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <DialogTitle className="text-2xl font-semibold mb-2">
+                {t("signup.checkEmail", "Revisa tu correo")}
+              </DialogTitle>
+              <DialogDescription className="text-base mt-2 mb-4">
+                {t("signup.verificationSent", "Hemos enviado un correo de verificación a")} <strong>{registeredEmail}</strong>. 
+                {t("signup.verificationInstructions", "Por favor, sigue las instrucciones para completar tu registro.")}
+              </DialogDescription>
+              <Alert className="mb-6 bg-blue-50 text-blue-800 border-blue-200">
+                <AlertDescription>
+                  {t("signup.emailNote", "Si no encuentras el correo, revisa tu carpeta de spam o solicita un nuevo enlace de verificación.")}
+                </AlertDescription>
+              </Alert>
+              <div className="flex flex-col space-y-4">
+                <Button onClick={switchToLogin} variant="outline">
+                  {t("signup.goToLogin", "Ir a iniciar sesión")}
+                </Button>
+                <Button onClick={resetForm} className="bg-theme-green-primary hover:bg-theme-green-primary/90">
+                  {t("signup.registerAnotherAccount", "Registrar otra cuenta")}
+                </Button>
+              </div>
+            </div>
+          ) : step === 1 ? (
             <>
               <DialogHeader className="mb-4">
                 <DialogTitle className="text-2xl font-semibold">{t("signup.selectUserType", "Ayúdanos a personalizar tu experiencia")}</DialogTitle>

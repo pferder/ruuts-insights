@@ -16,6 +16,7 @@ import AddFarm from "./pages/AddFarm";
 import Analytics from "./pages/Analytics";
 import ExportData from "./pages/ExportData";
 import NotFound from "./pages/NotFound";
+import ConfirmEmail from "./pages/ConfirmEmail";
 
 const App = () => {
   // Create QueryClient instance inside the component using useState hook
@@ -45,6 +46,7 @@ const App = () => {
                   <Route path="/add-farm" element={<AddFarm />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/export" element={<ExportData />} />
+                  <Route path="/confirm-email" element={<ConfirmEmail />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </HashRouter>

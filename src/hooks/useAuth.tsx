@@ -78,40 +78,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string, userData: any) => {
     try {
+      // Use the redirectTo parameter to specify the redirect URL after email confirmation
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             name: userData.name,
-            // Add any other user metadata fields you want to store
-          },
-        },
-      });
-
-      if (error) throw error;
-
-      // After signup, update the profile with additional fields
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .update({
             user_type: userData.userType,
             company_name: userData.companyName,
             farm_count: userData.farmCount ? parseInt(userData.farmCount) : null,
             location: userData.location,
             phone_number: userData.phoneNumber,
-          })
-          .eq("id", data.user.id);
+          },
+          emailRedirectTo: window.location.origin + '/#/confirm-email'
+        },
+      });
 
-        if (profileError) {
-          console.error("Error updating profile:", profileError);
-        }
-      }
+      if (error) throw error;
 
       toast({
-        title: "Registro exitoso",
-        description: "¡Bienvenido a Ruuts! Tu cuenta ha sido creada.",
+        title: "Registro iniciado",
+        description: "Te hemos enviado un correo de verificación. Por favor, revisa tu bandeja de entrada y sigue las instrucciones para completar el registro.",
       });
     } catch (error: any) {
       console.error("Error signing up:", error);
