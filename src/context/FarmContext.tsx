@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { FarmComplete, FarmData, CattleData, PastureData, CarbonData, RegionalAverages } from "@/types/farm";
 import { mockFarmData, getFarmById as getMockFarmById } from "@/lib/mock-data";
@@ -11,10 +12,11 @@ interface FarmContextType {
   loading: boolean;
   error: string | null;
   getFarmById: (id: string) => FarmComplete | null;
-  createFarm: (newFarm: Omit<FarmData, "id" | "createdAt" | "updatedAt" | "coordinates">, 
+  createFarm: (newFarm: Omit<FarmData, "id" | "createdAt" | "updatedAt">, 
                 cattle: Omit<CattleData, "id" | "farmId">, 
                 pasture: Omit<PastureData, "id" | "farmId">,
-                regionalAverages?: RegionalAverages) => void;
+                regionalAverages?: RegionalAverages,
+                productionData?: any) => void;
   updateFarm: (farmId: string, 
                farmData?: Partial<FarmData>, 
                cattleData?: Partial<CattleData>, 
@@ -54,10 +56,11 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const createFarm = (
-    newFarmData: Omit<FarmData, "id" | "createdAt" | "updatedAt" | "coordinates">,
+    newFarmData: Omit<FarmData, "id" | "createdAt" | "updatedAt">,
     newCattleData: Omit<CattleData, "id" | "farmId">,
     newPastureData: Omit<PastureData, "id" | "farmId">,
-    regionalAverages?: RegionalAverages
+    regionalAverages?: RegionalAverages,
+    productionData?: any
   ) => {
     const farmId = `farm-${uuidv4()}`;
     const now = new Date();
@@ -65,7 +68,6 @@ export const FarmProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const farm: FarmData = {
       id: farmId,
       ...newFarmData,
-      coordinates: { lat: Math.random() * 10 + 30, lng: Math.random() * 10 - 90 },
       createdAt: now,
       updatedAt: now
     };

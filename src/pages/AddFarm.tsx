@@ -11,6 +11,10 @@ const AddFarm = () => {
   return (
     <ProtectedRoute>
       <Layout>
+        <Header 
+          title={t("addFarm.title", "Add New Farm")}
+          subtitle={t("addFarm.subtitle", "Create a new farm to track and analyze")}
+        />
         <div className="mt-6">
           <FarmWizard />
         </div>

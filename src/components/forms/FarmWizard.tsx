@@ -170,9 +170,33 @@ export function FarmWizard() {
           location: data.location,
           size: data.size,
           ownerName: data.ownerName,
-          ...(farmGeometry && { coordinates: farmGeometry }),
           ...(data.contactEmail && { contactEmail: data.contactEmail }),
         };
+
+        if (farmGeometry) {
+          if (farmGeometry.type === 'Point') {
+            farmData.coordinates = {
+              lat: farmGeometry.coordinates[1],
+              lng: farmGeometry.coordinates[0]
+            };
+          } else if (farmGeometry.type === 'Polygon' && farmGeometry.coordinates[0] && farmGeometry.coordinates[0].length > 0) {
+            const firstPoint = farmGeometry.coordinates[0][0];
+            farmData.coordinates = {
+              lat: firstPoint[1],
+              lng: firstPoint[0]
+            };
+          } else {
+            farmData.coordinates = { 
+              lat: Math.random() * 10 + 30, 
+              lng: Math.random() * 10 - 90 
+            };
+          }
+        } else {
+          farmData.coordinates = { 
+            lat: Math.random() * 10 + 30, 
+            lng: Math.random() * 10 - 90 
+          };
+        }
 
         const cattleData: Omit<CattleData, "id" | "farmId"> = {
           totalHead: data.totalHead,
@@ -206,7 +230,7 @@ export function FarmWizard() {
           supplementationKg: data.supplementationKg,
         };
 
-        createFarm(farmData, cattleData, pastureData, regionalAverages, productionData);
+        createFarm(farmData, cattleData, pastureData, regionalAverages);
 
         toast({
           title: t("farmWizard.successTitle", "Farm Created"),
