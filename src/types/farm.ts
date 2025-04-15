@@ -6,9 +6,7 @@ export interface Coordinates {
 export interface FarmData {
   id: string;
   name: string;
-  country: string;
-  state: string;
-  city: string;
+  location: string;
   size: number; // in hectares
   coordinates: Coordinates;
   ownerName: string;

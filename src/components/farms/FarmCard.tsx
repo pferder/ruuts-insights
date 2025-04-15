@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { FarmMap } from "@/components/maps/FarmMap";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useEffect } from "react";
 
 interface FarmCardProps {
   farm: FarmComplete;
@@ -14,17 +16,18 @@ interface FarmCardProps {
 export function FarmCard({ farm }: FarmCardProps) {
   const { t } = useTranslation();
   const { farm: farmData, cattle, pasture } = farm;
+  const [isMapReady, setIsMapReady] = useState(false);
 
   return (
     <Card className="dashboard-card h-full flex flex-col card-gradient-green">
       <CardHeader className="pb-2">
-        <CardTitle className="text-xl text-primary">{farmData.name}</CardTitle>
+        <CardTitle className="text-xl text-primary">{isMapReady ? farmData.name : <Skeleton className="h-6 w-32" />}</CardTitle>
         <div className="flex items-center text-sm text-muted-foreground mt-1">
           <MapPin
             size={16}
             className="mr-1"
           />
-          <span>{farmData.location}</span>
+          <span>{isMapReady ? farmData.location : <Skeleton className="h-4 w-48" />}</span>
         </div>
       </CardHeader>
 
@@ -33,6 +36,8 @@ export function FarmCard({ farm }: FarmCardProps) {
           farm={farm}
           height="100%"
           showTooltip={false}
+          animate={false}
+          onMapReady={() => setIsMapReady(true)}
         />
       </div>
 
@@ -43,32 +48,28 @@ export function FarmCard({ farm }: FarmCardProps) {
               size={16}
               className="mr-2 text-secondary"
             />
-            <span>{farmData.size} hectares</span>
+            <span>{isMapReady ? `${farmData.size} hectares` : <Skeleton className="h-4 w-24" />}</span>
           </div>
           <div className="flex items-center text-sm">
             <User
               size={16}
               className="mr-2 text-secondary"
             />
-            <span>{farmData.ownerName}</span>
+            <span>{isMapReady ? farmData.ownerName : <Skeleton className="h-4 w-32" />}</span>
           </div>
           <div className="flex items-center text-sm">
             <PackagePlus
               size={16}
               className="mr-2 text-secondary"
             />
-            <span>
-              {cattle.totalHead} {cattle.cattleType}
-            </span>
+            <span>{isMapReady ? `${cattle.totalHead} ${cattle.cattleType}` : <Skeleton className="h-4 w-28" />}</span>
           </div>
           <div className="flex items-center text-sm">
             <Leaf
               size={16}
               className="mr-2 text-secondary"
             />
-            <span>
-              {pasture.totalPastures} {t("common.pastures")}
-            </span>
+            <span>{isMapReady ? `${pasture.totalPastures} ${t("common.pastures")}` : <Skeleton className="h-4 w-24" />}</span>
           </div>
         </div>
 
@@ -77,7 +78,7 @@ export function FarmCard({ farm }: FarmCardProps) {
             size={14}
             className="mr-1"
           />
-          {t("common.updated")} {formatDistanceToNow(new Date(farmData.updatedAt), { addSuffix: true })}
+          {isMapReady ? `${t("common.updated")} ${formatDistanceToNow(new Date(farmData.updatedAt), { addSuffix: true })}` : <Skeleton className="h-3 w-40" />}
         </div>
       </CardContent>
       <CardFooter className="pt-2">

@@ -13,6 +13,7 @@ import { StepWizard, Step } from "@/components/ui/step-wizard";
 import { Info, BarChart, ArrowLeft, ArrowRight, Sprout } from "lucide-react";
 import Icon from "@mdi/react";
 import { mdiCow } from "@mdi/js";
+import { getMapboxToken } from "@/config/mapbox";
 
 import { GeneralInfoStep } from "./wizard-steps/GeneralInfoStep";
 import { CattleInfoStep } from "./wizard-steps/CattleInfoStep";
@@ -23,6 +24,20 @@ import { useAuth } from "@/hooks/useAuth";
 
 interface FarmWizardProps {
   onComplete?: () => void;
+}
+
+interface MapboxFeature {
+  id: string;
+  text: string;
+  place_name: string;
+  context?: Array<{
+    id: string;
+    text: string;
+  }>;
+}
+
+interface MapboxResponse {
+  features: MapboxFeature[];
 }
 
 export function FarmWizard({ onComplete }: FarmWizardProps) {
@@ -175,10 +190,53 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
     }
   };
 
-  const handleGeoFileUpload = (geometry: GeoJSON.Geometry, file?: File) => {
+  const handleGeoFileUpload = async (geometry: GeoJSON.Geometry, file?: File) => {
     setFarmGeometry(geometry);
     if (file) {
       setGeoFile(file);
+    }
+
+    // Si la geometría es un polígono, obtener el centroide para geocoding
+    if (geometry.type === "Polygon" && geometry.coordinates[0] && geometry.coordinates[0].length > 0) {
+      const firstPoint = geometry.coordinates[0][0];
+      const center = {
+        lat: firstPoint[1],
+        lng: firstPoint[0],
+      };
+
+      // Actualizar las coordenadas en el formulario
+      form.setValue("coordinates", center);
+
+      try {
+        // Obtener el token de Mapbox desde Supabase
+        const token = await getMapboxToken();
+
+        // Realizar geocoding inverso para obtener la ubicación
+        const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${center.lng},${center.lat}.json?access_token=${token}&language=es`);
+        const data = (await response.json()) as MapboxResponse;
+
+        if (data.features && data.features.length > 0) {
+          const place = data.features[0];
+          const context = place.context || [];
+
+          // Extraer información de ubicación
+          const country = context.find((c) => c.id.includes("country"))?.text || "";
+          const region = context.find((c) => c.id.includes("region"))?.text || "";
+          const placeName = context.find((c) => c.id.includes("place"))?.text || "";
+
+          // Actualizar los campos del formulario
+          form.setValue("country", country);
+          form.setValue("state", region);
+          form.setValue("city", placeName);
+        }
+      } catch (error) {
+        console.error("Error en geocoding inverso:", error);
+        toast({
+          title: t("farmWizard.geocodingError", "Error en geocoding"),
+          description: t("farmWizard.geocodingErrorDesc", "No se pudo obtener la ubicación automáticamente"),
+          variant: "default",
+        });
+      }
     }
 
     toast({
@@ -201,31 +259,17 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
       setIsSubmitting(true);
 
       try {
+        console.log("Starting farm creation process...");
+        console.log("Geometry available:", !!farmGeometry);
+
         const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt"> = {
           name: data.name,
-          country: data.country,
-          state: data.state,
-          city: data.city,
+          location: `${data.city}, ${data.state}, ${data.country}`,
           size: data.size,
           coordinates: data.coordinates as Coordinates,
           ownerName: data.ownerName,
           contactEmail: data.contactEmail,
         };
-
-        if (farmGeometry) {
-          if (farmGeometry.type === "Point") {
-            farmData.coordinates = {
-              lat: farmGeometry.coordinates[1],
-              lng: farmGeometry.coordinates[0],
-            };
-          } else if (farmGeometry.type === "Polygon" && farmGeometry.coordinates[0] && farmGeometry.coordinates[0].length > 0) {
-            const firstPoint = farmGeometry.coordinates[0][0];
-            farmData.coordinates = {
-              lat: firstPoint[1],
-              lng: firstPoint[0],
-            };
-          }
-        }
 
         const cattleData: Omit<CattleData, "id" | "farmId"> = {
           totalHead: data.totalHead,
@@ -255,41 +299,51 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
             }
           : undefined;
 
-        const productionData = {
-          productionType: data.productionType,
-          livestockType: data.productionType === "livestock" ? data.livestockType : undefined,
-          supplementationKg: data.supplementationKg,
-        };
-
+        console.log("Creating farm with data:", farmData);
         const newFarm = await createFarm(farmData, cattleData, pastureData, regionalAverages);
+        console.log("Farm created successfully:", newFarm);
 
-        // If we have a geospatial file and a new farm was created, upload it
-        if (geoFile && newFarm && farmGeometry) {
+        // Si tenemos una geometría y una nueva finca fue creada, guardarla
+        if (newFarm && farmGeometry) {
           try {
-            // Upload the original file to storage
-            const filePath = `${user.id}/${newFarm.farm.id}/${geoFile.name}`;
-            const { error: uploadError } = await supabase.storage.from("farm_geospatial_files").upload(filePath, geoFile);
+            console.log("Inserting geometry into farm_geospatial table...");
+            console.log("Farm ID:", newFarm.farm.id);
+            console.log("Geometry type:", farmGeometry.type);
 
-            if (uploadError) throw uploadError;
+            const { data: geospatialData, error: geospatialError } = await supabase
+              .from("farm_geospatial")
+              .insert({
+                farm_id: newFarm.farm.id,
+                file_name: "uploaded_geometry",
+                file_type: "geojson",
+                geometry: farmGeometry,
+              })
+              .select()
+              .single();
 
-            // Store the geospatial data in the database
-            const { error: geospatialError } = await supabase.from("farm_geospatial").insert({
-              farm_id: newFarm.farm.id,
-              file_name: geoFile.name,
-              file_type: geoFile.name.split(".").pop()?.toLowerCase() || "unknown",
-              geometry: farmGeometry,
-            });
+            if (geospatialError) {
+              console.error("Error inserting geometry:", geospatialError);
+              throw geospatialError;
+            }
+            console.log("Geometry inserted successfully:", geospatialData);
 
-            if (geospatialError) throw geospatialError;
-          } catch (geoError) {
-            console.error("Error uploading geospatial file:", geoError);
-            // Don't fail the farm creation if just the geo file upload fails
             toast({
-              title: t("farmWizard.geoFileError"),
-              description: t("farmWizard.geoFileUploadError"),
+              title: t("farmWizard.geoFileSuccess", "Datos geoespaciales guardados"),
+              description: t("farmWizard.geoFileSuccessDesc", "La información geográfica fue guardada correctamente"),
+            });
+          } catch (geoError) {
+            console.error("Error in geospatial data handling:", geoError);
+            toast({
+              title: t("farmWizard.geoFileError", "Error en archivo geoespacial"),
+              description: t("farmWizard.geoFileUploadError", "Hubo un error al guardar la información geográfica"),
               variant: "default",
             });
           }
+        } else {
+          console.log("Skipping geospatial data upload:", {
+            hasNewFarm: !!newFarm,
+            hasGeometry: !!farmGeometry,
+          });
         }
 
         toast({
@@ -303,7 +357,7 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
           navigate("/farms");
         }
       } catch (error) {
-        console.error("Error creating farm:", error);
+        console.error("Error creando establecimiento:", error);
         toast({
           title: t("farmWizard.errorTitle", "Error"),
           description: t("farmWizard.errorDescription", "Hubo un error al agregar su establecimiento. Por favor intente nuevamente."),
