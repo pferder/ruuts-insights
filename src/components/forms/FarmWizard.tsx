@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,7 +8,7 @@ import { useFarm } from "@/context/FarmContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { FarmData, CattleData, PastureData } from "@/types/farm";
+import { FarmData, CattleData, PastureData, Coordinates } from "@/types/farm";
 import { StepWizard, Step } from "@/components/ui/step-wizard";
 import { Info, BarChart, ArrowLeft, ArrowRight, Sprout } from "lucide-react";
 import Icon from "@mdi/react";
@@ -21,42 +20,6 @@ import { GrazingInfoStep } from "./wizard-steps/GrazingInfoStep";
 import { ProductionInfoStep } from "./wizard-steps/ProductionInfoStep";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-
-const formSchema = z.object({
-  name: z.string().min(2, "Farm name must be at least 2 characters"),
-  location: z.string().min(2, "Location must be at least 2 characters"),
-  size: z.number().min(1, "Size must be at least 1 hectare"),
-  ownerName: z.string().min(2, "Owner name must be at least 2 characters"),
-  contactEmail: z.string().email("Please enter a valid email").optional(),
-
-  totalHead: z.number().min(1, "Total head must be at least 1"),
-  cattleType: z.string().min(2, "Cattle type must be at least 2 characters"),
-  averageWeight: z.number().min(100, "Average weight must be at least 100 kg"),
-  methodOfRaising: z.enum(["conventional", "regenerative", "mixed"]),
-
-  totalPastures: z.number().min(1, "Total pastures must be at least 1"),
-  averagePastureSize: z.number().min(1, "Average pasture size must be at least 1 hectare"),
-  rotationsPerSeason: z.number().min(1, "Rotations must be at least 1"),
-  restingDaysPerPasture: z.number().min(1, "Resting days must be at least 1"),
-  grassTypes: z.string().min(2, "Grass types must be at least 2 characters"),
-  soilHealthScore: z.number().min(1, "Soil health score must be at least 1").max(10, "Soil health score must be at most 10").optional(),
-  currentForageDensity: z.number().min(1, "Forage density must be at least 1 kg/hectare").optional(),
-
-  productionType: z.enum(["dairy", "livestock"]),
-  livestockType: z.enum(["breeding", "rearing", "fattening", "complete_cycle"]).optional(),
-  supplementationKg: z.number().min(0, "Supplementation must be at least 0 kg").default(0),
-
-  regionalBiomassDensity: z.number().min(1, "Regional biomass density must be at least 1 kg/hectare").optional(),
-  regionalAnimalLoad: z.number().min(0.1, "Regional animal load must be at least 0.1").optional(),
-  regionalPaddockCount: z.number().min(1, "Regional paddock count must be at least 1").optional(),
-  regionalRotationsCount: z.number().min(1, "Regional rotations count must be at least 1").optional(),
-  regionalCarbonCapture: z.number().min(0.1, "Regional carbon capture must be at least 0.1").optional(),
-  regionalCarbonEmissions: z.number().min(0.1, "Regional carbon emissions must be at least 0.1").optional(),
-});
-
-type FarmFormValues = z.infer<typeof formSchema>;
-
-export type { FarmFormValues };
 
 interface FarmWizardProps {
   onComplete?: () => void;
@@ -105,12 +68,63 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
     },
   ];
 
+  const formSchema = z.object({
+    name: z.string().min(1, { message: t("forms.validation.required") }),
+    country: z.string().min(1, { message: t("forms.validation.required") }),
+    state: z.string().min(1, { message: t("forms.validation.required") }),
+    city: z.string().min(1, { message: t("forms.validation.required") }),
+    size: z.number().min(0.01, { message: t("forms.validation.minSize") }),
+    coordinates: z
+      .object({
+        lat: z.number(),
+        lng: z.number(),
+      })
+      .required(),
+    ownerName: z.string().min(1, { message: t("forms.validation.required") }),
+    contactEmail: z
+      .string()
+      .email({ message: t("forms.validation.invalidEmail") })
+      .optional(),
+
+    totalHead: z.number().min(1, "Total head must be at least 1"),
+    cattleType: z.string().min(2, "Cattle type must be at least 2 characters"),
+    averageWeight: z.number().min(100, "Average weight must be at least 100 kg"),
+    methodOfRaising: z.enum(["conventional", "regenerative", "mixed"]),
+
+    totalPastures: z.number().min(1, "Total pastures must be at least 1"),
+    averagePastureSize: z.number().min(1, "Average pasture size must be at least 1 hectare"),
+    rotationsPerSeason: z.number().min(1, "Rotations must be at least 1"),
+    restingDaysPerPasture: z.number().min(1, "Resting days must be at least 1"),
+    grassTypes: z.string().min(2, "Grass types must be at least 2 characters"),
+    soilHealthScore: z.number().min(1, "Soil health score must be at least 1").max(10, "Soil health score must be at most 10").optional(),
+    currentForageDensity: z.number().min(1, "Forage density must be at least 1 kg/hectare").optional(),
+
+    productionType: z.enum(["dairy", "livestock"]),
+    livestockType: z.enum(["breeding", "rearing", "fattening", "complete_cycle"]).optional(),
+    supplementationKg: z.number().min(0, "Supplementation must be at least 0 kg").default(0),
+
+    regionalBiomassDensity: z.number().min(1, "Regional biomass density must be at least 1 kg/hectare").optional(),
+    regionalAnimalLoad: z.number().min(0.1, "Regional animal load must be at least 0.1").optional(),
+    regionalPaddockCount: z.number().min(1, "Regional paddock count must be at least 1").optional(),
+    regionalRotationsCount: z.number().min(1, "Regional rotations count must be at least 1").optional(),
+    regionalCarbonCapture: z.number().min(0.1, "Regional carbon capture must be at least 0.1").optional(),
+    regionalCarbonEmissions: z.number().min(0.1, "Regional carbon emissions must be at least 0.1").optional(),
+  });
+
+  type FarmFormValues = z.infer<typeof formSchema>;
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      location: "",
+      country: "",
+      state: "",
+      city: "",
       size: undefined,
+      coordinates: {
+        lat: 0,
+        lng: 0,
+      },
       ownerName: "",
       contactEmail: "",
       totalHead: undefined,
@@ -138,7 +152,7 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
 
   const goToNextStep = async () => {
     const stepFields = {
-      0: ["name", "location", "size", "ownerName", "contactEmail"],
+      0: ["name", "country", "state", "city", "size", "coordinates", "ownerName", "contactEmail"],
       1: ["totalHead", "cattleType", "averageWeight", "methodOfRaising"],
       2: ["totalPastures", "averagePastureSize", "rotationsPerSeason", "restingDaysPerPasture", "grassTypes", "soilHealthScore", "currentForageDensity"],
       3: ["productionType", "livestockType", "supplementationKg"],
@@ -166,7 +180,7 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
     if (file) {
       setGeoFile(file);
     }
-    
+
     toast({
       title: t("farmWizard.geoFileUploaded", "Archivo geográfico subido"),
       description: t("farmWizard.geoFileUploadSuccess", "Perímetro del establecimiento subido correctamente"),
@@ -177,39 +191,38 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
     form.handleSubmit(async (data) => {
       if (!user) {
         toast({
-          title: t("farmWizard.errorTitle", "Error"),
-          description: t("farmWizard.authError", "Debe iniciar sesión para crear un establecimiento"),
+          title: t("farmWizard.errorTitle"),
+          description: t("farmWizard.authError"),
           variant: "destructive",
         });
         return;
       }
-      
+
       setIsSubmitting(true);
 
       try {
         const farmData: Omit<FarmData, "id" | "createdAt" | "updatedAt"> = {
           name: data.name,
-          location: data.location,
+          country: data.country,
+          state: data.state,
+          city: data.city,
           size: data.size,
+          coordinates: data.coordinates as Coordinates,
           ownerName: data.ownerName,
-          coordinates: { 
-            lat: Math.random() * 10 + 30, 
-            lng: Math.random() * 10 - 90 
-          },
           contactEmail: data.contactEmail,
         };
 
         if (farmGeometry) {
-          if (farmGeometry.type === 'Point') {
+          if (farmGeometry.type === "Point") {
             farmData.coordinates = {
               lat: farmGeometry.coordinates[1],
-              lng: farmGeometry.coordinates[0]
+              lng: farmGeometry.coordinates[0],
             };
-          } else if (farmGeometry.type === 'Polygon' && farmGeometry.coordinates[0] && farmGeometry.coordinates[0].length > 0) {
+          } else if (farmGeometry.type === "Polygon" && farmGeometry.coordinates[0] && farmGeometry.coordinates[0].length > 0) {
             const firstPoint = farmGeometry.coordinates[0][0];
             farmData.coordinates = {
               lat: firstPoint[1],
-              lng: firstPoint[0]
+              lng: firstPoint[0],
             };
           }
         }
@@ -231,14 +244,16 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
           currentForageDensity: data.currentForageDensity,
         };
 
-        const regionalAverages = data.regionalBiomassDensity ? {
-          biomassDensity: data.regionalBiomassDensity,
-          animalLoad: data.regionalAnimalLoad || 1.5,
-          paddockCount: data.regionalPaddockCount || 6,
-          rotationsCount: data.regionalRotationsCount || 3,
-          carbonCapture: data.regionalCarbonCapture || 5,
-          carbonEmissions: data.regionalCarbonEmissions || 7,
-        } : undefined;
+        const regionalAverages = data.regionalBiomassDensity
+          ? {
+              biomassDensity: data.regionalBiomassDensity,
+              animalLoad: data.regionalAnimalLoad || 1.5,
+              paddockCount: data.regionalPaddockCount || 6,
+              rotationsCount: data.regionalRotationsCount || 3,
+              carbonCapture: data.regionalCarbonCapture || 5,
+              carbonEmissions: data.regionalCarbonEmissions || 7,
+            }
+          : undefined;
 
         const productionData = {
           productionType: data.productionType,
@@ -247,36 +262,31 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
         };
 
         const newFarm = await createFarm(farmData, cattleData, pastureData, regionalAverages);
-        
+
         // If we have a geospatial file and a new farm was created, upload it
         if (geoFile && newFarm && farmGeometry) {
           try {
             // Upload the original file to storage
             const filePath = `${user.id}/${newFarm.farm.id}/${geoFile.name}`;
-            const { error: uploadError } = await supabase.storage
-              .from('farm_geospatial_files')
-              .upload(filePath, geoFile);
-              
+            const { error: uploadError } = await supabase.storage.from("farm_geospatial_files").upload(filePath, geoFile);
+
             if (uploadError) throw uploadError;
-            
+
             // Store the geospatial data in the database
-            const { error: geospatialError } = await supabase
-              .from('farm_geospatial')
-              .insert({
-                farm_id: newFarm.farm.id,
-                file_name: geoFile.name,
-                file_type: geoFile.name.split('.').pop()?.toLowerCase() || 'unknown',
-                geometry: farmGeometry
-              });
-              
+            const { error: geospatialError } = await supabase.from("farm_geospatial").insert({
+              farm_id: newFarm.farm.id,
+              file_name: geoFile.name,
+              file_type: geoFile.name.split(".").pop()?.toLowerCase() || "unknown",
+              geometry: farmGeometry,
+            });
+
             if (geospatialError) throw geospatialError;
-            
           } catch (geoError) {
             console.error("Error uploading geospatial file:", geoError);
             // Don't fail the farm creation if just the geo file upload fails
             toast({
-              title: t("farmWizard.geoFileError", "Advertencia"),
-              description: t("farmWizard.geoFileUploadError", "El establecimiento se creó correctamente, pero hubo un error al guardar el archivo geoespacial."),
+              title: t("farmWizard.geoFileError"),
+              description: t("farmWizard.geoFileUploadError"),
               variant: "default",
             });
           }
@@ -329,7 +339,9 @@ export function FarmWizard({ onComplete }: FarmWizardProps) {
     <Card>
       <CardHeader>
         <CardTitle>{t("farmWizard.title", "Agregar Nuevo Establecimiento")}</CardTitle>
-        <CardDescription>{t("farmWizard.description", "Agregue información sobre su establecimiento para comenzar con los análisis regenerativos.")}</CardDescription>
+        <CardDescription>
+          {t("farmWizard.description", "Agregue información sobre su establecimiento para comenzar con los análisis regenerativos.")}
+        </CardDescription>
       </CardHeader>
 
       <CardContent>

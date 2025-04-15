@@ -1,118 +1,128 @@
-
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { GeoJSON as GeoJSONType } from "geojson";
-import L from "leaflet";
-import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
-import iconUrl from "leaflet/dist/images/marker-icon.png";
-import shadowUrl from "leaflet/dist/images/marker-shadow.png";
-
-// Fix Leaflet icon issue
-const fixLeafletIcon = () => {
-  delete L.Icon.Default.prototype._getIconUrl;
-
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl,
-    iconUrl,
-    shadowUrl,
-  });
-};
+import { useEffect, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { GeoJSON, Feature } from "geojson";
+import { bbox, center } from "@turf/turf";
+import { getMapboxToken } from "@/config/mapbox";
 
 interface MapPreviewProps {
-  geometry: GeoJSONType;
+  geometry: GeoJSON.Geometry;
   height?: string;
-  className?: string;
+  onMapReady?: () => void;
 }
 
-export function MapPreview({ geometry, height = "400px", className = "" }: MapPreviewProps) {
-  const [center, setCenter] = useState<[number, number]>([-34.6037, -58.3816]); // Default to Buenos Aires
-  const [zoom, setZoom] = useState(13);
-  
-  // Call once to fix icons
+export function MapPreview({ geometry, height = "300px", onMapReady }: MapPreviewProps) {
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
+
   useEffect(() => {
-    fixLeafletIcon();
+    if (!mapContainer.current) return;
+
+    const initializeMap = async () => {
+      const token = await getMapboxToken();
+      if (!token) return;
+
+      mapboxgl.accessToken = token;
+
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/satellite-v9",
+        center: [-58.5, -34.5],
+        zoom: 10,
+      });
+
+      map.current.on("load", () => {
+        setMapLoaded(true);
+      });
+    };
+
+    initializeMap();
+
+    return () => {
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
+    };
   }, []);
 
-  // Calculate center from geometry
   useEffect(() => {
-    if (geometry) {
-      try {
-        if (geometry.type === "Point") {
-          // For Point geometries, use the coordinates directly
-          setCenter([geometry.coordinates[1], geometry.coordinates[0]]);
-        } else if (geometry.type === "Polygon" && geometry.coordinates && geometry.coordinates[0]) {
-          // For Polygon geometries, calculate the center
-          let totalLat = 0;
-          let totalLng = 0;
-          let count = 0;
-          
-          for (const coord of geometry.coordinates[0]) {
-            totalLng += coord[0];
-            totalLat += coord[1];
-            count++;
-          }
-          
-          if (count > 0) {
-            setCenter([totalLat / count, totalLng / count]);
-          }
-        } else if (geometry.type === "MultiPolygon" && geometry.coordinates && geometry.coordinates[0]) {
-          // For MultiPolygon geometries, use the first polygon
-          let totalLat = 0;
-          let totalLng = 0;
-          let count = 0;
-          
-          for (const coord of geometry.coordinates[0][0]) {
-            totalLng += coord[0];
-            totalLat += coord[1];
-            count++;
-          }
-          
-          if (count > 0) {
-            setCenter([totalLat / count, totalLng / count]);
-          }
-        }
-      } catch (error) {
-        console.error("Error calculating map center:", error);
-      }
+    if (!map.current || !mapLoaded || !geometry) return;
+
+    // Convertir la geometría a Feature para usar con Turf
+    const feature: Feature = {
+      type: "Feature",
+      properties: {},
+      geometry: geometry,
+    };
+
+    // Calcular el bbox y el centro
+    const bounds = bbox(feature);
+    const [minX, minY, maxX, maxY] = bounds;
+
+    // Limpiar fuentes y capas existentes
+    if (map.current.getSource("farm-boundary")) {
+      map.current.removeLayer("farm-boundary-fill");
+      map.current.removeLayer("farm-boundary-line");
+      map.current.removeSource("farm-boundary");
     }
-  }, [geometry]);
 
-  // Create feature from geometry
-  const geoJsonData = {
-    type: "Feature",
-    properties: {},
-    geometry: geometry
-  };
+    // Agregar la nueva geometría
+    map.current.addSource("farm-boundary", {
+      type: "geojson",
+      data: feature,
+    });
 
-  // GeoJSON style
-  const geoJsonStyle = {
-    fillColor: "#38bdf8",
-    weight: 1.5,
-    opacity: 1,
-    color: "#0284c7",
-    fillOpacity: 0.25,
-  };
+    map.current.addLayer({
+      id: "farm-boundary-fill",
+      type: "fill",
+      source: "farm-boundary",
+      paint: {
+        "fill-color": "#00ff00",
+        "fill-opacity": 0.2,
+      },
+    });
+
+    map.current.addLayer({
+      id: "farm-boundary-line",
+      type: "line",
+      source: "farm-boundary",
+      paint: {
+        "line-color": "#00ff00",
+        "line-width": 2,
+      },
+    });
+
+    // Ajustar el mapa al bbox después de que las capas estén cargadas
+    map.current.once("idle", () => {
+      map.current?.fitBounds(
+        [
+          [minX, minY],
+          [maxX, maxY],
+        ],
+        {
+          padding: 50,
+          maxZoom: 15,
+          duration: 2000, // Aumentamos la duración de la animación
+        }
+      );
+
+      // Notificar que el mapa está listo solo después de que la geometría esté visible
+      if (onMapReady) {
+        onMapReady();
+      }
+    });
+  }, [geometry, mapLoaded, onMapReady]);
 
   return (
-    <div className={`rounded-xl border border-border ${className}`} style={{ height, width: "100%" }}>
-      <MapContainer 
-        center={center}
-        zoom={zoom}
-        style={{ height: "100%", width: "100%" }}
-        className="h-full w-full rounded-xl"
-        key={`map-${center[0]}-${center[1]}-${zoom}`}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <GeoJSON 
-          key={JSON.stringify(geometry)}
-          data={geoJsonData as any}
-          style={() => geoJsonStyle}
-        />
-      </MapContainer>
-    </div>
+    <div
+      ref={mapContainer}
+      style={{
+        height: "100%",
+        aspectRatio: "3/2",
+      }}
+      className="w-full rounded-lg overflow-hidden"
+    />
   );
 }

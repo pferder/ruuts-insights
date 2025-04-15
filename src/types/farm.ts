@@ -1,4 +1,3 @@
-
 export interface Coordinates {
   lat: number;
   lng: number;
@@ -7,10 +6,13 @@ export interface Coordinates {
 export interface FarmData {
   id: string;
   name: string;
-  location: string;
+  country: string;
+  state: string;
+  city: string;
   size: number; // in hectares
   coordinates: Coordinates;
   ownerName: string;
+  contactEmail?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -54,7 +56,7 @@ export type CarbonData = {
 export interface RegionalAverages {
   biomassDensity: number; // kg/hectare
   animalLoad: number; // animals per hectare
-  paddockCount: number; 
+  paddockCount: number;
   rotationsCount: number;
   carbonCapture: number; // tons CO2/year/hectare
   carbonEmissions: number; // tons CO2/year/hectare

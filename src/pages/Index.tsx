@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -54,9 +53,7 @@ const Index = () => {
       <Layout>
         <div className="space-y-6">
           <h2 className="text-3xl font-bold tracking-tight">{t("dashboard.welcome", "Bienvenido a su Dashboard")}</h2>
-          <p className="text-muted-foreground">
-            {t("dashboard.overview", "Aquí tiene un resumen de sus establecimientos y servicios.")}
-          </p>
+          <p className="text-muted-foreground">{t("dashboard.overview", "Aquí tiene un resumen de sus establecimientos y servicios.")}</p>
 
           {/* Mis Establecimientos */}
           <Card className="my-6">
@@ -65,9 +62,9 @@ const Index = () => {
                 <CardTitle>{t("dashboard.myFarms", "Mis Establecimientos")}</CardTitle>
                 <CardDescription>{t("dashboard.manageFarms", "Gestione sus establecimientos registrados")}</CardDescription>
               </div>
-              <Button 
-                onClick={() => navigate("/add-farm")} 
-                variant="outline" 
+              <Button
+                onClick={() => navigate("/add-farm")}
+                variant="outline"
                 size="sm"
                 className="flex items-center gap-1"
               >
@@ -78,14 +75,14 @@ const Index = () => {
             <CardContent>
               {farms.length > 0 ? (
                 <>
-                  <FarmGrid 
-                    farms={farms.slice(0, 5)} 
-                    viewMode="list" 
-                    compact={true} 
+                  <FarmGrid
+                    farms={farms.slice(0, 5)}
+                    viewMode="list"
+                    compact={true}
                   />
                   {farms.length > 5 && (
-                    <Button 
-                      variant="link" 
+                    <Button
+                      variant="link"
                       onClick={() => navigate("/farms")}
                       className="mt-4"
                     >
@@ -96,8 +93,8 @@ const Index = () => {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-muted-foreground mb-4">{t("dashboard.noFarms", "No tiene establecimientos registrados")}</p>
-                  <Button 
-                    onClick={() => navigate("/add-farm")} 
+                  <Button
+                    onClick={() => navigate("/add-farm")}
                     className="bg-farm-green-700 hover:bg-farm-green-800"
                   >
                     {t("dashboard.addFirstFarm", "Agregar Primer Establecimiento")}
@@ -122,7 +119,10 @@ const Index = () => {
                 <div className="space-y-4">
                   <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground mb-2">{t("dashboard.noActiveServices", "No tiene servicios contratados")}</p>
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                    >
                       {t("dashboard.exploreServices", "Explorar servicios")}
                     </Button>
                   </div>
@@ -143,8 +143,11 @@ const Index = () => {
                 <div className="space-y-4">
                   <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground mb-2">{t("dashboard.noCarbonPrograms", "No tiene programas de carbono")}</p>
-                    <Button variant="outline" size="sm">
-                      {t("dashboard.exploreCarbonPrograms", "Explorar programas")}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                    >
+                      {t("dashboard.exploreCarbonPrograms", "Check de elegibilidad")}
                     </Button>
                   </div>
                 </div>
@@ -163,14 +166,46 @@ const Index = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between border-b pb-2">
-                    <span className="text-sm">Introducción a la Agricultura Regenerativa</span>
-                    <Button variant="ghost" size="sm">Ver</Button>
+                    <div>
+                      <span className="text-sm font-medium">Especialización en manejo holístico</span>
+                      <p className="text-xs text-muted-foreground">15 de Marzo 2024 - Virtual</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                    >
+                      Ver
+                    </Button>
                   </div>
                   <div className="flex items-center justify-between border-b pb-2">
-                    <span className="text-sm">Pastoreo Regenerativo</span>
-                    <Button variant="ghost" size="sm">Ver</Button>
+                    <div>
+                      <span className="text-sm font-medium">Pastoreo Regenerativo</span>
+                      <p className="text-xs text-muted-foreground">22 de Marzo 2024 - Presencial (Montevideo)</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                    >
+                      Ver
+                    </Button>
                   </div>
-                  <Button variant="link" size="sm" className="text-center w-full">
+                  <div className="flex items-center justify-between border-b pb-2">
+                    <div>
+                      <span className="text-sm font-medium">Agricultura Regenerativa</span>
+                      <p className="text-xs text-muted-foreground">5 de Abril 2024 - Presencial (Canelones)</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                    >
+                      Ver
+                    </Button>
+                  </div>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-center w-full"
+                  >
                     {t("dashboard.viewAllCourses", "Ver todos los cursos")}
                   </Button>
                 </div>
