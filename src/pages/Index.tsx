@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Building2, CircleDollarSign, GraduationCap, Leaf, Plus } from "lucide-react";
 import { FarmGrid } from "@/components/farms/FarmGrid";
 import { ComparativeMetrics } from "@/components/dashboard/ComparativeMetrics";
+import { RegenProgramCard } from "@/components/dashboard/RegenProgramCard";
 import { CarbonChart } from "@/components/dashboard/CarbonChart";
 import { ActionCard } from "@/components/dashboard/ActionCard";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -52,15 +53,21 @@ const Index = () => {
     <ProtectedRoute>
       <Layout>
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold tracking-tight">{t("dashboard.welcome", "Bienvenido a su Dashboard")}</h2>
-          <p className="text-muted-foreground">{t("dashboard.overview", "Aquí tiene un resumen de sus establecimientos y servicios.")}</p>
+          <h2 className="text-3xl font-bold tracking-tight">
+            {t("dashboard.welcome", "Bienvenido a su Dashboard")}
+          </h2>
+          <p className="text-muted-foreground">
+            {t("dashboard.overview", "Aquí tiene un resumen de sus establecimientos y servicios.")}
+          </p>
 
           {/* Mis Establecimientos */}
           <Card className="my-6">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle>{t("dashboard.myFarms", "Mis Establecimientos")}</CardTitle>
-                <CardDescription>{t("dashboard.manageFarms", "Gestione sus establecimientos registrados")}</CardDescription>
+                <CardDescription>
+                  {t("dashboard.manageFarms", "Gestione sus establecimientos registrados")}
+                </CardDescription>
               </div>
               <Button
                 onClick={() => navigate("/add-farm")}
@@ -75,24 +82,18 @@ const Index = () => {
             <CardContent>
               {farms.length > 0 ? (
                 <>
-                  <FarmGrid
-                    farms={farms.slice(0, 5)}
-                    viewMode="list"
-                    compact={true}
-                  />
+                  <FarmGrid farms={farms.slice(0, 5)} viewMode="list" compact={true} />
                   {farms.length > 5 && (
-                    <Button
-                      variant="link"
-                      onClick={() => navigate("/farms")}
-                      className="mt-4"
-                    >
+                    <Button variant="link" onClick={() => navigate("/farms")} className="mt-4">
                       {t("dashboard.viewAllFarms", "Ver todos los establecimientos")}
                     </Button>
                   )}
                 </>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-muted-foreground mb-4">{t("dashboard.noFarms", "No tiene establecimientos registrados")}</p>
+                  <p className="text-muted-foreground mb-4">
+                    {t("dashboard.noFarms", "No tiene establecimientos registrados")}
+                  </p>
                   <Button
                     onClick={() => navigate("/add-farm")}
                     className="bg-farm-green-700 hover:bg-farm-green-800"
@@ -103,6 +104,8 @@ const Index = () => {
               )}
             </CardContent>
           </Card>
+          {/* Programas de Carbono */}
+          <RegenProgramCard />
 
           {/* Services sections */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
@@ -113,41 +116,18 @@ const Index = () => {
                   <Building2 className="h-5 w-5 text-muted-foreground" />
                   <CardTitle>{t("dashboard.services", "Servicios Contratados")}</CardTitle>
                 </div>
-                <CardDescription>{t("dashboard.servicesDesc", "Acceda a sus servicios activos")}</CardDescription>
+                <CardDescription>
+                  {t("dashboard.servicesDesc", "Acceda a sus servicios activos")}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <p className="text-sm text-muted-foreground mb-2">{t("dashboard.noActiveServices", "No tiene servicios contratados")}</p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                    >
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {t("dashboard.noActiveServices", "No tiene servicios contratados")}
+                    </p>
+                    <Button variant="outline" size="sm">
                       {t("dashboard.exploreServices", "Explorar servicios")}
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Programas de Carbono */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center space-x-2">
-                  <Leaf className="h-5 w-5 text-muted-foreground" />
-                  <CardTitle>{t("dashboard.carbonPrograms", "Programas de Carbono")}</CardTitle>
-                </div>
-                <CardDescription>{t("dashboard.carbonDesc", "Programe capturas de carbono")}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <p className="text-sm text-muted-foreground mb-2">{t("dashboard.noCarbonPrograms", "No tiene programas de carbono")}</p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                    >
-                      {t("dashboard.exploreCarbonPrograms", "Check de elegibilidad")}
                     </Button>
                   </div>
                 </div>
@@ -161,51 +141,46 @@ const Index = () => {
                   <GraduationCap className="h-5 w-5 text-muted-foreground" />
                   <CardTitle>{t("dashboard.courses", "Cursos y Capacitaciones")}</CardTitle>
                 </div>
-                <CardDescription>{t("dashboard.coursesDesc", "Aprenda sobre prácticas regenerativas")}</CardDescription>
+                <CardDescription>
+                  {t("dashboard.coursesDesc", "Aprenda sobre prácticas regenerativas")}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between border-b pb-2">
                     <div>
-                      <span className="text-sm font-medium">Especialización en manejo holístico</span>
+                      <span className="text-sm font-medium">
+                        Especialización en manejo holístico
+                      </span>
                       <p className="text-xs text-muted-foreground">15 de Marzo 2024 - Virtual</p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                    >
+                    <Button variant="ghost" size="sm">
                       Ver
                     </Button>
                   </div>
                   <div className="flex items-center justify-between border-b pb-2">
                     <div>
                       <span className="text-sm font-medium">Pastoreo Regenerativo</span>
-                      <p className="text-xs text-muted-foreground">22 de Marzo 2024 - Presencial (Montevideo)</p>
+                      <p className="text-xs text-muted-foreground">
+                        22 de Marzo 2024 - Presencial (Montevideo)
+                      </p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                    >
+                    <Button variant="ghost" size="sm">
                       Ver
                     </Button>
                   </div>
                   <div className="flex items-center justify-between border-b pb-2">
                     <div>
                       <span className="text-sm font-medium">Agricultura Regenerativa</span>
-                      <p className="text-xs text-muted-foreground">5 de Abril 2024 - Presencial (Canelones)</p>
+                      <p className="text-xs text-muted-foreground">
+                        5 de Abril 2024 - Presencial (Canelones)
+                      </p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                    >
+                    <Button variant="ghost" size="sm">
                       Ver
                     </Button>
                   </div>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    className="text-center w-full"
-                  >
+                  <Button variant="link" size="sm" className="text-center w-full">
                     {t("dashboard.viewAllCourses", "Ver todos los cursos")}
                   </Button>
                 </div>

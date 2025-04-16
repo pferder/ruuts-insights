@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
   base: mode === "production" ? "/ruuts-insights/" : "/",
   server: {
     host: "::",
-    port: 8080,
+    port: 3000, // para que Science API acepte CORS en localhost hasta tener domain
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

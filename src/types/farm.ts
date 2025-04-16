@@ -1,3 +1,5 @@
+import { FeatureCollection, Geometry } from "geojson";
+
 export interface Coordinates {
   lat: number;
   lng: number;
@@ -104,3 +106,15 @@ export type RecommendedAction = {
   timeFrame: "short" | "medium" | "long";
   category: "pasture" | "cattle" | "soil" | "management";
 };
+
+export type EligibilityApiResponse = FeatureCollection<Geometry, { [name: string]: any }>;
+
+export interface DerivedEligibilityResult {
+  message: string;
+  totalUploadedAreaHa?: number;
+  deforestationAreaHa?: number;
+  deforestationYears?: number[];
+  forestAreaHa?: number;
+  wetlandsAreaHa?: number;
+  eligibleAreaHa?: number;
+}
