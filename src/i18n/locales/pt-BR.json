@@ -59,7 +59,12 @@
     "paddocks": "piquetes",
     "rotationsPerSeason": "rotações/temporada",
     "tonsPerHa": "tons CO2/ha/ano",
-    "regionalAvg": "média regional"
+    "regionalAvg": "média regional",
+    "perimeter": "Perímetro",
+    "deforestation": "Deforestación",
+    "forest": "Cobertura Forestal",
+    "wetlands": "Humedales",
+    "eligibleArea": "Área elegible"
   },
   "farms": {
     "title": "Fazendas",

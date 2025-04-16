@@ -59,7 +59,12 @@
     "paddocks": "paddocks",
     "rotationsPerSeason": "rotations/season",
     "tonsPerHa": "tons CO2/ha/year",
-    "regionalAvg": "regional avg"
+    "regionalAvg": "regional avg",
+    "perimeter": "Perimeter",
+    "deforestation": "Deforestation",
+    "forest": "Forest",
+    "wetlands": "Wetlands",
+    "eligibleArea": "Eligible Area"
   },
   "farms": {
     "title": "Farms",

@@ -59,7 +59,12 @@
     "paddocks": "potreros",
     "rotationsPerSeason": "rotaciones/temporada",
     "tonsPerHa": "tons CO2/ha/año",
-    "regionalAvg": "promedio regional"
+    "regionalAvg": "promedio regional",
+    "perimeter": "Perímetro",
+    "deforestation": "Deforestación",
+    "forest": "Cobertura Forestal",
+    "wetlands": "Humedales",
+    "eligibleArea": "Área elegible"
   },
   "farms": {
     "allFarms": "Todos los establecimientos",
