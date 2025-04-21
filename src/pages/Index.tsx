@@ -15,16 +15,22 @@ import { CarbonChart } from "@/components/dashboard/CarbonChart";
 import { ActionCard } from "@/components/dashboard/ActionCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RecommendedAction } from "@/types/farm";
+import { cn } from "@/lib/utils";
 
 const Index = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { farms, hasFarms, loading } = useFarm();
 
-  if (loading) {
-    return (
-      <ProtectedRoute>
-        <Layout>
+  const showDashboard = !loading && hasFarms;
+  const showLoading = loading;
+  const showOnboarding = !loading && !hasFarms;
+
+  return (
+    <ProtectedRoute>
+      <Layout>
+        {/* Loading State */}
+        {showLoading && (
           <div className="space-y-6">
             <Skeleton className="h-8 w-1/3" />
             <Skeleton className="h-5 w-1/4" />
@@ -34,25 +40,13 @@ const Index = () => {
               <Skeleton className="h-[180px] rounded-lg" />
             </div>
           </div>
-        </Layout>
-      </ProtectedRoute>
-    );
-  }
+        )}
 
-  if (!hasFarms) {
-    return (
-      <ProtectedRoute>
-        <Layout>
-          <FirstFarmGuide />
-        </Layout>
-      </ProtectedRoute>
-    );
-  }
+        {/* Onboarding State */}
+        {showOnboarding && <FirstFarmGuide />}
 
-  return (
-    <ProtectedRoute>
-      <Layout>
-        <div className="space-y-6">
+        {/* Main Dashboard Content - Always Mounted, Hidden with CSS */}
+        <div className={cn("space-y-6", !showDashboard && "hidden")}>
           <h2 className="text-3xl font-bold tracking-tight">
             {t("dashboard.welcome", "Bienvenido a su Dashboard")}
           </h2>
@@ -94,16 +88,11 @@ const Index = () => {
                   <p className="text-muted-foreground mb-4">
                     {t("dashboard.noFarms", "No tiene establecimientos registrados")}
                   </p>
-                  <Button
-                    onClick={() => navigate("/add-farm")}
-                    className="bg-farm-green-700 hover:bg-farm-green-800"
-                  >
-                    {t("dashboard.addFirstFarm", "Agregar Primer Establecimiento")}
-                  </Button>
                 </div>
               )}
             </CardContent>
           </Card>
+
           {/* Programas de Carbono */}
           <RegenProgramCard />
 
@@ -188,6 +177,7 @@ const Index = () => {
             </Card>
           </div>
 
+          {/* Comparative Metrics */}
           {farms.length > 0 && (
             <div className="mt-6">
               <ComparativeMetrics farm={farms[0]} />
