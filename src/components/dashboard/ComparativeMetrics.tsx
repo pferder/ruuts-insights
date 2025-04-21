@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CircleDashed, Layers, Repeat, Sprout, Leaf, ChartSpline } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface ComparativeMetricsProps {
   farm: FarmComplete;
@@ -14,6 +15,7 @@ interface ComparativeMetricsProps {
 
 export function ComparativeMetrics({ farm, cardVariant = "default" }: ComparativeMetricsProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // ... (All calculations remain the same) ...
   const biomassDensity = farm.pasture.currentForageDensity || 0;
@@ -176,7 +178,7 @@ export function ComparativeMetrics({ farm, cardVariant = "default" }: Comparativ
         <Progress value={Math.min(capturePercentage, 200)} className="h-1.5" />
       </div>
       <div className="flex justify-center p-4">
-        <Button variant="default">
+        <Button variant="default" onClick={() => navigate("/analytics")}>
           <ChartSpline className="h-4 w-4 mr-1" />
           {t("dashboard.advancedAnalytics", "Ver Analíticas avanzadas")}
         </Button>
