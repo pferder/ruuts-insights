@@ -77,7 +77,7 @@ export function FarmGrid({
               <TableHead>{t("common.location")}</TableHead>
               <TableHead>{t("common.size")}</TableHead>
               {!compact && <TableHead>{t("common.lastUpdated")}</TableHead>}
-              <TableHead className="text-right">{t("common.actions")}</TableHead>
+              <TableHead className="text-right">{t("common.actions.learnMore")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

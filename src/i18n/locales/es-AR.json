@@ -326,7 +326,11 @@
     "next": "Siguiente",
     "back": "Atrás",
     "creating": "Creando...",
-    "create": "Crear Establecimiento"
+    "create": "Crear Establecimiento",
+    "size": "Tamaño",
+    "location": "Ubicación",
+    "name": "Establecimiento",
+    "details": "Detalles"
   },
   "notFound": {
     "title": "Página no encontrada",

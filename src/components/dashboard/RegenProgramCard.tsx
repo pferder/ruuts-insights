@@ -22,6 +22,7 @@ import {
   Axe,
   Info,
   MapPin,
+  Play,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -644,12 +645,8 @@ export function RegenProgramCard() {
                         `¿Verificar elegibilidad para ${selectedFarm.farm.name}?`
                       )}
                     </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleEligibilityCheck}
-                      disabled={isCheckDisabled}
-                    >
+                    <Button onClick={handleEligibilityCheck} disabled={isCheckDisabled}>
+                      <Play className="h-4 w-4 mr-2" />
                       {t("dashboard.runCheck", "Check de elegibilidad")} {/* Restored fallback */}
                     </Button>
                   </div>
