@@ -47,12 +47,12 @@ const Index = () => {
 
         {/* Main Dashboard Content - Always Mounted, Hidden with CSS */}
         <div className={cn("space-y-6", !showDashboard && "hidden")}>
-          <h2 className="text-3xl font-bold tracking-tight">
+          {/* <h2 className="text-3xl font-bold tracking-tight">
             {t("dashboard.welcome", "Bienvenido a su Dashboard")}
           </h2>
           <p className="text-muted-foreground">
             {t("dashboard.overview", "Aquí tiene un resumen de sus establecimientos y servicios.")}
-          </p>
+          </p> */}
 
           {/* Mis Establecimientos */}
           <Card className="my-6">
@@ -158,44 +158,42 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
-            {/* Servicios Contratados */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center space-x-2">
-                  <Building2 className="h-5 w-5 text-muted-foreground" />
-                  <CardTitle>{t("dashboard.services", "Servicios Contratados")}</CardTitle>
-                </div>
-                <CardDescription>
-                  {t("dashboard.servicesDesc", "Acceda a sus servicios activos")}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {t("dashboard.noActiveServices", "No tiene servicios contratados")}
-                    </p>
-                    <Button variant="outline" size="sm">
-                      {t("dashboard.exploreServices", "Explorar servicios")}
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Cursos y Capacitaciones */}
             <Card>
               <CardHeader>
                 <div className="flex items-center space-x-2">
                   <GraduationCap className="h-5 w-5 text-muted-foreground" />
-                  <CardTitle>{t("dashboard.courses", "Cursos y Capacitaciones")}</CardTitle>
+                  <CardTitle>{t("dashboard.courses", "Aprendé de regeneración")}</CardTitle>
                 </div>
                 <CardDescription>
-                  {t("dashboard.coursesDesc", "Aprenda sobre prácticas regenerativas")}
+                  {t("dashboard.coursesDesc", "Formate en ganadería y agricultura regenerativa")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-amber-500/20 border border-amber-500/30 mb-5 relative overflow-hidden">
+                    <div className="absolute -right-6 -top-6 bg-amber-500/10 w-24 h-24 rounded-full"></div>
+                    <div className="absolute right-4 top-4">
+                      <div className="bg-amber-500 text-white text-xs font-bold py-1 px-2 rounded-full transform rotate-3">
+                        Nuevo
+                      </div>
+                    </div>
+                    <h4 className="font-bold text-base mb-2 flex items-center">
+                      <span className="bg-amber-500/20 text-amber-700 p-1 rounded mr-2">
+                        <GraduationCap className="h-4 w-4" />
+                      </span>
+                      MASTERCLASS
+                    </h4>
+                    <p className="text-sm font-medium mb-1">Regeneración de pastizales naturales</p>
+                    <p className="text-xs text-muted-foreground mb-3">Con Pablo Borrelli</p>
+                    <div className="flex items-center justify-between">
+                      {/* <span className="text-amber-700 font-medium text-sm">Plazas limitadas</span> */}
+                      <Button className="bg-amber-600 hover:bg-amber-700" size="sm">
+                        Ver clase
+                      </Button>
+                    </div>
+                  </div>
+
                   <div className="flex items-center justify-between border-b pb-2">
                     <div>
                       <span className="text-sm font-medium">
@@ -235,14 +233,92 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
+            {/* Calendario Próximos eventos */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center space-x-2">
+                  <Leaf className="h-5 w-5 text-muted-foreground" />
+                  <CardTitle>{t("dashboard.events", "Próximos eventos")}</CardTitle>
+                </div>
+                <CardDescription>
+                  {t("dashboard.eventsDesc", "No te pierdas nuestros próximos eventos")}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="relative p-4 rounded-lg bg-green-500/10 border border-green-500/20 mb-4">
+                    <div className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold py-0.5 px-2 rounded-full">
+                      Destacado
+                    </div>
+                    <h4 className="font-medium mb-1">Jornada de Manejo Regenerativo</h4>
+                    <p className="text-xs text-muted-foreground mb-1">15 Marzo, 2024</p>
+                    <p className="text-xs text-muted-foreground mb-3">Durazno, Uruguay</p>
+                    <Button size="sm" className="w-full bg-green-600 hover:bg-green-700">
+                      Inscribirse
+                    </Button>
+                  </div>
 
-          {/* Comparative Metrics */}
-          {farms.length > 0 && (
-            <div className="mt-6">
-              <ComparativeMetrics farm={farms[0]} />
-            </div>
-          )}
+                  <div className="flex items-center justify-between border-b pb-2">
+                    <div>
+                      <span className="text-sm font-medium">Workshop de Suelos Vivos</span>
+                      <p className="text-xs text-muted-foreground">22 Marzo, 2024 - Montevideo</p>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      Ver
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between border-b pb-2">
+                    <div>
+                      <span className="text-sm font-medium">Visita a Campo Modelo</span>
+                      <p className="text-xs text-muted-foreground">5 Abril, 2024 - Paysandú</p>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      Ver
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between border-b pb-2">
+                    <div>
+                      <span className="text-sm font-medium">Webinar: Carbono en Ganadería</span>
+                      <p className="text-xs text-muted-foreground">12 Abril, 2024 - Virtual</p>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      Ver
+                    </Button>
+                  </div>
+
+                  <Button variant="link" size="sm" className="text-center w-full">
+                    {t("dashboard.viewAllEvents", "Ver todos los eventos")}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          {/* Servicios Contratados */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center space-x-2">
+                <Building2 className="h-5 w-5 text-muted-foreground" />
+                <CardTitle>{t("dashboard.services", "Servicios Contratados")}</CardTitle>
+              </div>
+              <CardDescription>
+                {t("dashboard.servicesDesc", "Acceda a sus servicios activos")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {t("dashboard.noActiveServices", "No tiene servicios contratados")}
+                  </p>
+                  <Button variant="outline" size="sm">
+                    {t("dashboard.exploreServices", "Explorar servicios")}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </Layout>
     </ProtectedRoute>
